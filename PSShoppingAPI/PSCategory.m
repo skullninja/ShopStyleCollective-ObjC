@@ -58,16 +58,24 @@
     if (![aDictionary isKindOfClass:[NSDictionary class]]) {
         return;
     }
-    [self setValuesForKeysWithDictionary:aDictionary];
+	for (NSString *key in aDictionary) {
+		id value = [aDictionary valueForKey:key];
+		if ([key isEqualToString:@"id"]) {
+			[self setValue:value forKey:@"categoryId"];
+		} else {
+			[self setValue:value forKey:key];
+		}
+	}
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
-    if ([key isEqualToString:@"id"]) {
-        [self setValue:value forKey:@"categoryId"];
-    } else {
-        [super setValue:value forUndefinedKey:key];
-    }
+	PSDLog(@"Warning: Undefined Key Named '%@'", key);
+}
+
+- (NSString *)description
+{
+	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.categoryId];
 }
 
 - (NSDictionary *)dictionaryRepresentation

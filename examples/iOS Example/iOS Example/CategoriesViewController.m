@@ -22,87 +22,60 @@
 // THE SOFTWARE.
 
 #import "CategoriesViewController.h"
-#import "PSShoppingAPIClient.h"
-#import "AFHTTPRequestOperation.h"
-#import "PSCategory.h"
 
 @interface CategoriesViewController ()
-    @property (nonatomic, strong) NSArray *categories;
+
+@property (nonatomic, strong) NSArray *categories;
+
 @end
 
 @implementation CategoriesViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+@synthesize categories = _categories;
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-
-    void (^success)(NSArray *) = ^ void (NSArray *retailers) {
-        _categories = retailers;
-        [self.tableView reloadData];
-    };
-    void (^failure)(AFHTTPRequestOperation *, NSError *) = ^ void (AFHTTPRequestOperation *request, NSError *error) {
-        NSLog(@"request failed with error:%@", [error description]);
-    };
-    [[PSShoppingAPIClient sharedClient] getCategoriesFromCategory:nil depth:nil success:success failure:failure];    
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+	[super viewDidLoad];
+	self.title = @"Categories";
+	
+	__weak typeof(self) weakSelf = self;
+	[[PSShoppingAPIClient sharedClient] getCategoriesFromCategory:nil depth:nil success:^(NSArray *categories) {
+		weakSelf.categories = categories;
+		[weakSelf.tableView reloadData];
+	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+		NSLog(@"Request failed with error: %@", error);
+	}];
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
-    return 1;
+	return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    if (_categories) {
-        return [_categories count];
-    } else {
-        return 0;
-    }
+	return [self.categories count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
-    
-    cell.textLabel.text = ((PSCategory *)[_categories objectAtIndex:indexPath.row]).name;
-    
-    return cell;
+	static NSString *CellIdentifier = @"Cell";
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	if (cell == nil) {
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+	}
+	PSCategory *thisCategory = [self.categories objectAtIndex:indexPath.row];
+	cell.textLabel.text = thisCategory.name;
+	return cell;
 }
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

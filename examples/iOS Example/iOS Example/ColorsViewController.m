@@ -22,87 +22,60 @@
 // THE SOFTWARE.
 
 #import "ColorsViewController.h"
-#import "PSShoppingAPIClient.h"
-#import "AFHTTPRequestOperation.h"
-#import "PSColor.h"
 
 @interface ColorsViewController ()
-    @property (nonatomic, strong) NSArray *colors;
+
+@property (nonatomic, strong) NSArray *colors;
+
 @end
 
 @implementation ColorsViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+@synthesize colors = _colors;
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-
-    void (^success)(NSArray *) = ^ void (NSArray *retailers) {
-        _colors = retailers;
-        [self.tableView reloadData];
-    };
-    void (^failure)(AFHTTPRequestOperation *, NSError *) = ^ void (AFHTTPRequestOperation *request, NSError *error) {
-        NSLog(@"request failed with error:%@", [error description]);
-    };
-    [[PSShoppingAPIClient sharedClient] getColorsSuccess:success failure:failure];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+	[super viewDidLoad];
+	self.title = @"Colors";
+	
+	__weak typeof(self) weakSelf = self;
+	[[PSShoppingAPIClient sharedClient] getColorsSuccess:^(NSArray *colors) {
+		weakSelf.colors = colors;
+		[weakSelf.tableView reloadData];
+	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+		NSLog(@"Request failed with error: %@", error);
+	}];
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
-    return 1;
+	return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    if (_colors) {
-        return [_colors count];
-    } else {
-        return 0;
-    }
+	return [self.colors count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
-    
-    cell.textLabel.text = ((PSColor *)[_colors objectAtIndex:indexPath.row]).name;
-    
-    return cell;
+	static NSString *CellIdentifier = @"Cell";
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	if (cell == nil) {
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+	}
+	PSColor *thisColor = (PSColor *)[self.colors objectAtIndex:indexPath.row];
+	cell.textLabel.text = thisColor.name;
+	return cell;
 }
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

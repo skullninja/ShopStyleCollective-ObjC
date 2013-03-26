@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		882146021702275B00DEED11 /* Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 882146001702275B00DEED11 /* Placeholder.png */; };
+		882146031702275B00DEED11 /* Placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 882146011702275B00DEED11 /* Placeholder@2x.png */; };
 		88730A8616CEBE210070885F /* PSBrand.m in Sources */ = {isa = PBXBuildFile; fileRef = 88730A7416CEBE210070885F /* PSBrand.m */; };
 		88730A8716CEBE210070885F /* PSCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 88730A7616CEBE210070885F /* PSCategory.m */; };
 		88730A8816CEBE210070885F /* PSProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 88730A7816CEBE210070885F /* PSProduct.m */; };
@@ -24,7 +26,6 @@
 		8892725A16CC0E7800C2FCED /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8892725916CC0E7800C2FCED /* Default@2x.png */; };
 		8892725C16CC0E7800C2FCED /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8892725B16CC0E7800C2FCED /* Default-568h@2x.png */; };
 		8892725F16CC0E7800C2FCED /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8892725E16CC0E7800C2FCED /* MasterViewController.m */; };
-		8892726516CC0E7800C2FCED /* MasterViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8892726316CC0E7800C2FCED /* MasterViewController_iPhone.xib */; };
 		8892727616CC0EE100C2FCED /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8892727516CC0EE100C2FCED /* SystemConfiguration.framework */; };
 		8892727816CC0EE700C2FCED /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8892727716CC0EE700C2FCED /* MobileCoreServices.framework */; };
 		8892728D16CC0F0C00C2FCED /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8892727B16CC0F0C00C2FCED /* AFHTTPClient.m */; };
@@ -39,20 +40,16 @@
 		889272A316CC11A900C2FCED /* PSProductQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 889272A016CC11A900C2FCED /* PSProductQuery.m */; };
 		889272A416CC11A900C2FCED /* PSShoppingAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 889272A216CC11A900C2FCED /* PSShoppingAPIClient.m */; };
 		AD54415816CEFE4F00CA6A1C /* BrandsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD54415616CEFE4F00CA6A1C /* BrandsViewController.m */; };
-		AD54415916CEFE4F00CA6A1C /* BrandsViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD54415716CEFE4F00CA6A1C /* BrandsViewController_iPhone.xib */; };
 		AD54415D16CF0A2D00CA6A1C /* RetailersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD54415B16CF0A2D00CA6A1C /* RetailersViewController.m */; };
-		AD54415E16CF0A2D00CA6A1C /* RetailersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD54415C16CF0A2D00CA6A1C /* RetailersViewController.xib */; };
 		AD54416216CF0A3A00CA6A1C /* ColorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD54416016CF0A3A00CA6A1C /* ColorsViewController.m */; };
-		AD54416316CF0A3A00CA6A1C /* ColorsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD54416116CF0A3A00CA6A1C /* ColorsViewController.xib */; };
 		AD54416716CF0A8000CA6A1C /* CategoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD54416516CF0A8000CA6A1C /* CategoriesViewController.m */; };
-		AD54416816CF0A8000CA6A1C /* CategoriesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD54416616CF0A8000CA6A1C /* CategoriesViewController.xib */; };
 		AD54416C16CF17CA00CA6A1C /* SearchProductsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD54416A16CF17C900CA6A1C /* SearchProductsViewController.m */; };
-		AD54416D16CF17CA00CA6A1C /* SearchProductsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD54416B16CF17CA00CA6A1C /* SearchProductsViewController.xib */; };
 		AD54417116CF181800CA6A1C /* ProductHistogramViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD54416F16CF181800CA6A1C /* ProductHistogramViewController.m */; };
-		AD54417216CF181800CA6A1C /* ProductHistogramViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD54417016CF181800CA6A1C /* ProductHistogramViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		882146001702275B00DEED11 /* Placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Placeholder.png; sourceTree = "<group>"; };
+		882146011702275B00DEED11 /* Placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Placeholder@2x.png"; sourceTree = "<group>"; };
 		88730A7316CEBE210070885F /* PSBrand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSBrand.h; sourceTree = "<group>"; };
 		88730A7416CEBE210070885F /* PSBrand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSBrand.m; sourceTree = "<group>"; };
 		88730A7516CEBE210070885F /* PSCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSCategory.h; sourceTree = "<group>"; };
@@ -83,7 +80,6 @@
 		8892725B16CC0E7800C2FCED /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		8892725D16CC0E7800C2FCED /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
 		8892725E16CC0E7800C2FCED /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
-		8892726416CC0E7800C2FCED /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MasterViewController_iPhone.xib; sourceTree = "<group>"; };
 		8892727516CC0EE100C2FCED /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		8892727716CC0EE700C2FCED /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		8892727A16CC0F0C00C2FCED /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
@@ -111,22 +107,16 @@
 		889272A216CC11A900C2FCED /* PSShoppingAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSShoppingAPIClient.m; sourceTree = "<group>"; };
 		AD54415516CEFE4F00CA6A1C /* BrandsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrandsViewController.h; sourceTree = "<group>"; };
 		AD54415616CEFE4F00CA6A1C /* BrandsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrandsViewController.m; sourceTree = "<group>"; };
-		AD54415716CEFE4F00CA6A1C /* BrandsViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BrandsViewController_iPhone.xib; sourceTree = "<group>"; };
 		AD54415A16CF0A2D00CA6A1C /* RetailersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RetailersViewController.h; sourceTree = "<group>"; };
 		AD54415B16CF0A2D00CA6A1C /* RetailersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RetailersViewController.m; sourceTree = "<group>"; };
-		AD54415C16CF0A2D00CA6A1C /* RetailersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RetailersViewController.xib; sourceTree = "<group>"; };
 		AD54415F16CF0A3900CA6A1C /* ColorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorsViewController.h; sourceTree = "<group>"; };
 		AD54416016CF0A3A00CA6A1C /* ColorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorsViewController.m; sourceTree = "<group>"; };
-		AD54416116CF0A3A00CA6A1C /* ColorsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ColorsViewController.xib; sourceTree = "<group>"; };
 		AD54416416CF0A8000CA6A1C /* CategoriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CategoriesViewController.h; sourceTree = "<group>"; };
 		AD54416516CF0A8000CA6A1C /* CategoriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CategoriesViewController.m; sourceTree = "<group>"; };
-		AD54416616CF0A8000CA6A1C /* CategoriesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CategoriesViewController.xib; sourceTree = "<group>"; };
 		AD54416916CF17C900CA6A1C /* SearchProductsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchProductsViewController.h; sourceTree = "<group>"; };
 		AD54416A16CF17C900CA6A1C /* SearchProductsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchProductsViewController.m; sourceTree = "<group>"; };
-		AD54416B16CF17CA00CA6A1C /* SearchProductsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchProductsViewController.xib; sourceTree = "<group>"; };
 		AD54416E16CF181700CA6A1C /* ProductHistogramViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductHistogramViewController.h; sourceTree = "<group>"; };
 		AD54416F16CF181800CA6A1C /* ProductHistogramViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductHistogramViewController.m; sourceTree = "<group>"; };
-		AD54417016CF181800CA6A1C /* ProductHistogramViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProductHistogramViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,25 +172,18 @@
 				8892725516CC0E7800C2FCED /* AppDelegate.m */,
 				8892725D16CC0E7800C2FCED /* MasterViewController.h */,
 				8892725E16CC0E7800C2FCED /* MasterViewController.m */,
-				8892726316CC0E7800C2FCED /* MasterViewController_iPhone.xib */,
 				AD54416916CF17C900CA6A1C /* SearchProductsViewController.h */,
 				AD54416A16CF17C900CA6A1C /* SearchProductsViewController.m */,
-				AD54416B16CF17CA00CA6A1C /* SearchProductsViewController.xib */,
 				AD54416E16CF181700CA6A1C /* ProductHistogramViewController.h */,
 				AD54416F16CF181800CA6A1C /* ProductHistogramViewController.m */,
-				AD54417016CF181800CA6A1C /* ProductHistogramViewController.xib */,
 				AD54415516CEFE4F00CA6A1C /* BrandsViewController.h */,
 				AD54415616CEFE4F00CA6A1C /* BrandsViewController.m */,
-				AD54415716CEFE4F00CA6A1C /* BrandsViewController_iPhone.xib */,
 				AD54415A16CF0A2D00CA6A1C /* RetailersViewController.h */,
 				AD54415B16CF0A2D00CA6A1C /* RetailersViewController.m */,
-				AD54415C16CF0A2D00CA6A1C /* RetailersViewController.xib */,
 				AD54415F16CF0A3900CA6A1C /* ColorsViewController.h */,
 				AD54416016CF0A3A00CA6A1C /* ColorsViewController.m */,
-				AD54416116CF0A3A00CA6A1C /* ColorsViewController.xib */,
 				AD54416416CF0A8000CA6A1C /* CategoriesViewController.h */,
 				AD54416516CF0A8000CA6A1C /* CategoriesViewController.m */,
-				AD54416616CF0A8000CA6A1C /* CategoriesViewController.xib */,
 				8892724C16CC0E7800C2FCED /* Supporting Files */,
 			);
 			path = "iOS Example";
@@ -209,6 +192,8 @@
 		8892724C16CC0E7800C2FCED /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				882146001702275B00DEED11 /* Placeholder.png */,
+				882146011702275B00DEED11 /* Placeholder@2x.png */,
 				8892724D16CC0E7800C2FCED /* iOS Example-Info.plist */,
 				8892724E16CC0E7800C2FCED /* InfoPlist.strings */,
 				8892725116CC0E7800C2FCED /* main.m */,
@@ -338,13 +323,8 @@
 				8892725816CC0E7800C2FCED /* Default.png in Resources */,
 				8892725A16CC0E7800C2FCED /* Default@2x.png in Resources */,
 				8892725C16CC0E7800C2FCED /* Default-568h@2x.png in Resources */,
-				8892726516CC0E7800C2FCED /* MasterViewController_iPhone.xib in Resources */,
-				AD54415916CEFE4F00CA6A1C /* BrandsViewController_iPhone.xib in Resources */,
-				AD54415E16CF0A2D00CA6A1C /* RetailersViewController.xib in Resources */,
-				AD54416316CF0A3A00CA6A1C /* ColorsViewController.xib in Resources */,
-				AD54416816CF0A8000CA6A1C /* CategoriesViewController.xib in Resources */,
-				AD54416D16CF17CA00CA6A1C /* SearchProductsViewController.xib in Resources */,
-				AD54417216CF181800CA6A1C /* ProductHistogramViewController.xib in Resources */,
+				882146021702275B00DEED11 /* Placeholder.png in Resources */,
+				882146031702275B00DEED11 /* Placeholder@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,14 +374,6 @@
 				8892724F16CC0E7800C2FCED /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		8892726316CC0E7800C2FCED /* MasterViewController_iPhone.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8892726416CC0E7800C2FCED /* en */,
-			);
-			name = MasterViewController_iPhone.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

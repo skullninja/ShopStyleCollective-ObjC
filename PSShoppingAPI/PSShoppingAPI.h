@@ -35,3 +35,9 @@
 	#import "PSRetailer.h"
 	#import "PSColor.h"
 #endif
+
+#ifdef _PSShoppingAPI_DEBUG_
+	#define PSDLog(...) NSLog(@"%s(%p) %@", __PRETTY_FUNCTION__, self, [NSString stringWithFormat:__VA_ARGS__])
+#else
+	#define PSDLog(...)
+#endif

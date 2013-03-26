@@ -124,7 +124,20 @@
     if (![aDictionary isKindOfClass:[NSDictionary class]]) {
         return;
     }
-    [self setValuesForKeysWithDictionary:aDictionary];
+	for (NSString *key in aDictionary) {
+		id value = [aDictionary valueForKey:key];
+		if ([key isEqualToString:@"clickUrl"]) {
+			[self setValue:value forKey:@"buyUrlString"];
+		} else if ([key isEqualToString:@"description"]) {
+			[self setValue:value forKey:@"descriptionText"];
+		} else if ([key isEqualToString:@"locale"]) {
+			[self setValue:value forKey:@"localeId"];
+		} else if ([key isEqualToString:@"id"]) {
+			[self setValue:value forKey:@"productId"];
+		} else {
+			[self setValue:value forKey:key];
+		}
+	}
 }
 
 - (void)setValue:(id)value forKey:(NSString *)key
@@ -182,17 +195,12 @@
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
-    if ([key isEqualToString:@"clickUrl"]) {
-        [self setValue:value forKey:@"buyUrlString"];
-    } else if ([key isEqualToString:@"description"]) {
-        [self setValue:value forKey:@"descriptionText"];
-    } else if ([key isEqualToString:@"locale"]) {
-        [self setValue:value forKey:@"localeId"];
-    } else if ([key isEqualToString:@"id"]) {
-        [self setValue:value forKey:@"productId"];
-    } else {
-        [super setValue:value forUndefinedKey:key];
-    }
+	PSDLog(@"Warning: Undefined Key Named '%@'", key);
+}
+
+- (NSString *)description
+{
+	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.productId];
 }
 
 - (NSDictionary *)dictionaryRepresentation

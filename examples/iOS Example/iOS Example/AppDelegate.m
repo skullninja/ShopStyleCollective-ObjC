@@ -29,15 +29,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-	[[PSShoppingAPIClient sharedClient] setPartnerId:<#Partner ID#>"];
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+#warning You must sign up for a Partner ID at http://shopsense.shopstyle.com/
+	[[PSShoppingAPIClient sharedClient] setPartnerId:<#Partner ID#>];
+	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	
-	MasterViewController *masterViewController = [[MasterViewController alloc] initWithNibName:@"MasterViewController_iPhone" bundle:nil];
+	MasterViewController *masterViewController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];
 	self.navigationController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
 	self.window.rootViewController = self.navigationController;
 	
-    [self.window makeKeyAndVisible];
-    return YES;
+	[self.window makeKeyAndVisible];
+	return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -48,7 +49,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-	// Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
+	// Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
 	// If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 

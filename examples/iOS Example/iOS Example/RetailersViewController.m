@@ -22,86 +22,60 @@
 // THE SOFTWARE.
 
 #import "RetailersViewController.h"
-#import "PSShoppingAPIClient.h"
-#import "AFHTTPRequestOperation.h"
-#import "PSRetailer.h"
 
 @interface RetailersViewController ()
-    @property (nonatomic, strong) NSArray *retailers;
+
+@property (nonatomic, strong) NSArray *retailers;
+
 @end
 
 @implementation RetailersViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-    }
-    return self;
-}
+@synthesize retailers = _retailers;
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-    
-    void (^success)(NSArray *) = ^ void (NSArray *retailers) {
-        _retailers = retailers;
-        [self.tableView reloadData];
-    };
-    void (^failure)(AFHTTPRequestOperation *, NSError *) = ^ void (AFHTTPRequestOperation *request, NSError *error) {
-        NSLog(@"request failed with error:%@", [error description]);
-    };
-    [[PSShoppingAPIClient sharedClient] getRetailersSuccess:success failure:failure];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+	[super viewDidLoad];
+	self.title = @"Retailers";
+	
+	__weak typeof(self) weakSelf = self;
+	[[PSShoppingAPIClient sharedClient] getRetailersSuccess:^(NSArray *retailers) {
+		weakSelf.retailers = retailers;
+		[weakSelf.tableView reloadData];
+	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+		NSLog(@"Request failed with error: %@", error);
+	}];
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
-    return 1;
+	return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    if (_retailers) {
-        return [_retailers count];
-    } else {
-        return 0;
-    }
+	return [self.retailers count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
-    
-    cell.textLabel.text = ((PSRetailer *)[_retailers objectAtIndex:indexPath.row]).name;
-    
-    return cell;
+	static NSString *CellIdentifier = @"Cell";
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	if (cell == nil) {
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+	}
+	PSRetailer *thisRetailer = [self.retailers objectAtIndex:indexPath.row];
+	cell.textLabel.text = thisRetailer.name;
+	return cell;
 }
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

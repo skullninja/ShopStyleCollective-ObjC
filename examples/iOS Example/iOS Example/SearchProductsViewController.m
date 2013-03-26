@@ -22,88 +22,78 @@
 // THE SOFTWARE.
 
 #import "SearchProductsViewController.h"
-#import "AFHTTPRequestOperation.h"
-#import "PSShoppingAPIClient.h"
-#import "PSProduct.h"
 
 @interface SearchProductsViewController ()
-    @property (nonatomic, strong) NSArray *products;
+
+@property (nonatomic, strong) NSArray *products;
+
 @end
 
 @implementation SearchProductsViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+@synthesize products = _products;
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-
-    void (^success)(NSUInteger, NSArray *) = ^ void (NSUInteger totalCount, NSArray *products) {
-        _products = products;
-        [self.tableView reloadData];
-    };
-    void (^failure)(AFHTTPRequestOperation *, NSError *) = ^ void (AFHTTPRequestOperation *request, NSError *error) {
-        NSLog(@"request failed with error:%@", [error description]);
-    };
-    [[PSShoppingAPIClient sharedClient] searchProductsWithTerm:@"Red Dress" offset:[NSNumber numberWithInt:0] limit:[NSNumber numberWithInt:100] success:success failure:failure];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+	[super viewDidLoad];
+	self.title = @"Search: 'Red Dress'";
+	
+	__weak typeof(self) weakSelf = self;
+	[[PSShoppingAPIClient sharedClient] searchProductsWithTerm:@"Red Dress" offset:nil limit:nil success:^(NSUInteger totalCount, NSArray *products) {
+		weakSelf.products = products;
+		[weakSelf.tableView reloadData];
+	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+		NSLog(@"Request failed with error: %@", error);
+	}];
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
-    return 1;
+	return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    if (_products) {
-        return [_products count];
-    } else {
-        return 0;
-    }
+	return [self.products count];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return 100;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-    }
-    
-    cell.textLabel.text = ((PSProduct *)[_products objectAtIndex:indexPath.row]).name;
-    cell.detailTextLabel.text = ((PSProduct *)[_products objectAtIndex:indexPath.row]).priceLabel;
-    
-    return cell;
+	static NSString *CellIdentifier = @"Cell";
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	if (cell == nil) {
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+	}
+	PSProduct *thisProduct = [self.products objectAtIndex:indexPath.row];
+	cell.textLabel.text = thisProduct.name;
+	cell.textLabel.numberOfLines = 0;
+	if (thisProduct.salePriceLabel) {
+		cell.detailTextLabel.text = [NSString stringWithFormat:@"Now %@! (was %@)", thisProduct.salePriceLabel, thisProduct.priceLabel];
+	} else {
+		cell.detailTextLabel.text = thisProduct.priceLabel;
+	}
+	if (thisProduct.images.count > 0) {
+		PSProductImage *productImage = [thisProduct.images lastObject];
+		[cell.imageView setImageWithURL:[NSURL URLWithString:productImage.urlString] placeholderImage:[UIImage imageNamed:@"Placeholder"]];
+	} else {
+		cell.imageView.image = [UIImage imageNamed:@"Placeholder"];
+	}
+	cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+	return cell;
 }
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end
