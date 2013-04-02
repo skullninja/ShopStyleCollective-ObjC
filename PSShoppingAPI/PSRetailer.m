@@ -23,54 +23,22 @@
 
 #import "PSRetailer.h"
 
+@interface PSRetailer ()
+
+@property (nonatomic, copy, readwrite) NSNumber *retailerId;
+@property (nonatomic, copy, readwrite) NSString *name;
+@property (nonatomic, copy, readwrite) NSURL *browseURL;
+@property (nonatomic, assign, readwrite) BOOL deeplinkSupport;
+
+@end
+
 @implementation PSRetailer
 
-@synthesize name = _name;
-@synthesize urlString = _urlString;
-@synthesize retailerId = _retailerId;
+#pragma mark - NSObject
 
-
-- (void)encodeWithCoder:(NSCoder *)encoder
+- (NSString *)description
 {
-    [encoder encodeObject:self.name forKey:@"name"];
-    [encoder encodeObject:self.retailerId forKey:@"retailerId"];
-    [encoder encodeObject:self.urlString forKey:@"urlString"];
-    [encoder encodeObject:[NSNumber numberWithBool:self.deeplinkSupport] forKey:@"deeplinkSupport"];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-    if ((self = [super init])) {
-        self.name = [decoder decodeObjectForKey:@"name"];
-        self.retailerId = [decoder decodeObjectForKey:@"retailerId"];
-        self.urlString = [decoder decodeObjectForKey:@"urlString"];
-        self.deeplinkSupport = [(NSNumber *)[decoder decodeObjectForKey:@"deeplinkSupport"] boolValue];
-    }
-    return self;
-}
-
-+ (PSRetailer *)instanceFromDictionary:(NSDictionary *)aDictionary
-{
-    PSRetailer *instance = [[PSRetailer alloc] init];
-    [instance setPropertiesWithDictionary:aDictionary];
-    return instance;
-}
-
-- (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary
-{
-    if (![aDictionary isKindOfClass:[NSDictionary class]]) {
-        return;
-    }
-	for (NSString *key in aDictionary) {
-		id value = [aDictionary valueForKey:key];
-		if ([key isEqualToString:@"id"]) {
-			[self setValue:value forKey:@"retailerId"];
-		} else if ([key isEqualToString:@"url"] && [value isKindOfClass:[NSString class]]) {
-			[self setValue:value forKey:@"urlString"];
-		} else {
-			[self setValue:value forKey:key];
-		}
-	}
+	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.retailerId];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -78,25 +46,67 @@
 	PSDLog(@"Warning: Undefined Key Named '%@'", key);
 }
 
-- (NSString *)description
+- (NSUInteger)hash
 {
-	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.retailerId];
+	return self.retailerId.hash;
 }
 
-- (NSDictionary *)dictionaryRepresentation
+- (BOOL)isEqual:(id)object
 {
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-    [dictionary setObject:[NSNumber numberWithBool:self.deeplinkSupport] forKey:@"deeplinkSupport"];
-    if (self.name) {
-        [dictionary setObject:self.name forKey:@"name"];
-    }
-    if (self.retailerId) {
-        [dictionary setObject:self.retailerId forKey:@"retailerId"];
-    }
-    if (self.urlString) {
-        [dictionary setObject:self.urlString forKey:@"urlString"];
-    }
-    return dictionary;
+	if (object == self) {
+		return YES;
+	}
+	if (object == nil || ![object isKindOfClass:[self class]]) {
+		return NO;
+	}
+	return ([self.retailerId isEqualToNumber:[(PSRetailer *)object retailerId]]);
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[encoder encodeObject:self.name forKey:@"name"];
+	[encoder encodeObject:self.retailerId forKey:@"retailerId"];
+	[encoder encodeObject:self.browseURL forKey:@"browseURL"];
+	[encoder encodeObject:[NSNumber numberWithBool:self.deeplinkSupport] forKey:@"deeplinkSupport"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	if ((self = [super init])) {
+		self.name = [decoder decodeObjectForKey:@"name"];
+		self.retailerId = [decoder decodeObjectForKey:@"retailerId"];
+		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
+		self.deeplinkSupport = [(NSNumber *)[decoder decodeObjectForKey:@"deeplinkSupport"] boolValue];
+	}
+	return self;
+}
+
+#pragma mark - PSRemoteObject
+
++ (instancetype)instanceFromRemoteRepresentation:(NSDictionary *)representation
+{
+	if (representation.count == 0) {
+		return nil;
+	}
+	PSRetailer *instance = [[PSRetailer alloc] init];
+	[instance setPropertiesWithDictionary:representation];
+	return instance;
+}
+
+- (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary
+{
+	for (NSString *key in aDictionary) {
+		id value = [aDictionary valueForKey:key];
+		if ([key isEqualToString:@"id"] && ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]])) {
+			self.retailerId = [NSNumber numberWithInteger:[[value description] integerValue]];
+		} else if ([key isEqualToString:@"url"] && [value isKindOfClass:[NSString class]]) {
+			self.browseURL = [NSURL URLWithString:value];
+		} else {
+			[self setValue:value forKey:key];
+		}
+	}
 }
 
 @end

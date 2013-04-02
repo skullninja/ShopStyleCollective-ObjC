@@ -1,5 +1,5 @@
 //
-//  PSColor.m
+//  PSProductSize.m
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -21,23 +21,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "PSColor.h"
+#import "PSProductSize.h"
 
-@interface PSColor ()
+@interface PSProductSize ()
 
-@property (nonatomic, copy, readwrite) NSNumber *colorId;
 @property (nonatomic, copy, readwrite) NSString *name;
-@property (nonatomic, copy, readwrite) NSURL *browseURL;
 
 @end
 
-@implementation PSColor
+@implementation PSProductSize
 
 #pragma mark - NSObject
 
 - (NSString *)description
 {
-	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.colorId];
+	return [[super description] stringByAppendingFormat:@" %@", self.name];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -47,7 +45,7 @@
 
 - (NSUInteger)hash
 {
-	return self.colorId.hash;
+	return self.name.hash;
 }
 
 - (BOOL)isEqual:(id)object
@@ -58,7 +56,7 @@
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.colorId isEqualToNumber:[(PSColor *)object colorId]]);
+	return ([self.name isEqualToString:[(PSProductSize *)object name]]);
 }
 
 #pragma mark - NSCoding
@@ -66,16 +64,12 @@
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
 	[encoder encodeObject:self.name forKey:@"name"];
-	[encoder encodeObject:self.colorId forKey:@"colorId"];
-	[encoder encodeObject:self.browseURL forKey:@"browseURL"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [super init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
-		self.colorId = [decoder decodeObjectForKey:@"colorId"];
-		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
 	}
 	return self;
 }
@@ -87,7 +81,7 @@
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSColor *instance = [[PSColor alloc] init];
+	PSProductSize *instance = [[PSProductSize alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }
@@ -96,13 +90,7 @@
 {
 	for (NSString *key in aDictionary) {
 		id value = [aDictionary valueForKey:key];
-		if ([key isEqualToString:@"id"] && ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]])) {
-			self.colorId = [NSNumber numberWithInteger:[[value description] integerValue]];
-		} else if ([key isEqualToString:@"url"] && [value isKindOfClass:[NSString class]]) {
-			self.browseURL = [NSURL URLWithString:value];
-		} else {
-			[self setValue:value forKey:key];
-		}
+		[self setValue:value forKey:key];
 	}
 }
 

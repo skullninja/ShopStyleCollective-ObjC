@@ -31,7 +31,6 @@
 #import "PSCategory.h"
 
 static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/api/v2/";
-// http://api.shopstyle.com/api/v2/products?pid=uid2436-7580206-43&fts=red+dress&offset=0&limit=10
 
 @interface PSShoppingAPIClient ()
 
@@ -45,32 +44,32 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 
 #pragma mark - Shared Client
 
-+ (PSShoppingAPIClient *)sharedClient
++ (instancetype)sharedClient
 {
-    static PSShoppingAPIClient *_sharedClient = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _sharedClient = [[PSShoppingAPIClient alloc] initWithBaseURL:[NSURL URLWithString:kPSShoppingBaseURLString]];
-    });
-    
-    return _sharedClient;
+	static PSShoppingAPIClient *_sharedClient = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_sharedClient = [[PSShoppingAPIClient alloc] initWithBaseURL:[NSURL URLWithString:kPSShoppingBaseURLString]];
+	});
+	
+	return _sharedClient;
 }
 
 #pragma mark - AFHTTPClient
 
 - (id)initWithBaseURL:(NSURL *)url
 {
-    self = [super initWithBaseURL:url];
-    if (!self) {
-        return nil;
-    }
-    
-    [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
-    
-    // Accept HTTP Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
+	self = [super initWithBaseURL:url];
+	if (!self) {
+		return nil;
+	}
+	
+	[self registerHTTPOperationClass:[AFJSONRequestOperation class]];
+	
+	// Accept HTTP Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
 	[self setDefaultHeader:@"Accept" value:@"application/json"];
-    
-    return self;
+	
+	return self;
 }
 
 #pragma mark - Base API Request
@@ -84,10 +83,10 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 	[mutableParameters setValue:self.partnerId forKey:@"pid"];
 	[mutableParameters setValue:@"true" forKey:@"suppressResponseCode"];
 	
-    NSMutableURLRequest *request = [self requestWithMethod:@"GET" path:entity parameters:mutableParameters];
-    [request setValue:@"gzip, deflate" forHTTPHeaderField:@"Accept-Encoding"];
-    AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([responseObject isKindOfClass:[NSDictionary class]]) {
+	NSMutableURLRequest *request = [self requestWithMethod:@"GET" path:entity parameters:mutableParameters];
+	[request setValue:@"gzip, deflate" forHTTPHeaderField:@"Accept-Encoding"];
+	AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+		if ([responseObject isKindOfClass:[NSDictionary class]]) {
 			if ([responseObject objectForKey:@"errorCode"] != nil || [responseObject objectForKey:@"errorName"] != nil || [responseObject objectForKey:@"errorMessage"] != nil) {
 				if (failure) {
 					NSNumber *errorCode = [responseObject objectForKey:@"errorCode"] ?: [NSNumber numberWithInt:500];
@@ -98,22 +97,21 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 					failure(operation, badResponse);
 				}
 			} else if (success) {
-                success(operation, responseObject);
-            }
-        } else {
-            if (failure) {
-                NSError *badResponse = [NSError errorWithDomain:NSStringFromClass([self class]) code:500 userInfo:@{NSLocalizedDescriptionKey : @"Malformed Response From Server"}];
-                failure(operation, badResponse);
-            }
-        }
-        
+				success(operation, responseObject);
+			}
+		} else {
+			if (failure) {
+				failure(operation, [self errorForBadResponse]);
+			}
+		}
+		
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 		if (failure) {
 			failure(operation, error);
 		}
 	}];
-    
-    [self enqueueHTTPRequestOperation:operation];
+	
+	[self enqueueHTTPRequestOperation:operation];
 }
 
 #pragma mark - Getting Products
@@ -124,7 +122,7 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 	NSString *entity = [NSString stringWithFormat:@"products/%d",productId.integerValue];
 	[self makeRequestForEntity:entity parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
 		if (success) {
-			PSProduct *product = [PSProduct instanceFromDictionary:responseObject];
+			PSProduct *product = (PSProduct *)[self remoteObjectForEntityNamed:@"product" fromRepresentation:responseObject];
 			success(product);
 		}
 	} failure:failure];
@@ -133,10 +131,10 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 - (void)searchProductsWithTerm:(NSString *)searchTerm offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSParameterAssert(searchTerm != nil && searchTerm.length > 0);
-	[self getProductsWithQuery:[PSProductQuery productQueryWithSearchTerm:searchTerm] offset:offset limit:limit success:success failure:failure];
+	[self searchProductsWithQuery:[PSProductQuery productQueryWithSearchTerm:searchTerm] offset:offset limit:limit success:success failure:failure];
 }
 
-- (void)getProductsWithQuery:(PSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (void)searchProductsWithQuery:(PSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSString *entity = @"products";
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
@@ -159,11 +157,7 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 			
 			if (success) {
 				NSArray *productsRepresentation = [responseObject objectForKey:@"products"];
-				NSMutableArray *products = [NSMutableArray arrayWithCapacity:[productsRepresentation count]];
-				for (id productRepresentation in productsRepresentation) {
-					PSProduct *product = [PSProduct instanceFromDictionary:productRepresentation];
-					[products addObject:product];
-				}
+				NSArray *products = [self remoteObjectsForEntityNamed:@"product" fromRepresentations:productsRepresentation];
 				NSUInteger totalCount = products.count;
 				NSDictionary *metadata = [responseObject objectForKey:@"metadata"];
 				if ([[metadata objectForKey:@"total"] isKindOfClass:[NSNumber class]]) {
@@ -173,15 +167,14 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 			}
 			
 		} else {
-            if (failure) {
-                NSError *badResponse = [NSError errorWithDomain:NSStringFromClass([self class]) code:500 userInfo:@{NSLocalizedDescriptionKey : @"Malformed Response From Server"}];
-                failure(operation, badResponse);
-            }
+			if (failure) {
+				failure(operation, [self errorForBadResponse]);
+			}
 		}
 	} failure:failure];
 }
 
-- (void)getProductHistogramWithQuery:(PSProductQuery *)queryOrNil filterType:(PSProductFilterType)filterType floor:(NSNumber *)floorOrNil success:(void (^)(NSArray *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (void)productHistogramWithQuery:(PSProductQuery *)queryOrNil filterType:(PSProductFilterType)filterType floor:(NSNumber *)floorOrNil success:(void (^)(NSArray *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
 	NSString *filterResponseKey = nil;
@@ -229,19 +222,24 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 				NSArray *filtersRepresentation = [responseObject objectForKey:filterResponseKey];
 				NSMutableArray *filters = [NSMutableArray arrayWithCapacity:[filtersRepresentation count]];
 				for (id filterRep in filtersRepresentation) {
-					PSProductFilter *filter = [PSProductFilter filterWithType:filterType filterId:[filterRep objectForKey:@"id"]];
-					filter.urlString = [filterRep objectForKey:@"url"];
-					filter.name = [filterRep objectForKey:@"name"];
-					filter.productCount = [filterRep objectForKey:@"count"];
-					[filters addObject:filter];
+					if ([filterRep isKindOfClass:[NSDictionary class]] && [filterRep objectForKey:@"id"] != nil) {
+						PSProductFilter *filter = [PSProductFilter filterWithType:filterType filterId:[filterRep objectForKey:@"id"]];
+						filter.browseURLString = [filterRep objectForKey:@"url"];
+						filter.name = [filterRep objectForKey:@"name"];
+						filter.productCount = [filterRep objectForKey:@"count"];
+						[filters addObject:filter];
+					}
 				}
-				success(filters);
+				if (filters.count > 0) {
+					success(filters);
+					return;
+				}
+				success(nil);
 			}
 		} else {
-            if (failure) {
-                NSError *badResponse = [NSError errorWithDomain:NSStringFromClass([self class]) code:500 userInfo:@{NSLocalizedDescriptionKey : @"Malformed Response From Server"}];
-                failure(operation, badResponse);
-            }
+			if (failure) {
+				failure(operation, [self errorForBadResponse]);
+			}
 		}
 	} failure:failure];
 }
@@ -255,23 +253,18 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 		if ([[responseObject objectForKey:@"brands"] isKindOfClass:[NSArray class]]) {
 			if (success) {
 				NSArray *brandsRepresentation = [responseObject objectForKey:@"brands"];
-				NSMutableArray *brands = [NSMutableArray arrayWithCapacity:[brandsRepresentation count]];
-				for (id brandRepresentation in brandsRepresentation) {
-					PSBrand *brand = [PSBrand instanceFromDictionary:brandRepresentation];
-					[brands addObject:brand];
-				}
+				NSArray *brands = [self remoteObjectsForEntityNamed:@"brand" fromRepresentations:brandsRepresentation];
 				success(brands);
 			}
 		} else {
-            if (failure) {
-                NSError *badResponse = [NSError errorWithDomain:NSStringFromClass([self class]) code:500 userInfo:@{NSLocalizedDescriptionKey : @"Malformed Response From Server"}];
-                failure(operation, badResponse);
-            }
+			if (failure) {
+				failure(operation, [self errorForBadResponse]);
+			}
 		}
 	} failure:failure];
 }
 
-#pragma mark - Brands
+#pragma mark - Retailers
 
 - (void)getRetailersSuccess:(void (^)(NSArray *retailers))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
@@ -280,18 +273,13 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 		if ([[responseObject objectForKey:@"retailers"] isKindOfClass:[NSArray class]]) {
 			if (success) {
 				NSArray *retailersRepresentation = [responseObject objectForKey:@"retailers"];
-				NSMutableArray *retailers = [NSMutableArray arrayWithCapacity:[retailersRepresentation count]];
-				for (id retailerRepresentation in retailersRepresentation) {
-					PSRetailer *retailer = [PSRetailer instanceFromDictionary:retailerRepresentation];
-					[retailers addObject:retailer];
-				}
+				NSArray *retailers = [self remoteObjectsForEntityNamed:@"retailer" fromRepresentations:retailersRepresentation];
 				success(retailers);
 			}
 		} else {
-            if (failure) {
-                NSError *badResponse = [NSError errorWithDomain:NSStringFromClass([self class]) code:500 userInfo:@{NSLocalizedDescriptionKey : @"Malformed Response From Server"}];
-                failure(operation, badResponse);
-            }
+			if (failure) {
+				failure(operation, [self errorForBadResponse]);
+			}
 		}
 	} failure:failure];
 }
@@ -305,18 +293,13 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 		if ([[responseObject objectForKey:@"colors"] isKindOfClass:[NSArray class]]) {
 			if (success) {
 				NSArray *colorsRepresentation = [responseObject objectForKey:@"colors"];
-				NSMutableArray *colors = [NSMutableArray arrayWithCapacity:[colorsRepresentation count]];
-				for (id colorRepresentation in colorsRepresentation) {
-					PSColor *color = [PSColor instanceFromDictionary:colorRepresentation];
-					[colors addObject:color];
-				}
+				NSArray *colors = [self remoteObjectsForEntityNamed:@"color" fromRepresentations:colorsRepresentation];
 				success(colors);
 			}
 		} else {
-            if (failure) {
-                NSError *badResponse = [NSError errorWithDomain:NSStringFromClass([self class]) code:500 userInfo:@{NSLocalizedDescriptionKey : @"Malformed Response From Server"}];
-                failure(operation, badResponse);
-            }
+			if (failure) {
+				failure(operation, [self errorForBadResponse]);
+			}
 		}
 	} failure:failure];
 }
@@ -340,20 +323,57 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 		if ([[responseObject objectForKey:@"categories"] isKindOfClass:[NSArray class]]) {
 			if (success) {
 				NSArray *categoriesRepresentation = [responseObject objectForKey:@"categories"];
-				NSMutableArray *categories = [NSMutableArray arrayWithCapacity:[categoriesRepresentation count]];
-				for (id categoryRepresentation in categoriesRepresentation) {
-					PSCategory *color = [PSCategory instanceFromDictionary:categoryRepresentation];
-					[categories addObject:color];
-				}
+				NSArray *categories = [self remoteObjectsForEntityNamed:@"category" fromRepresentations:categoriesRepresentation];
 				success(categories);
 			}
 		} else {
-            if (failure) {
-                NSError *badResponse = [NSError errorWithDomain:NSStringFromClass([self class]) code:500 userInfo:@{NSLocalizedDescriptionKey : @"Malformed Response From Server"}];
-                failure(operation, badResponse);
-            }
+			if (failure) {
+				failure(operation, [self errorForBadResponse]);
+			}
 		}
 	} failure:failure];
+}
+
+#pragma mark - Standard Errors
+
+- (NSError *)errorForBadResponse
+{
+	return [NSError errorWithDomain:NSStringFromClass([self class]) code:500 userInfo:@{NSLocalizedDescriptionKey : @"Malformed Response From Server"}];
+}
+
+#pragma mark - PSRemoteObject Conversion
+
+- (NSArray *)remoteObjectsForEntityNamed:(NSString *)entityName fromRepresentations:(NSArray *)representations
+{
+	NSMutableArray *objects = [NSMutableArray arrayWithCapacity:[representations count]];
+	for (id valueMember in representations) {
+		if ([valueMember isKindOfClass:[NSDictionary class]] && [(NSDictionary *)valueMember count] > 0) {
+			id remoteObject = [self remoteObjectForEntityNamed:entityName fromRepresentation:valueMember];
+			if (remoteObject != nil) {
+				[objects addObject:remoteObject];
+			}
+		}
+	}
+	if (objects.count > 0) {
+		return objects;
+	}
+	return nil;
+}
+
+- (id<PSRemoteObject>)remoteObjectForEntityNamed:(NSString *)entityName fromRepresentation:(NSDictionary *)representation
+{
+	if ([entityName isEqualToString:@"brand"]) {
+		return [PSBrand instanceFromRemoteRepresentation:representation];
+	} else if ([entityName isEqualToString:@"category"]) {
+		return [PSCategory instanceFromRemoteRepresentation:representation];
+	} else if ([entityName isEqualToString:@"color"]) {
+		return [PSColor instanceFromRemoteRepresentation:representation];
+	} else if ([entityName isEqualToString:@"product"]) {
+		return [PSProduct instanceFromRemoteRepresentation:representation];
+	} else if ([entityName isEqualToString:@"retailer"]) {
+		return [PSRetailer instanceFromRemoteRepresentation:representation];
+	}
+	return nil;
 }
 
 @end

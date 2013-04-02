@@ -23,15 +23,17 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PSCategory : NSObject <NSCoding>
+/** A category found on shopstyle.com  */
 
-@property (nonatomic, copy) NSString *categoryId;
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *parentId;
+@interface PSCategory : NSObject <NSCoding, PSRemoteObject>
 
-+ (PSCategory *)instanceFromDictionary:(NSDictionary *)aDictionary;
-- (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary;
+/** The category's unique identifier. */
+@property (nonatomic, copy, readonly) NSString *categoryId;
 
-- (NSDictionary *)dictionaryRepresentation;
+/** The category's name. */
+@property (nonatomic, copy, readonly) NSString *name;
+
+/** The category's parent categoryId if one exists. */
+@property (nonatomic, copy, readonly) NSString *parentId;
 
 @end

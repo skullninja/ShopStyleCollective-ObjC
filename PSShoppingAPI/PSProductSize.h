@@ -1,5 +1,5 @@
 //
-//  PSShoppingAPI.h
+//  PSProductSize.h
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -21,25 +21,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "AFNetworking.h"
+#import <Foundation/Foundation.h>
 
-#ifndef _PSShoppingAPI_
-	#define _PSShoppingAPI_
-	#import "PSShoppingAPIClient.h"
-	#import "PSProductQuery.h"
-	#import "PSProductFilter.h"
-	#import "PSProduct.h"
-	#import "PSBrand.h"
-	#import "PSCategory.h"
-	#import "PSProductImage.h"
-	#import "PSProductSize.h"
-	#import "PSProductColor.h"
-	#import "PSRetailer.h"
-	#import "PSColor.h"
-#endif
+/** The retailer/brand size description */
 
-#ifdef _PSShoppingAPI_DEBUG_
-	#define PSDLog(...) NSLog(@"%s(%p) %@", __PRETTY_FUNCTION__, self, [NSString stringWithFormat:__VA_ARGS__])
-#else
-	#define PSDLog(...)
-#endif
+@interface PSProductSize : NSObject <NSCoding, PSRemoteObject>
+
+/** The size name. */
+@property (nonatomic, copy, readonly) NSString *name;
+
+@end

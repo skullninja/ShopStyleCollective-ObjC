@@ -81,7 +81,7 @@
 	}
 	if (thisProduct.images.count > 0) {
 		PSProductImage *productImage = [thisProduct.images lastObject];
-		[cell.imageView setImageWithURL:[NSURL URLWithString:productImage.urlString] placeholderImage:[UIImage imageNamed:@"Placeholder"]];
+		[cell.imageView setImageWithURL:productImage.URL placeholderImage:[UIImage imageNamed:@"Placeholder"]];
 	} else {
 		cell.imageView.image = [UIImage imageNamed:@"Placeholder"];
 	}

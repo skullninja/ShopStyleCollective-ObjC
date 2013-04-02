@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		882146021702275B00DEED11 /* Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 882146001702275B00DEED11 /* Placeholder.png */; };
 		882146031702275B00DEED11 /* Placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 882146011702275B00DEED11 /* Placeholder@2x.png */; };
+		883AC04017066238006351B1 /* PSProductSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 883AC03F17066237006351B1 /* PSProductSize.m */; };
+		883AC0431706625A006351B1 /* PSProductColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 883AC04217066259006351B1 /* PSProductColor.m */; };
 		88730A8616CEBE210070885F /* PSBrand.m in Sources */ = {isa = PBXBuildFile; fileRef = 88730A7416CEBE210070885F /* PSBrand.m */; };
 		88730A8716CEBE210070885F /* PSCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 88730A7616CEBE210070885F /* PSCategory.m */; };
 		88730A8816CEBE210070885F /* PSProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 88730A7816CEBE210070885F /* PSProduct.m */; };
@@ -50,6 +52,10 @@
 /* Begin PBXFileReference section */
 		882146001702275B00DEED11 /* Placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Placeholder.png; sourceTree = "<group>"; };
 		882146011702275B00DEED11 /* Placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Placeholder@2x.png"; sourceTree = "<group>"; };
+		883AC03E17066237006351B1 /* PSProductSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSProductSize.h; sourceTree = "<group>"; };
+		883AC03F17066237006351B1 /* PSProductSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSProductSize.m; sourceTree = "<group>"; };
+		883AC04117066259006351B1 /* PSProductColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSProductColor.h; sourceTree = "<group>"; };
+		883AC04217066259006351B1 /* PSProductColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSProductColor.m; sourceTree = "<group>"; };
 		88730A7316CEBE210070885F /* PSBrand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSBrand.h; sourceTree = "<group>"; };
 		88730A7416CEBE210070885F /* PSBrand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSBrand.m; sourceTree = "<group>"; };
 		88730A7516CEBE210070885F /* PSCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSCategory.h; sourceTree = "<group>"; };
@@ -255,6 +261,10 @@
 				88730A7816CEBE210070885F /* PSProduct.m */,
 				88730A7916CEBE210070885F /* PSProductImage.h */,
 				88730A7A16CEBE210070885F /* PSProductImage.m */,
+				883AC03E17066237006351B1 /* PSProductSize.h */,
+				883AC03F17066237006351B1 /* PSProductSize.m */,
+				883AC04117066259006351B1 /* PSProductColor.h */,
+				883AC04217066259006351B1 /* PSProductColor.m */,
 				88730A7316CEBE210070885F /* PSBrand.h */,
 				88730A7416CEBE210070885F /* PSBrand.m */,
 				88730A7516CEBE210070885F /* PSCategory.h */,
@@ -362,6 +372,8 @@
 				AD54416716CF0A8000CA6A1C /* CategoriesViewController.m in Sources */,
 				AD54416C16CF17CA00CA6A1C /* SearchProductsViewController.m in Sources */,
 				AD54417116CF181800CA6A1C /* ProductHistogramViewController.m in Sources */,
+				883AC04017066238006351B1 /* PSProductSize.m in Sources */,
+				883AC0431706625A006351B1 /* PSProductColor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

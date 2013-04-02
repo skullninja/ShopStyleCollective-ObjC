@@ -32,34 +32,9 @@
 
 @implementation PSProductFilter
 
-@synthesize type = _type;
-@synthesize filterId = _filterId;
-@synthesize name = _name;
-@synthesize urlString = _urlString;
-@synthesize productCount = _productCount;
+#pragma mark - Init
 
-- (void)encodeWithCoder:(NSCoder *)encoder
-{
-    [encoder encodeObject:self.name forKey:@"name"];
-    [encoder encodeObject:self.filterId forKey:@"filterId"];
-    [encoder encodeObject:self.urlString forKey:@"urlString"];
-	[encoder encodeInteger:self.type forKey:@"type"];
-    [encoder encodeObject:self.productCount forKey:@"productCount"];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-    if ((self = [super init])) {
-        self.name = [decoder decodeObjectForKey:@"name"];
-        self.filterId = [decoder decodeObjectForKey:@"filterId"];
-        self.urlString = [decoder decodeObjectForKey:@"urlString"];
-		self.type = [decoder decodeIntegerForKey:@"type"];
-        self.productCount = [decoder decodeObjectForKey:@"productCount"];
-    }
-    return self;
-}
-
-+ (PSProductFilter *)filterWithType:(PSProductFilterType)type filterId:(NSNumber *)filterId
++ (instancetype)filterWithType:(PSProductFilterType)type filterId:(NSNumber *)filterId
 {
 	PSProductFilter *filter = [[PSProductFilter alloc] initWithType:type filterId:filterId];
 	return filter;
@@ -68,15 +43,17 @@
 - (id)initWithType:(PSProductFilterType)type filterId:(NSNumber *)filterId
 {
 	NSParameterAssert(filterId != nil);
-    self = [super init];
-    if (self) {
-        _filterId = [filterId copy];
+	self = [super init];
+	if (self) {
+		_filterId = [filterId copy];
 		_type = type;
-    }
-    return self;
+	}
+	return self;
 }
 
-- (NSString *)description
+#pragma mark - Conversion to URL Query Parameters
+
+- (NSString *)queryParameterRepresentation
 {
 	// Filter prefixes are:
 	// b - brand
@@ -109,7 +86,53 @@
 		default:
 			break;
 	}
-	return [prefix stringByAppendingString:self.filterId.stringValue];
+	return [prefix stringByAppendingFormat:@"%d", self.filterId.integerValue];
+}
+
+#pragma mark - NSObject
+
+- (NSString *)description
+{
+	return [[super description] stringByAppendingFormat:@" %@", [self queryParameterRepresentation]];
+}
+
+- (NSUInteger)hash
+{
+	return ((self.filterId.hash << sizeof(PSProductFilterType)) ^ self.type);
+}
+
+- (BOOL)isEqual:(id)object
+{
+	if (object == self) {
+		return YES;
+	}
+	if (object == nil || ![object isKindOfClass:[self class]]) {
+		return NO;
+	}
+	return ([self.filterId isEqualToNumber:[(PSProductFilter *)object filterId]] && self.type == [(PSProductFilter *)object type]);
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[encoder encodeObject:self.name forKey:@"name"];
+	[encoder encodeObject:self.filterId forKey:@"filterId"];
+	[encoder encodeObject:self.browseURLString forKey:@"browseURLString"];
+	[encoder encodeInteger:self.type forKey:@"type"];
+	[encoder encodeObject:self.productCount forKey:@"productCount"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	if ((self = [super init])) {
+		self.name = [decoder decodeObjectForKey:@"name"];
+		self.filterId = [decoder decodeObjectForKey:@"filterId"];
+		self.browseURLString = [decoder decodeObjectForKey:@"browseURLString"];
+		self.type = [decoder decodeIntegerForKey:@"type"];
+		self.productCount = [decoder decodeObjectForKey:@"productCount"];
+	}
+	return self;
 }
 
 @end

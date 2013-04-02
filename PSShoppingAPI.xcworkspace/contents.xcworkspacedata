@@ -38,6 +38,18 @@
          location = "group:PSProductImage.m">
       </FileRef>
       <FileRef
+         location = "group:PSProductColor.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSProductColor.m">
+      </FileRef>
+      <FileRef
+         location = "group:PSProductSize.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSProductSize.m">
+      </FileRef>
+      <FileRef
          location = "group:PSBrand.h">
       </FileRef>
       <FileRef

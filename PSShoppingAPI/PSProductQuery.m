@@ -33,32 +33,7 @@
 
 @implementation PSProductQuery
 
-@synthesize searchTerm = _searchTerm;
-@synthesize productCategory = _productCategory;
-@synthesize priceDropDate = _priceDropDate;
-@synthesize productFilterSet = _productFilterSet;
-@synthesize sort = _sort;
-
-- (void)encodeWithCoder:(NSCoder *)encoder
-{
-    [encoder encodeObject:self.searchTerm forKey:@"searchTerm"];
-    [encoder encodeObject:self.productCategory forKey:@"productCategory"];
-    [encoder encodeObject:self.priceDropDate forKey:@"priceDropDate"];
-	[encoder encodeInteger:self.sort forKey:@"sort"];
-    [encoder encodeObject:self.productFilterSet forKey:@"productFilterSet"];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-    if ((self = [super init])) {
-        self.searchTerm = [decoder decodeObjectForKey:@"searchTerm"];
-        self.productCategory = [decoder decodeObjectForKey:@"productCategory"];
-        self.priceDropDate = [decoder decodeObjectForKey:@"priceDropDate"];
-		self.sort = [decoder decodeIntegerForKey:@"sort"];
-        self.productFilterSet = [decoder decodeObjectForKey:@"productFilterSet"];
-    }
-    return self;
-}
+#pragma mark - init
 
 + (instancetype)productQueryWithSearchTerm:(NSString *)searchTearm
 {
@@ -67,22 +42,20 @@
 	return instance;
 }
 
-+ (instancetype)productQueryWithCategory:(NSString *)productCategory
++ (instancetype)productQueryWithCategoryId:(NSString *)productCategoryId
 {
 	PSProductQuery *instance = [[PSProductQuery alloc] init];
-	instance.productCategory = productCategory;
+	instance.productCategoryId = productCategoryId;
 	return instance;
 }
 
-#pragma mark - init
-
 - (id)init
 {
-    self = [super init];
-    if (self) {
-        _productFilterSet = [[NSMutableSet alloc] init];
-    }
-    return self;
+	self = [super init];
+	if (self) {
+		_productFilterSet = [[NSMutableSet alloc] init];
+	}
+	return self;
 }
 
 #pragma mark - Product Filters
@@ -133,30 +106,30 @@
 	[self.productFilterSet minusSet:[self productFilterSetOfType:filterType]];
 }
 
-#pragma mark -
+#pragma mark - Conversion to URL Query Parameters
 
 - (NSDictionary *)queryParameterRepresentation
 {
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+	NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
 	
-    if (self.searchTerm && self.searchTerm.length > 0) {
-        [dictionary setObject:self.searchTerm forKey:@"fts"];
-    }
-    if (self.productCategory && self.productCategory.length > 0) {
-        [dictionary setObject:self.productCategory forKey:@"cat"];
-    }
+	if (self.searchTerm && self.searchTerm.length > 0) {
+		[dictionary setObject:self.searchTerm forKey:@"fts"];
+	}
+	if (self.productCategoryId && self.productCategoryId.length > 0) {
+		[dictionary setObject:self.productCategoryId forKey:@"cat"];
+	}
 	
 	if (self.productFilterSet.count > 0) {
 		NSArray *allFilters = [self productFilters];
 		for (PSProductFilter *filter in allFilters) {
-			[dictionary setObject:filter.description forKey:@"fl"];
+			[dictionary setObject:filter.queryParameterRepresentation forKey:@"fl"];
 		}
 	}
 	
-    if (self.priceDropDate) {
+	if (self.priceDropDate) {
 		NSNumber *numberRep = [NSNumber numberWithDouble:[self.priceDropDate timeIntervalSince1970]];
-        [dictionary setObject:numberRep forKey:@"pdd"];
-    }
+		[dictionary setObject:numberRep forKey:@"pdd"];
+	}
 	
 	if (self.sort == PSProductQuerySortPriceLoHi) {
 		[dictionary setObject:@"PriceLoHi" forKey:@"sort"];
@@ -168,7 +141,83 @@
 		[dictionary setObject:@"Popular" forKey:@"sort"];
 	}
 	
-    return dictionary;
+	return dictionary;
+}
+
+#pragma mark - NSObject
+
+- (NSString *)description
+{
+	return [[super description] stringByAppendingFormat:@" %@", [self queryParameterRepresentation]];
+}
+
+- (NSUInteger)hash
+{
+	// a very simple hash
+	NSUInteger hash = 0;
+	hash ^= self.productFilterSet.hash;
+	hash ^= self.searchTerm.hash;
+	hash ^= self.productCategoryId.hash;
+	hash ^= self.priceDropDate.hash;
+	hash ^= self.sort;
+	return hash;
+}
+
+- (BOOL)isEqual:(id)object
+{
+	if (object == nil || ![object isKindOfClass:[self class]]) {
+		return NO;
+	}
+	return [self isEqualToProductQuery:object];
+}
+
+- (BOOL)isEqualToProductQuery:(PSProductQuery *)productQuery
+{
+	NSParameterAssert(productQuery != nil);
+	if (productQuery == self) {
+		return YES;
+	}
+	
+	if (![productQuery.productFilterSet isEqualToSet:self.productFilterSet]) {
+		return NO;
+	}
+	if (![productQuery.searchTerm isEqualToString:self.searchTerm]) {
+		return NO;
+	}
+	if (![productQuery.productCategoryId isEqualToString:self.productCategoryId]) {
+		return NO;
+	}
+	if (![productQuery.priceDropDate isEqualToDate:self.priceDropDate]) {
+		return NO;
+	}
+	if (productQuery.sort != self.sort) {
+		return NO;
+	}
+	
+	return YES;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[encoder encodeObject:self.searchTerm forKey:@"searchTerm"];
+	[encoder encodeObject:self.productCategoryId forKey:@"productCategoryId"];
+	[encoder encodeObject:self.priceDropDate forKey:@"priceDropDate"];
+	[encoder encodeInteger:self.sort forKey:@"sort"];
+	[encoder encodeObject:self.productFilterSet forKey:@"productFilterSet"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	if ((self = [super init])) {
+		self.searchTerm = [decoder decodeObjectForKey:@"searchTerm"];
+		self.productCategoryId = [decoder decodeObjectForKey:@"productCategoryId"];
+		self.priceDropDate = [decoder decodeObjectForKey:@"priceDropDate"];
+		self.sort = [decoder decodeIntegerForKey:@"sort"];
+		self.productFilterSet = [decoder decodeObjectForKey:@"productFilterSet"];
+	}
+	return self;
 }
 
 @end

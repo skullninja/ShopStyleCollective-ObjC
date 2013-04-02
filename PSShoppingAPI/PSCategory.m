@@ -23,49 +23,21 @@
 
 #import "PSCategory.h"
 
+@interface PSCategory ()
+
+@property (nonatomic, copy, readwrite) NSString *categoryId;
+@property (nonatomic, copy, readwrite) NSString *name;
+@property (nonatomic, copy, readwrite) NSString *parentId;
+
+@end
+
 @implementation PSCategory
 
-@synthesize categoryId = _categoryId;
-@synthesize name = _name;
-@synthesize parentId = _parentId;
+#pragma mark - NSObject
 
-- (void)encodeWithCoder:(NSCoder *)encoder
+- (NSString *)description
 {
-    [encoder encodeObject:self.categoryId forKey:@"categoryId"];
-    [encoder encodeObject:self.name forKey:@"name"];
-    [encoder encodeObject:self.parentId forKey:@"parentId"];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-    if ((self = [super init])) {
-        self.categoryId = [decoder decodeObjectForKey:@"categoryId"];
-        self.name = [decoder decodeObjectForKey:@"name"];
-        self.parentId = [decoder decodeObjectForKey:@"parentId"];
-    }
-    return self;
-}
-
-+ (PSCategory *)instanceFromDictionary:(NSDictionary *)aDictionary
-{
-    PSCategory *instance = [[PSCategory alloc] init];
-    [instance setPropertiesWithDictionary:aDictionary];
-    return instance;
-}
-
-- (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary
-{
-    if (![aDictionary isKindOfClass:[NSDictionary class]]) {
-        return;
-    }
-	for (NSString *key in aDictionary) {
-		id value = [aDictionary valueForKey:key];
-		if ([key isEqualToString:@"id"]) {
-			[self setValue:value forKey:@"categoryId"];
-		} else {
-			[self setValue:value forKey:key];
-		}
-	}
+	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.categoryId];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -73,24 +45,63 @@
 	PSDLog(@"Warning: Undefined Key Named '%@'", key);
 }
 
-- (NSString *)description
+- (NSUInteger)hash
 {
-	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.categoryId];
+	return self.categoryId.hash;
 }
 
-- (NSDictionary *)dictionaryRepresentation
+- (BOOL)isEqual:(id)object
 {
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-    if (self.categoryId) {
-        [dictionary setObject:self.categoryId forKey:@"categoryId"];
-    }
-    if (self.name) {
-        [dictionary setObject:self.name forKey:@"name"];
-    }
-    if (self.parentId) {
-        [dictionary setObject:self.parentId forKey:@"parentId"];
-    }
-    return dictionary;
+	if (object == self) {
+		return YES;
+	}
+	if (object == nil || ![object isKindOfClass:[self class]]) {
+		return NO;
+	}
+	return ([self.categoryId isEqualToString:[(PSCategory *)object categoryId]]);
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[encoder encodeObject:self.categoryId forKey:@"categoryId"];
+	[encoder encodeObject:self.name forKey:@"name"];
+	[encoder encodeObject:self.parentId forKey:@"parentId"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	if ((self = [super init])) {
+		self.categoryId = [decoder decodeObjectForKey:@"categoryId"];
+		self.name = [decoder decodeObjectForKey:@"name"];
+		self.parentId = [decoder decodeObjectForKey:@"parentId"];
+	}
+	return self;
+}
+
+#pragma mark - PSRemoteObject
+
++ (instancetype)instanceFromRemoteRepresentation:(NSDictionary *)representation
+{
+	if (representation.count == 0) {
+		return nil;
+	}
+	PSCategory *instance = [[PSCategory alloc] init];
+	[instance setPropertiesWithDictionary:representation];
+	return instance;
+}
+
+- (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary
+{
+	for (NSString *key in aDictionary) {
+		id value = [aDictionary valueForKey:key];
+		if ([key isEqualToString:@"id"] && [value isKindOfClass:[NSString class]]) {
+			self.categoryId = value;
+		} else {
+			[self setValue:value forKey:key];
+		}
+	}
 }
 
 @end

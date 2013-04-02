@@ -23,51 +23,21 @@
 
 #import "PSBrand.h"
 
+@interface PSBrand ()
+
+@property (nonatomic, copy, readwrite) NSNumber *brandId;
+@property (nonatomic, copy, readwrite) NSString *name;
+@property (nonatomic, copy, readwrite) NSURL *browseURL;
+
+@end
+
 @implementation PSBrand
 
-@synthesize name = _name;
-@synthesize urlString = _urlString;
-@synthesize brandId = _brandId;
+#pragma mark - NSObject
 
-- (void)encodeWithCoder:(NSCoder *)encoder
+- (NSString *)description
 {
-    [encoder encodeObject:self.name forKey:@"name"];
-    [encoder encodeObject:self.brandId forKey:@"brandId"];
-    [encoder encodeObject:self.urlString forKey:@"urlString"];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-    if ((self = [super init])) {
-        self.name = [decoder decodeObjectForKey:@"name"];
-        self.brandId = [decoder decodeObjectForKey:@"brandId"];
-        self.urlString = [decoder decodeObjectForKey:@"urlString"];
-    }
-    return self;
-}
-
-+ (PSBrand *)instanceFromDictionary:(NSDictionary *)aDictionary
-{
-    PSBrand *instance = [[PSBrand alloc] init];
-    [instance setPropertiesWithDictionary:aDictionary];
-    return instance;
-}
-
-- (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary
-{
-    if (![aDictionary isKindOfClass:[NSDictionary class]]) {
-        return;
-    }
-	for (NSString *key in aDictionary) {
-		id value = [aDictionary valueForKey:key];
-		if ([key isEqualToString:@"id"]) {
-			[self setValue:value forKey:@"brandId"];
-		} else if ([key isEqualToString:@"url"] && [value isKindOfClass:[NSString class]]) {
-			[self setValue:value forKey:@"urlString"];
-		} else {
-			[self setValue:value forKey:key];
-		}
-	}
+	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.brandId];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -75,24 +45,65 @@
 	PSDLog(@"Warning: Undefined Key Named '%@'", key);
 }
 
-- (NSString *)description
+- (NSUInteger)hash
 {
-	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.brandId];
+	return self.brandId.hash;
 }
 
-- (NSDictionary *)dictionaryRepresentation
+- (BOOL)isEqual:(id)object
 {
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-    if (self.name) {
-        [dictionary setObject:self.name forKey:@"name"];
-    }
-    if (self.brandId) {
-        [dictionary setObject:self.brandId forKey:@"brandId"];
-    }
-    if (self.urlString) {
-        [dictionary setObject:self.urlString forKey:@"urlString"];
-    }
-    return dictionary;
+	if (object == self) {
+		return YES;
+	}
+	if (object == nil || ![object isKindOfClass:[self class]]) {
+		return NO;
+	}
+	return ([self.brandId isEqualToNumber:[(PSBrand *)object brandId]]);
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[encoder encodeObject:self.name forKey:@"name"];
+	[encoder encodeObject:self.brandId forKey:@"brandId"];
+	[encoder encodeObject:self.browseURL forKey:@"browseURL"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	if ((self = [super init])) {
+		self.name = [decoder decodeObjectForKey:@"name"];
+		self.brandId = [decoder decodeObjectForKey:@"brandId"];
+		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
+	}
+	return self;
+}
+
+#pragma mark - PSRemoteObject
+
++ (instancetype)instanceFromRemoteRepresentation:(NSDictionary *)representation
+{
+	if (representation.count == 0) {
+		return nil;
+	}
+	PSBrand *instance = [[PSBrand alloc] init];
+	[instance setPropertiesWithDictionary:representation];
+	return instance;
+}
+
+- (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary
+{
+	for (NSString *key in aDictionary) {
+		id value = [aDictionary valueForKey:key];
+		if ([key isEqualToString:@"id"] && ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]])) {
+			self.brandId = [NSNumber numberWithInteger:[[value description] integerValue]];
+		} else if ([key isEqualToString:@"url"] && [value isKindOfClass:[NSString class]]) {
+			self.browseURL = [NSURL URLWithString:value];
+		} else {
+			[self setValue:value forKey:key];
+		}
+	}
 }
 
 @end

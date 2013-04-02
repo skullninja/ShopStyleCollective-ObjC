@@ -23,15 +23,17 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PSBrand : NSObject <NSCoding>
+/** A brand found on shopstyle.com */
 
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSNumber *brandId;
-@property (nonatomic, copy) NSString *urlString;
+@interface PSBrand : NSObject <NSCoding, PSRemoteObject>
 
-+ (PSBrand *)instanceFromDictionary:(NSDictionary *)aDictionary;
-- (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary;
+/** The brand's unique identifier. */
+@property (nonatomic, copy, readonly) NSNumber *brandId;
 
-- (NSDictionary *)dictionaryRepresentation;
+/** The brand's name. */
+@property (nonatomic, copy, readonly) NSString *name;
+
+/** A shopstyle.com URL that shows more products like the receiver. */
+@property (nonatomic, copy, readonly) NSURL *browseURL;
 
 @end

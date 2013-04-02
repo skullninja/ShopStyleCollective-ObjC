@@ -23,16 +23,19 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PSRetailer : NSObject <NSCoding>
+/** A retailer found on shopstyle.com */
 
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSNumber *retailerId;
-@property (nonatomic, copy) NSString *urlString;
-@property (nonatomic, assign) BOOL deeplinkSupport;
+@interface PSRetailer : NSObject <NSCoding, PSRemoteObject>
 
-+ (PSRetailer *)instanceFromDictionary:(NSDictionary *)aDictionary;
-- (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary;
+/** The retailer's unique identifier. */
+@property (nonatomic, copy, readonly) NSNumber *retailerId;
 
-- (NSDictionary *)dictionaryRepresentation;
+/** The retailer's name. */
+@property (nonatomic, copy, readonly) NSString *name;
+
+/** A shopstyle.com URL that shows more products like the receiver. */
+@property (nonatomic, copy, readonly) NSURL *browseURL;
+
+@property (nonatomic, assign, readonly) BOOL deeplinkSupport;
 
 @end

@@ -23,16 +23,22 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PSProductImage : NSObject <NSCoding>
+/** An image of a `PSProduct` */
 
-@property (nonatomic, copy) NSNumber *height;
-@property (nonatomic, copy) NSString *sizeName;
-@property (nonatomic, copy) NSString *urlString;
-@property (nonatomic, copy) NSNumber *width;
+@interface PSProductImage : NSObject <NSCoding, PSRemoteObject>
 
-+ (PSProductImage *)instanceFromDictionary:(NSDictionary *)aDictionary;
-- (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary;
+/** A name for the size of this image */
+@property (nonatomic, copy, readonly) NSString *sizeName;
 
-- (NSDictionary *)dictionaryRepresentation;
+/** The product image's absolute URL */
+@property (nonatomic, copy, readonly) NSURL *URL;
+
+/** The product image's maximum width. The original image is resized to fit in this width 
+ without changing the aspect ratio. Therefor the actual width may be less than this number. */
+@property (nonatomic, copy, readonly) NSNumber *maxWidth;
+
+/** The product image's maximum height. The original image is resized to fit in this height
+ without changing the aspect ratio. Therefor the actual height may be less than this number. */
+@property (nonatomic, copy, readonly) NSNumber *maxHeight;
 
 @end

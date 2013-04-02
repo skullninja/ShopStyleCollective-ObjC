@@ -23,52 +23,22 @@
 
 #import "PSProductImage.h"
 
+@interface PSProductImage ()
+
+@property (nonatomic, copy, readwrite) NSString *sizeName;
+@property (nonatomic, copy, readwrite) NSURL *URL;
+@property (nonatomic, copy, readwrite) NSNumber *maxWidth;
+@property (nonatomic, copy, readwrite) NSNumber *maxHeight;
+
+@end
+
 @implementation PSProductImage
 
-@synthesize height = _height;
-@synthesize width = _width;
-@synthesize sizeName = _sizeName;
-@synthesize urlString = _urlString;
+#pragma mark - NSObject
 
-- (void)encodeWithCoder:(NSCoder *)encoder
+- (NSString *)description
 {
-    [encoder encodeObject:self.height forKey:@"height"];
-    [encoder encodeObject:self.sizeName forKey:@"sizeName"];
-    [encoder encodeObject:self.urlString forKey:@"urlString"];
-    [encoder encodeObject:self.width forKey:@"width"];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-    if ((self = [super init])) {
-        self.height = [decoder decodeObjectForKey:@"height"];
-        self.sizeName = [decoder decodeObjectForKey:@"sizeName"];
-        self.urlString = [decoder decodeObjectForKey:@"urlString"];
-        self.width = [decoder decodeObjectForKey:@"width"];
-    }
-    return self;
-}
-
-+ (PSProductImage *)instanceFromDictionary:(NSDictionary *)aDictionary
-{
-    PSProductImage *instance = [[PSProductImage alloc] init];
-    [instance setPropertiesWithDictionary:aDictionary];
-    return instance;
-}
-
-- (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary
-{
-    if (![aDictionary isKindOfClass:[NSDictionary class]]) {
-        return;
-    }
-	for (NSString *key in aDictionary) {
-		id value = [aDictionary valueForKey:key];
-		if ([key isEqualToString:@"url"] && [value isKindOfClass:[NSString class]]) {
-			[self setValue:value forKey:@"urlString"];
-		} else {
-			[self setValue:value forKey:key];
-		}
-	}
+	return [[super description] stringByAppendingFormat:@" %@(%@,%@): %@", self.sizeName, self.maxWidth, self.maxHeight, self.URL.absoluteString];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -76,27 +46,69 @@
 	PSDLog(@"Warning: Undefined Key Named '%@'", key);
 }
 
-- (NSString *)description
+- (NSUInteger)hash
 {
-	return [[super description] stringByAppendingFormat:@" %@(%@,%@): %@", self.sizeName, self.width, self.height, self.urlString];
+	return self.URL.hash;
 }
 
-- (NSDictionary *)dictionaryRepresentation
+- (BOOL)isEqual:(id)object
 {
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-    if (self.height) {
-        [dictionary setObject:self.height forKey:@"height"];
-    }
-    if (self.sizeName) {
-        [dictionary setObject:self.sizeName forKey:@"sizeName"];
-    }
-    if (self.urlString) {
-        [dictionary setObject:self.urlString forKey:@"urlString"];
-    }
-    if (self.width) {
-        [dictionary setObject:self.width forKey:@"width"];
-    }
-    return dictionary;
+	if (object == self) {
+		return YES;
+	}
+	if (object == nil || ![object isKindOfClass:[self class]]) {
+		return NO;
+	}
+	return ([self.URL isEqual:[(PSProductImage *)object URL]]);
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[encoder encodeObject:self.sizeName forKey:@"sizeName"];
+	[encoder encodeObject:self.URL forKey:@"URL"];
+	[encoder encodeObject:self.maxWidth forKey:@"maxWidth"];
+	[encoder encodeObject:self.maxHeight forKey:@"maxHeight"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	if ((self = [super init])) {
+		self.sizeName = [decoder decodeObjectForKey:@"sizeName"];
+		self.URL = [decoder decodeObjectForKey:@"URL"];
+		self.maxWidth = [decoder decodeObjectForKey:@"maxWidth"];
+		self.maxHeight = [decoder decodeObjectForKey:@"maxHeight"];
+	}
+	return self;
+}
+
+#pragma mark - PSRemoteObject
+
++ (instancetype)instanceFromRemoteRepresentation:(NSDictionary *)representation
+{
+	if (representation.count == 0) {
+		return nil;
+	}
+	PSProductImage *instance = [[PSProductImage alloc] init];
+	[instance setPropertiesWithDictionary:representation];
+	return instance;
+}
+
+- (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary
+{
+	for (NSString *key in aDictionary) {
+		id value = [aDictionary valueForKey:key];
+		if ([key isEqualToString:@"url"] && [value isKindOfClass:[NSString class]]) {
+			self.URL = [NSURL URLWithString:value];
+		} else if ([key isEqualToString:@"width"]) {
+			[self setValue:value forKey:@"maxWidth"];
+		} else if ([key isEqualToString:@"height"]) {
+			[self setValue:value forKey:@"maxHeight"];
+		} else {
+			[self setValue:value forKey:key];
+		}
+	}
 }
 
 @end
