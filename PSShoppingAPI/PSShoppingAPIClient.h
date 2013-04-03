@@ -40,12 +40,22 @@
 
 @interface PSShoppingAPIClient : AFHTTPClient
 
+/**---------------------------------------------------------------------------------------
+ * @name Setting up the Client
+ *  ---------------------------------------------------------------------------------------
+ */
+
 /** Returns the shared client object. */
 + (instancetype)sharedClient;
 
 /** Unique API_KEY string that is assigned to the caller. This parameter must be present before making any requests.  
  Your Partner ID can be found on the https://shopsense.shopstyle.com/ API page. */
 @property (nonatomic, copy) NSString *partnerId;
+
+/**---------------------------------------------------------------------------------------
+ * @name Finding Products
+ *  ---------------------------------------------------------------------------------------
+ */
 
 /** Returns a single product object matching a supplied product identifier.
  
@@ -85,6 +95,11 @@
  */
 - (void)productHistogramWithQuery:(PSProductQuery *)queryOrNil filterType:(PSProductFilterType)filterType floor:(NSNumber *)floorOrNil success:(void (^)(NSArray *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
+/**---------------------------------------------------------------------------------------
+ * @name Getting Lookup Values
+ *  ---------------------------------------------------------------------------------------
+ */
+
 /** Returns a list of brands that have live products. Brands that have very few products will be omitted.
  
  @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: an array of `PSBrand` objects.
@@ -106,7 +121,7 @@
  */
 - (void)getColorsSuccess:(void (^)(NSArray *colors))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
-/** Returns a list of the categories available to the API 
+/** Returns a list of the categories available. 
  
  @param categoryOrNil The ID of the category to use as the starting point. By default, the global root of the category tree is used.
  @param depthOrNil The number of levels from the root to include in the response. By default all the levels are included.
@@ -121,7 +136,10 @@
 
 @protocol PSRemoteObject <NSObject>
 
-/** Creates an instance of the receiver from a remote representation of the object. */
+/** Creates an instance of the receiver from a remote representation of the object. 
+ 
+ @param representation A dictionary representation of an object from a ShopSense API.
+ */
 + (instancetype)instanceFromRemoteRepresentation:(NSDictionary *)representation;
 
 @end

@@ -27,10 +27,10 @@
 
 @interface PSCategory : NSObject <NSCoding, PSRemoteObject>
 
-/** The category's unique identifier. */
+/** The unique identifier of the receiver. */
 @property (nonatomic, copy, readonly) NSString *categoryId;
 
-/** The category's name. */
+/** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;
 
 /** The category's parent categoryId if one exists. */

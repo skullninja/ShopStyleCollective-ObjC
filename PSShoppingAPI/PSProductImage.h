@@ -30,14 +30,18 @@
 /** A name for the size of this image */
 @property (nonatomic, copy, readonly) NSString *sizeName;
 
-/** The product image's absolute URL */
+/** The absolute URL to fetch the image data. */
 @property (nonatomic, copy, readonly) NSURL *URL;
 
-/** The product image's maximum width. The original image is resized to fit in this width 
+/** The maximum width of the receiver. 
+ 
+ The original image is resized to fit within this width
  without changing the aspect ratio. Therefor the actual width may be less than this number. */
 @property (nonatomic, copy, readonly) NSNumber *maxWidth;
 
-/** The product image's maximum height. The original image is resized to fit in this height
+/** The maximum height of the receiver. 
+ 
+ The original image is resized to fit within this height
  without changing the aspect ratio. Therefor the actual height may be less than this number. */
 @property (nonatomic, copy, readonly) NSNumber *maxHeight;
 

@@ -27,7 +27,7 @@
 
 @interface PSProductSize : NSObject <NSCoding, PSRemoteObject>
 
-/** The size name. */
+/** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;
 
 @end

@@ -36,18 +36,37 @@ typedef enum {
 
 @interface PSProductFilter : NSObject <NSCoding>
 
-/** The identifier in the receiver's `type`. You must combine with `type` to uniquely identify the receiver. */
+/**---------------------------------------------------------------------------------------
+ * @name Filter Parameters
+ *  ---------------------------------------------------------------------------------------
+ */
+
+/** The identifier in the receiver's `type`. 
+ 
+ You must combine with `type` to uniquely identify the receiver. */
 @property (nonatomic, copy, readonly) NSNumber *filterId;
 
 /** The filter type of the receiver. Combine with `filterId` to uniquely identify the receiver.  
  
  The currently supported types are:
- - `PSProductFilterTypeBrand`: Filter by brand.
- - `PSProductFilterTypeRetailer`: Filter by retailer.
- - `PSProductFilterTypePrice`: Filter by price range.
- - `PSProductFilterTypeSale`: Filter by sale amount.
- - `PSProductFilterTypeSize`: Filter by size.
- - `PSProductFilterTypeColor`: Filter by color.
+ 
+ `PSProductFilterTypeBrand`
+ Filter by brand.
+ 
+`PSProductFilterTypeRetailer`
+ Filter by retailer.
+ 
+ `PSProductFilterTypePrice`
+ Filter by price range.
+ 
+ `PSProductFilterTypeSale`
+ Filter by sale amount.
+ 
+ `PSProductFilterTypeSize`
+ Filter by size.
+
+ `PSProductFilterTypeColor`
+ Filter by color.
  
  */
 @property (nonatomic, assign, readonly) PSProductFilterType type;
@@ -55,18 +74,37 @@ typedef enum {
 /** A name to display for the receiver. */
 @property (nonatomic, copy) NSString *name;
 
+/**---------------------------------------------------------------------------------------
+ * @name Histogram Result Parameters
+ *  ---------------------------------------------------------------------------------------
+ */
+
 /** A shopstyle.com URL that shows more products like the receiver. */
 @property (nonatomic, copy) NSString *browseURLString;
 
-/** When a `PSProductFilter` object is returned from a histogram query it may contain a count of the products that would be 
- found if the receiver was used to further filter the result set. */
+/** A count of the products that would be found if the receiver was used to further filter the result set.
+ 
+ If the reciever was not returned by a product histogram query this value will be nil. */
 @property (nonatomic, copy) NSNumber *productCount;
 
-/** Creating a `PSProductFilter` requires the filter type and identifier. */
+/**---------------------------------------------------------------------------------------
+ * @name Comparing Product Filters
+ *  ---------------------------------------------------------------------------------------
+ */
+
+/** Creating a `PSProductFilter` requires the type and filterId. */
 - (id)initWithType:(PSProductFilterType)type filterId:(NSNumber *)filterId;
 
-/** A convenience method as an alternative to alloc and `initWithType:filterId:` */
+/** A convenience method as an alternative to alloc and `initWithType:filterId:`
+ 
+ @see initWithType:filterId:
+ */
 + (instancetype)filterWithType:(PSProductFilterType)type filterId:(NSNumber *)filterId;
+
+/**---------------------------------------------------------------------------------------
+ * @name Converting to URL Parameters
+ *  ---------------------------------------------------------------------------------------
+ */
 
 /** A representation of the receiver used to create an URL query parameter when making a product request on the ShopSense API */
 - (NSString *)queryParameterRepresentation;

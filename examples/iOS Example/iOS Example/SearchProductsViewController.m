@@ -75,9 +75,9 @@
 	cell.textLabel.text = thisProduct.name;
 	cell.textLabel.numberOfLines = 0;
 	if (thisProduct.salePriceLabel) {
-		cell.detailTextLabel.text = [NSString stringWithFormat:@"Now %@! (was %@)", thisProduct.salePriceLabel, thisProduct.priceLabel];
+		cell.detailTextLabel.text = [NSString stringWithFormat:@"Now %@! (was %@)", thisProduct.salePriceLabel, thisProduct.regularPriceLabel];
 	} else {
-		cell.detailTextLabel.text = thisProduct.priceLabel;
+		cell.detailTextLabel.text = thisProduct.regularPriceLabel;
 	}
 	if (thisProduct.images.count > 0) {
 		PSProductImage *productImage = [thisProduct.images lastObject];

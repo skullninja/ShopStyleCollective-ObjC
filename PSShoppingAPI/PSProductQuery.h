@@ -39,57 +39,122 @@ typedef enum {
 
 @interface PSProductQuery : NSObject <NSCoding>
 
+/**---------------------------------------------------------------------------------------
+ * @name Creating Product Queries
+ *  ---------------------------------------------------------------------------------------
+ */
+
 /** A convenience method to great a PSProductFilter initialized with a search term. */
 + (instancetype)productQueryWithSearchTerm:(NSString *)searchTearm;
 
 /** A convenience method to great a PSProductFilter initialized with a product category identifier. */
 + (instancetype)productQueryWithCategoryId:(NSString *)productCategoryId;
 
+/**---------------------------------------------------------------------------------------
+ * @name Query Parameters
+ *  ---------------------------------------------------------------------------------------
+ */
+
 /** Text search term, as a user would enter in a "Search:" field.  
+ 
  This is also known as `fts` on the ShopSense API documentation. */
 @property (nonatomic, copy) NSString *searchTerm;
 
 /** A product category. Only products within the category will be returned. This should be a `PSCategory categoryId`.  
+ 
   This is also known as `cat` on the ShopSense API documentation. */
 @property (nonatomic, copy) NSString *productCategoryId;
 
 /** A price drop date, if present, limits the results to products whose price has dropped since the given date.  
+ 
  This is also known as `pdd` on the ShopSense API documentation.  */
 @property (nonatomic, copy) NSDate *priceDropDate;
 
-/** The sort algorithm to use. Possible values are:  
- - `PSProductQuerySortDefault`: The most relevant products to the product query are listed first.  
- - `PSProductQuerySortPriceLoHi`: Sort by price in ascending order.  
- - `PSProductQuerySortPriceHiLo`: Sort by price in descending order.  
- - `PSProductQuerySortRecency`: Sort by the recency of the products.  
- - `PSProductQuerySortPopular`: Sort by the popularity of the products.  
+/** The sort algorithm to use. 
+ 
+ Possible values are:
+ 
+ `PSProductQuerySortDefault`
+ The most relevant products to the product query are listed first.
+ 
+ `PSProductQuerySortPriceLoHi`
+ Sort by price in ascending order.
+ 
+ `PSProductQuerySortPriceHiLo`
+ Sort by price in descending order.
+ 
+ `PSProductQuerySortRecency`
+ Sort by the recency of the products.
+ 
+ `PSProductQuerySortPopular`
+ Sort by the popularity of the products.
+ 
  This is also known as `sort` on the ShopSense API documentation.  */
 @property (nonatomic, assign) PSProductQuerySort sort;
 
-/** Returns an array of all `PSProductFilter` objects that are part of the receiver.  
- These are also known as `fl` parameters on the ShopSense API documentation. */
+/**---------------------------------------------------------------------------------------
+ * @name Managing Product Filters
+ *  ---------------------------------------------------------------------------------------
+ */
+
+/** All filters that are part of the receiver.
+ 
+ These are also known as `fl` parameters on the ShopSense API documentation. 
+ 
+ @return An array of all `PSProductFilter` objects.
+ */
 - (NSArray *)productFilters;
 
-/** Returns a array of all `PSProductFilter` objects of a specific `PSProductFilterType` that are part of the receiver. */
+/** All filters that are part of the receiver matching filterType.
+ 
+ @param filterType The type of filters to return.
+ @return An array of all `PSProductFilter` objects of a specific `PSProductFilterType` that are part of the receiver. */
 - (NSArray *)productFiltersOfType:(PSProductFilterType)filterType;
 
-/** Add a `PSProductFilter` object to the receiver. If the filter exists it will not be added again. */
+/** Add a `PSProductFilter` object to the receiver. 
+ 
+ If the filter exists it will not be added again.
+ 
+ @param newFilter The `PSProductFilter` to add.
+ */
 - (void)addProductFilter:(PSProductFilter *)newFilter;
 
-/** Add an array of `PSProductFilter` objects to the receiver. If an individual filter exists it will not be added again. */
+/** Add an array of `PSProductFilter` objects to the receiver. 
+ 
+ If an individual filter exists it will not be added again.
+ 
+ @param newFilters An array of `PSProductFilter` objects to add.
+ */
 - (void)addProductFilters:(NSArray *)newFilters;
 
-/** Remove a `PSProductFilter` objects from the receiver that matches the filter parameter. */
+/** Remove a `PSProductFilter` objects from the receiver that matches the filter parameter.
+ 
+ @param filter A `PSProductFilter` to remove if found.
+ */
 - (void)removeProductFilter:(PSProductFilter *)filter;
 
 /** Clears all `PSProductFilter` objects that are part of the receiver. */
 - (void)clearProductFilters;
 
-/** Clears all `PSProductFilter` objects of a specific `PSProductFilterType` that are part of the receiver. */
+/** Clears all `PSProductFilter` objects of a specific `PSProductFilterType` that are part of the receiver. 
+ 
+ @param filterType The type of filters to remove.
+ */
 - (void)clearProductFiltersOfType:(PSProductFilterType)filterType;
+
+/**---------------------------------------------------------------------------------------
+ * @name Converting to URL Parameters
+ *  ---------------------------------------------------------------------------------------
+ */
 
 /** A representation of the receiver used to create URL query parameters when making a product request on the ShopSense API */
 - (NSDictionary *)queryParameterRepresentation;
+
+
+/**---------------------------------------------------------------------------------------
+ * @name Comparing Product Queries
+ *  ---------------------------------------------------------------------------------------
+ */
 
 /** Returns a Boolean value that indicates whether a given `PSProductQuery` is equal to the receiver using an isEqual: test on all properties. */
 - (BOOL)isEqualToProductQuery:(PSProductQuery *)productQuery;

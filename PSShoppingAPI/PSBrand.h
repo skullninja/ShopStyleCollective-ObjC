@@ -27,10 +27,10 @@
 
 @interface PSBrand : NSObject <NSCoding, PSRemoteObject>
 
-/** The brand's unique identifier. */
+/** The unique identifier of the receiver. */
 @property (nonatomic, copy, readonly) NSNumber *brandId;
 
-/** The brand's name. */
+/** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;
 
 /** A shopstyle.com URL that shows more products like the receiver. */

@@ -33,8 +33,8 @@
 @property (nonatomic, copy, readwrite) NSString *name;
 @property (nonatomic, copy, readwrite) NSString *descriptionHTML;
 @property (nonatomic, copy, readwrite) NSURL *buyURL;
-@property (nonatomic, copy, readwrite) NSString *priceLabel;
-@property (nonatomic, copy, readwrite) NSNumber *price;
+@property (nonatomic, copy, readwrite) NSString *regularPriceLabel;
+@property (nonatomic, copy, readwrite) NSNumber *regularPrice;
 @property (nonatomic, copy, readwrite) NSString *maxPriceLabel;
 @property (nonatomic, copy, readwrite) NSNumber *maxPrice;
 @property (nonatomic, copy, readwrite) NSString *salePriceLabel;
@@ -112,8 +112,8 @@
 	[encoder encodeObject:self.maxSalePrice forKey:@"maxSalePrice"];
 	[encoder encodeObject:self.maxSalePriceLabel forKey:@"maxSalePriceLabel"];
 	[encoder encodeObject:self.name forKey:@"name"];
-	[encoder encodeObject:self.price forKey:@"price"];
-	[encoder encodeObject:self.priceLabel forKey:@"priceLabel"];
+	[encoder encodeObject:self.regularPrice forKey:@"price"];
+	[encoder encodeObject:self.regularPriceLabel forKey:@"regularPriceLabel"];
 	[encoder encodeObject:self.productId forKey:@"productId"];
 	[encoder encodeObject:self.retailer forKey:@"retailer"];
 	[encoder encodeObject:self.salePrice forKey:@"salePrice"];
@@ -141,8 +141,8 @@
 		self.maxSalePrice = [decoder decodeObjectForKey:@"maxSalePrice"];
 		self.maxSalePriceLabel = [decoder decodeObjectForKey:@"maxSalePriceLabel"];
 		self.name = [decoder decodeObjectForKey:@"name"];
-		self.price = [decoder decodeObjectForKey:@"price"];
-		self.priceLabel = [decoder decodeObjectForKey:@"priceLabel"];
+		self.regularPrice = [decoder decodeObjectForKey:@"regularPrice"];
+		self.regularPriceLabel = [decoder decodeObjectForKey:@"regularPriceLabel"];
 		self.productId = [decoder decodeObjectForKey:@"productId"];
 		self.retailer = [decoder decodeObjectForKey:@"retailer"];
 		self.salePrice = [decoder decodeObjectForKey:@"salePrice"];
@@ -195,6 +195,10 @@
 			self.retailer = (PSRetailer *)[self remoteObjectForRelationshipNamed:@"retailer" fromRepresentation:value];
 		} else if ([key isEqualToString:@"sizes"] && [value isKindOfClass:[NSArray class]]) {
 			self.sizes = [self remoteObjectsForToManyRelationshipNamed:@"sizes" fromRepresentations:value];
+		} else if ([key isEqualToString:@"price"] && ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]])) {
+			self.regularPrice = [NSNumber numberWithInteger:[[value description] integerValue]];
+		} else if ([key isEqualToString:@"priceLabel"]) {
+			self.regularPriceLabel = [value description];
 		} else {
 			[self setValue:value forKey:key];
 		}

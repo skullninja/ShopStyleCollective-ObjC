@@ -27,7 +27,7 @@
 
 @interface PSProductColor : NSObject <NSCoding, PSRemoteObject>
 
-/** The color's name. */
+/** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;
 
 @end
