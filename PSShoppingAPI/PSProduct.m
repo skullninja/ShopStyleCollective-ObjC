@@ -35,8 +35,8 @@
 @property (nonatomic, copy, readwrite) NSURL *buyURL;
 @property (nonatomic, copy, readwrite) NSString *regularPriceLabel;
 @property (nonatomic, copy, readwrite) NSNumber *regularPrice;
-@property (nonatomic, copy, readwrite) NSString *maxPriceLabel;
-@property (nonatomic, copy, readwrite) NSNumber *maxPrice;
+@property (nonatomic, copy, readwrite) NSString *maxRegularPriceLabel;
+@property (nonatomic, copy, readwrite) NSNumber *maxRegularPrice;
 @property (nonatomic, copy, readwrite) NSString *salePriceLabel;
 @property (nonatomic, copy, readwrite) NSNumber *salePrice;
 @property (nonatomic, copy, readwrite) NSString *maxSalePriceLabel;
@@ -58,11 +58,48 @@
 
 @implementation PSProduct
 
-#pragma mark - Accessors
+#pragma mark - Pricing Helpers
 
 - (BOOL)isOnSale
 {
 	return (self.salePrice != nil && self.salePrice.integerValue > 0);
+}
+
+- (BOOL)hasPriceRange
+{
+	return ([self currentMaxPrice] != nil);
+}
+
+- (NSString *)currentPriceLabel
+{
+	if (self.salePriceLabel != nil) {
+		return self.salePriceLabel;
+	}
+	return self.regularPriceLabel;
+}
+
+- (NSNumber *)currentPrice
+{
+	if (self.salePrice != nil) {
+		return self.salePrice;
+	}
+	return self.regularPrice;
+}
+
+- (NSString *)currentMaxPriceLabel
+{
+	if (self.maxSalePriceLabel != nil) {
+		return self.maxSalePriceLabel;
+	}
+	return self.maxRegularPriceLabel;
+}
+
+- (NSNumber *)currentMaxPrice
+{
+	if (self.maxSalePrice != nil) {
+		return self.maxSalePrice;
+	}
+	return self.maxRegularPrice;
 }
 
 #pragma mark - NSObject
@@ -107,8 +144,8 @@
 	[encoder encodeObject:self.images forKey:@"images"];
 	[encoder encodeObject:[NSNumber numberWithBool:self.inStock] forKey:@"inStock"];
 	[encoder encodeObject:self.localeId forKey:@"localeId"];
-	[encoder encodeObject:self.maxPrice forKey:@"maxPrice"];
-	[encoder encodeObject:self.maxPriceLabel forKey:@"maxPriceLabel"];
+	[encoder encodeObject:self.maxRegularPrice forKey:@"maxRegularPrice"];
+	[encoder encodeObject:self.maxRegularPriceLabel forKey:@"maxRegularPriceLabel"];
 	[encoder encodeObject:self.maxSalePrice forKey:@"maxSalePrice"];
 	[encoder encodeObject:self.maxSalePriceLabel forKey:@"maxSalePriceLabel"];
 	[encoder encodeObject:self.name forKey:@"name"];
@@ -136,8 +173,8 @@
 		self.images = [decoder decodeObjectForKey:@"images"];
 		self.inStock = [(NSNumber *)[decoder decodeObjectForKey:@"inStock"] boolValue];
 		self.localeId = [decoder decodeObjectForKey:@"localeId"];
-		self.maxPrice = [decoder decodeObjectForKey:@"maxPrice"];
-		self.maxPriceLabel = [decoder decodeObjectForKey:@"maxPriceLabel"];
+		self.maxRegularPrice = [decoder decodeObjectForKey:@"maxRegularPrice"];
+		self.maxRegularPriceLabel = [decoder decodeObjectForKey:@"maxRegularPriceLabel"];
 		self.maxSalePrice = [decoder decodeObjectForKey:@"maxSalePrice"];
 		self.maxSalePriceLabel = [decoder decodeObjectForKey:@"maxSalePriceLabel"];
 		self.name = [decoder decodeObjectForKey:@"name"];
@@ -199,6 +236,10 @@
 			self.regularPrice = [NSNumber numberWithInteger:[[value description] integerValue]];
 		} else if ([key isEqualToString:@"priceLabel"]) {
 			self.regularPriceLabel = [value description];
+		} else if ([key isEqualToString:@"maxPrice"] && ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]])) {
+			self.maxRegularPrice = [NSNumber numberWithInteger:[[value description] integerValue]];
+		} else if ([key isEqualToString:@"maxPriceLabel"]) {
+			self.maxRegularPriceLabel = [value description];
 		} else {
 			[self setValue:value forKey:key];
 		}

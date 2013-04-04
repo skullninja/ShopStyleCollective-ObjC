@@ -43,7 +43,7 @@
  may be purchased. */
 @property (nonatomic, copy, readonly) NSURL *buyURL;
 
-/** A string representation of the regularPrice. */
+/** A string representation of the `regularPrice`. */
 @property (nonatomic, copy, readonly) NSString *regularPriceLabel;
 
 /** The regular price in the currency of the receiver.
@@ -51,26 +51,18 @@
  The price of the product when not on sale. If the product isOnSale use salePrice for the price. */
 @property (nonatomic, copy, readonly) NSNumber *regularPrice;
 
-/** A string representation of the maxPrice.  
- 
- Some products are price as a range (e.g., sets of sheets that come in different sizes).  If the product
- is priced as a range, the price contains the lower end of the range.  If the product is not priced as
- a range, this property is nil.
- */
-@property (nonatomic, copy, readonly) NSString *maxPriceLabel;
+/** A string representation of the `maxRegularPrice`. */
+@property (nonatomic, copy, readonly) NSString *maxRegularPriceLabel;
 
-/** The maximum price in the currency of the receiver.  
+/** The maximum price in the currency of the receiver when priced in a range.  
  
  Some products are price as a range (e.g., sets of sheets that come in different sizes).  If the product
- is priced as a range, the price contains the lower end of the range.  If the product is not priced as
+ is priced as a range, the regularPrice contains the lower end of the range.  If the product is not priced as
  a range this property is nil.
  */
-@property (nonatomic, copy, readonly) NSNumber *maxPrice;
+@property (nonatomic, copy, readonly) NSNumber *maxRegularPrice;
 
-/** A string representation of the salePrice.  
- 
- If the product is not priced on sale this property is nil.
- */
+/** A string representation of the `salePrice`. */
 @property (nonatomic, copy, readonly) NSString *salePriceLabel;
 
 /** The product's sale price.  
@@ -79,18 +71,13 @@
  */
 @property (nonatomic, copy, readonly) NSNumber *salePrice;
 
-/** A string representation of the product's maximum sale price.  
- 
- Some products are price as a range (e.g., sets of sheets that come in different sizes).  If the product
- is priced as a range, the sale price contains the lower end of the range.  If the product is not priced 
- as a range or is not on sale this property is nil.
- */
+/** A string representation of the `maxSalePrice`. */
 @property (nonatomic, copy, readonly) NSString *maxSalePriceLabel;
 
-/** The product's maximum sale price.  
+/** The product's maximum sale price when on sale and priced in a range.  
  
  Some products are price as a range (e.g., sets of sheets that come in different sizes).  If the product
- is priced as a range, the sale price contains the lower end of the range.  If the product is not priced 
+ is priced as a range, the salePrice contains the lower end of the range.  If the product is not priced 
  as a range or is not on sale this property is nil.
  */
 @property (nonatomic, copy, readonly) NSNumber *maxSalePrice;
@@ -132,6 +119,8 @@
 
 /** The receiver was in stock the last poll of the retailer's website.
  
+ Out of stock products should not be returned by product searches but my be returned by other methods such as getting a product by it's identifier.
+ 
  @returns YES if the product is currently in stock. */
 @property (nonatomic, assign, readonly) BOOL inStock;
 
@@ -143,9 +132,47 @@
  @return An array of `PSProductImage` objects. */
 @property (nonatomic, copy, readonly) NSArray *images;
 
+/**---------------------------------------------------------------------------------------
+ * @name Pricing Helpers
+ *  ---------------------------------------------------------------------------------------
+ */
+
 /** The receiver was on sale the last poll of the retailer's website.
  
  @return YES if the product is on sale. */
-@property (nonatomic, assign, readonly) BOOL isOnSale;
+- (BOOL)isOnSale;
+
+/** The product's price should be displayed as a price range.
+ 
+ Some products are price as a range (e.g., sets of sheets that come in different sizes).  If the product
+ is priced as a range, the `currentPrice` contains the lower end of the range and the `currentMaxPrice` contains the upper end of the range.
+ 
+ @return YES if the product price should be displayed as a price range.
+ */
+- (BOOL)hasPriceRange;
+
+/** A string representation of the `currentPrice`. */
+- (NSString *)currentPriceLabel;
+
+/** The current price in the currency of the receiver. The current low price when priced in a range.
+ 
+ Some products are price as a range (e.g., sets of sheets that come in different sizes).  If the product
+ is priced as a range, the `currentMaxPrice` contains the higher end of the range.
+ 
+ @return The salePrice if there is one, otherwise returns the regularPrice. */
+- (NSNumber *)currentPrice;
+
+/** A string representation of the `currentMaxPrice`. */
+- (NSString *)currentMaxPriceLabel;
+
+/** The current max price in the currency of the receiver when priced in a range.
+ 
+ Some products are price as a range (e.g., sets of sheets that come in different sizes).  If the product
+ is priced as a range, the `currentPrice` contains the lower end of the range.  If the product is not priced as
+ a range this property is nil.
+ 
+ @return The maxSalePrice if there is one, otherwise returns the maxRegularPrice. If the receiver does not have a price range returns nil.
+ */
+- (NSNumber *)currentMaxPrice;
 
 @end
