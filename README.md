@@ -1,3 +1,5 @@
+> IMPORTANT: The current version of the API Client is currently in pre-release status. You should expect changes to both naming and types.
+
 # POPSUGAR Shopping API Client for Objective-C
 **Readers click, you get money.**  
 
