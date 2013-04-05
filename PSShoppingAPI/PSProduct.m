@@ -54,6 +54,8 @@
 @property (nonatomic, copy, readwrite) NSString *extractDate;
 @property (nonatomic, copy, readwrite) NSArray *images;
 
+@property (nonatomic, strong) NSDictionary *imagesBySizeName;
+
 @end
 
 @implementation PSProduct
@@ -100,6 +102,38 @@
 		return self.maxSalePrice;
 	}
 	return self.maxRegularPrice;
+}
+
+#pragma mark - Product Image Helpers
+
+- (NSArray *)orderedImageSizeNames
+{
+	return [NSArray arrayWithObjects:kPSProductImageSizeNamedSmall, kPSProductImageSizeNamedIPhoneSmall, kPSProductImageSizeNamedMedium, kPSProductImageSizeNamedLarge, kPSProductImageSizeNamedIPhone, kPSProductImageSizeNamedOriginal, nil];
+}
+
+- (void)orderAndMapImages:(NSArray *)images
+{
+	if (images == nil || images.count == 0) {
+		self.images = nil;
+		self.imagesBySizeName = nil;
+	}
+	NSMutableDictionary *mappedImages = [[NSMutableDictionary alloc] initWithCapacity:images.count];
+	for (PSProductImage *image in images) {
+		[mappedImages setObject:image forKey:image.sizeName];
+	}
+	self.imagesBySizeName = mappedImages;
+	NSMutableArray *sortedImages = [[NSMutableArray alloc] initWithCapacity:mappedImages.count];
+	for (NSString *sizeName in [self orderedImageSizeNames]) {
+		if ([self.imagesBySizeName objectForKey:sizeName] != nil) {
+			[sortedImages addObject:[self.imagesBySizeName objectForKey:sizeName]];
+		}
+	}
+	self.images = sortedImages;
+}
+
+- (PSProductImage *)imageWithSizeName:(NSString *)imageSizeName
+{
+	return [self.imagesBySizeName objectForKey:imageSizeName];
 }
 
 #pragma mark - NSObject
@@ -158,6 +192,7 @@
 	[encoder encodeObject:self.seeMoreLabel forKey:@"seeMoreLabel"];
 	[encoder encodeObject:self.seeMoreURL forKey:@"seeMoreURL"];
 	[encoder encodeObject:self.sizes forKey:@"sizes"];
+	[encoder encodeObject:self.imagesBySizeName forKey:@"imagesBySizeName"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -187,6 +222,7 @@
 		self.seeMoreLabel = [decoder decodeObjectForKey:@"seeMoreLabel"];
 		self.seeMoreURL = [decoder decodeObjectForKey:@"seeMoreURL"];
 		self.sizes = [decoder decodeObjectForKey:@"sizes"];
+		self.imagesBySizeName = [decoder decodeObjectForKey:@"imagesBySizeName"];
 	}
 	return self;
 }
@@ -227,7 +263,7 @@
 		} else if ([key isEqualToString:@"colors"] && [value isKindOfClass:[NSArray class]]) {
 			self.colors = [self remoteObjectsForToManyRelationshipNamed:@"colors" fromRepresentations:value];
 		} else if ([key isEqualToString:@"images"] && [value isKindOfClass:[NSArray class]]) {
-			self.images = [self remoteObjectsForToManyRelationshipNamed:@"images" fromRepresentations:value];
+			[self orderAndMapImages:[self remoteObjectsForToManyRelationshipNamed:@"images" fromRepresentations:value]];
 		} else if ([key isEqualToString:@"retailer"] && [value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
 			self.retailer = (PSRetailer *)[self remoteObjectForRelationshipNamed:@"retailer" fromRepresentation:value];
 		} else if ([key isEqualToString:@"sizes"] && [value isKindOfClass:[NSArray class]]) {

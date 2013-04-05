@@ -23,6 +23,13 @@
 
 #import "PSProductImage.h"
 
+NSString * const kPSProductImageSizeNamedSmall = @"Small";
+NSString * const kPSProductImageSizeNamedMedium = @"Medium";
+NSString * const kPSProductImageSizeNamedLarge = @"Large";
+NSString * const kPSProductImageSizeNamedOriginal = @"Original";
+NSString * const kPSProductImageSizeNamedIPhoneSmall = @"IPhoneSmall";
+NSString * const kPSProductImageSizeNamedIPhone = @"IPhone";
+
 @interface PSProductImage ()
 
 @property (nonatomic, copy, readwrite) NSString *sizeName;

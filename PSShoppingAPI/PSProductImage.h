@@ -23,17 +23,39 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const kPSProductImageSizeNamedSmall;
+extern NSString * const kPSProductImageSizeNamedMedium;
+extern NSString * const kPSProductImageSizeNamedLarge;
+extern NSString * const kPSProductImageSizeNamedOriginal;
+extern NSString * const kPSProductImageSizeNamedIPhoneSmall;
+extern NSString * const kPSProductImageSizeNamedIPhone;
+
 /** An image of a `PSProduct` */
 
 @interface PSProductImage : NSObject <NSCoding, PSRemoteObject>
 
-/** A name for the size of this image */
+/** A name for the size of this image.
+ 
+ Possible values are:
+ 
+ kPSProductImageSizeNamedSmall = @"Small";
+ 
+ kPSProductImageSizeNamedMedium = @"Medium";
+ 
+ kPSProductImageSizeNamedLarge = @"Large";
+ 
+ kPSProductImageSizeNamedOriginal = @"Original";
+ 
+ kPSProductImageSizeNamedIPhoneSmall = @"IPhoneSmall";
+ 
+ kPSProductImageSizeNamedIPhone = @"IPhone";
+ */
 @property (nonatomic, copy, readonly) NSString *sizeName;
 
 /** The absolute URL to fetch the image data. */
 @property (nonatomic, copy, readonly) NSURL *URL;
 
-/** The maximum width of the receiver. 
+/** The maximum width of the receiver.
  
  The original image is resized to fit within this width
  without changing the aspect ratio. Therefor the actual width may be less than this number. */

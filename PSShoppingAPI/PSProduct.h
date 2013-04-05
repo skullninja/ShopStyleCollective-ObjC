@@ -25,6 +25,7 @@
 
 @class PSBrand;
 @class PSRetailer;
+@class PSProductImage;
 
 /** A product on shopstyle.com. */
 
@@ -174,5 +175,15 @@
  @return The maxSalePrice if there is one, otherwise returns the maxRegularPrice. If the receiver does not have a price range returns nil.
  */
 - (NSNumber *)currentMaxPrice;
+
+/**---------------------------------------------------------------------------------------
+ * @name Product Image Helpers
+ *  ---------------------------------------------------------------------------------------
+ */
+
+/** A product image matching the size name. See `PSProductImage` for size name constants.
+ 
+ @return A `PSProductImage` or nil if not found for the given imageSizeName. */
+- (PSProductImage *)imageWithSizeName:(NSString *)imageSizeName;
 
 @end
