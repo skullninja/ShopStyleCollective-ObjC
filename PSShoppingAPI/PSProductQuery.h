@@ -60,7 +60,7 @@ typedef enum {
  This is also known as `fts` on the ShopSense API documentation. */
 @property (nonatomic, copy) NSString *searchTerm;
 
-/** A product category. Only products within the category will be returned. This should be a `PSCategory categoryId`.  
+/** A product category identifier. Only products within the category will be returned. This should be a `PSProductCategory categoryId`.  
  
   This is also known as `cat` on the ShopSense API documentation. */
 @property (nonatomic, copy) NSString *productCategoryId;

@@ -30,10 +30,12 @@
 	#import "PSProductFilter.h"
 	#import "PSProduct.h"
 	#import "PSBrand.h"
+	#import "PSCategoryTree.h"
 	#import "PSCategory.h"
 	#import "PSProductImage.h"
 	#import "PSProductSize.h"
 	#import "PSProductColor.h"
+	#import "PSProductCategory.h"
 	#import "PSRetailer.h"
 	#import "PSColor.h"
 #endif

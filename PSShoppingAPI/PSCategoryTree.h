@@ -1,5 +1,5 @@
 //
-//  CategoriesViewController.h
+//  PSCategoryTree.h
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -21,10 +21,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-@interface CategoriesViewController : UITableViewController
+@class PSCategory;
 
-- (id)initWithCategories:(NSArray *)categoriesOrNil;
+/** A collection categories found on shopstyle.com  */
+
+@interface PSCategoryTree : NSObject <NSCoding>
+
+/** The top-level categories for the receiver. */
+@property (nonatomic, strong, readonly) NSArray *rootCategories;
+
+/** Initializes a category tree.
+ 
+ @param rootCategoryId The category identifier to consider the parent of the receiver.
+ @param categories An array of `PSCategory` objects to build into the receiver.
+ */
+- (id)initWithRootId:(NSString *)rootCategoryId categories:(NSArray *)categories;
+
+/** All categories that are part of the receiver in a flat array. */
+- (NSArray *)allCategories;
+
+/** Find a specific category in the receiver by it's identifier.
+ 
+ @param categoryId A category identifier.
+ */
+- (PSCategory *)categoryWithId:(NSString *)categoryId;
 
 @end

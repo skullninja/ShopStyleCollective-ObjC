@@ -50,10 +50,22 @@
          location = "group:PSProductSize.m">
       </FileRef>
       <FileRef
+         location = "group:PSProductCategory.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSProductCategory.m">
+      </FileRef>
+      <FileRef
          location = "group:PSBrand.h">
       </FileRef>
       <FileRef
          location = "group:PSBrand.m">
+      </FileRef>
+      <FileRef
+         location = "group:PSCategoryTree.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSCategoryTree.m">
       </FileRef>
       <FileRef
          location = "group:PSCategory.h">

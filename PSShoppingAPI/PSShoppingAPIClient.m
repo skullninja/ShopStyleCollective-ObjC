@@ -29,6 +29,7 @@
 #import "PSRetailer.h"
 #import "PSColor.h"
 #import "PSCategory.h"
+#import "PSCategoryTree.h"
 
 static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/api/v2/";
 
@@ -306,11 +307,17 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 
 #pragma mark - Categories
 
-- (void)getCategoriesFromCategory:(PSCategory *)categoryOrNil depth:(NSNumber *)depthOrNil success:(void (^)(NSArray *categories))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (void)categoryTreeFromCategoryId:(NSString *)categoryIdOrNil depth:(NSNumber *)depthOrNil success:(void (^)(PSCategoryTree *categoryTree))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
+	if (depthOrNil != nil && depthOrNil.integerValue <= 0) {
+		if (success) {
+			success(nil);
+		}
+		return;
+	}
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-	if (categoryOrNil != nil) {
-		[params setValue:categoryOrNil.categoryId forKey:@"depth"];
+	if (categoryIdOrNil != nil && categoryIdOrNil.length > 0) {
+		[params setValue:categoryIdOrNil forKey:@"cat"];
 	}
 	if (depthOrNil != nil) {
 		[params setValue:depthOrNil forKey:@"depth"];
@@ -320,11 +327,26 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 	}
 	NSString *entity = @"categories";
 	[self makeRequestForEntity:entity parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
-		if ([[responseObject objectForKey:@"categories"] isKindOfClass:[NSArray class]]) {
-			if (success) {
-				NSArray *categoriesRepresentation = [responseObject objectForKey:@"categories"];
-				NSArray *categories = [self remoteObjectsForEntityNamed:@"category" fromRepresentations:categoriesRepresentation];
-				success(categories);
+		if ([[responseObject objectForKey:@"categories"] isKindOfClass:[NSArray class]] && [[responseObject objectForKey:@"metadata"] isKindOfClass:[NSDictionary class]]) {
+			NSArray *categoriesRepresentation = [responseObject objectForKey:@"categories"];
+			NSArray *categories = [self remoteObjectsForEntityNamed:@"category" fromRepresentations:categoriesRepresentation];
+			NSString *rootId = nil;
+			NSDictionary *metadata = [responseObject objectForKey:@"metadata"];
+			if ([[metadata objectForKey:@"root"] isKindOfClass:[NSDictionary class]]) {
+				NSDictionary *rootCat = [metadata objectForKey:@"root"];
+				if ([rootCat objectForKey:@"id"]) {
+					rootId = [rootCat objectForKey:@"id"];
+				}
+			}
+			if (categories.count > 0 && rootId.length > 0) {
+				if (success) {
+					PSCategoryTree *categoryTree = [[PSCategoryTree alloc] initWithRootId:rootId categories:categories];
+					success(categoryTree);
+				}
+			} else {
+				if (failure) {
+					failure(operation, [self errorForBadResponse]);
+				}
 			}
 		} else {
 			if (failure) {

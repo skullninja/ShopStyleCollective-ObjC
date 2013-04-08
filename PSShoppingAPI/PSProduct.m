@@ -23,7 +23,7 @@
 
 #import "PSProduct.h"
 #import "PSBrand.h"
-#import "PSCategory.h"
+#import "PSProductCategory.h"
 #import "PSProductImage.h"
 #import "PSRetailer.h"
 
@@ -304,7 +304,7 @@
 	if ([relationshipName isEqualToString:@"brand"]) {
 		return [PSBrand instanceFromRemoteRepresentation:representation];
 	} else if ([relationshipName isEqualToString:@"categories"]) {
-		return [PSCategory instanceFromRemoteRepresentation:representation];
+		return [PSProductCategory instanceFromRemoteRepresentation:representation];
 	} else if ([relationshipName isEqualToString:@"colors"]) {
 		return [PSProductColor instanceFromRemoteRepresentation:representation];
 	} else if ([relationshipName isEqualToString:@"images"]) {

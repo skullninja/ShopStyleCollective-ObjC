@@ -22,18 +22,13 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "PSProductCategory.h"
 
 /** A category found on shopstyle.com  */
 
-@interface PSCategory : NSObject <NSCoding, PSRemoteObject>
+@interface PSCategory : PSProductCategory <NSCoding, PSRemoteObject>
 
-/** The unique identifier of the receiver. */
-@property (nonatomic, copy, readonly) NSString *categoryId;
-
-/** A name to display for the receiver. */
-@property (nonatomic, copy, readonly) NSString *name;
-
-/** The category's parent categoryId if one exists. */
-@property (nonatomic, copy, readonly) NSString *parentId;
+/** The child categories of the receiver if any exists. */
+@property (nonatomic, strong, readonly) NSArray *childCategories;
 
 @end

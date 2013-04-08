@@ -31,20 +31,31 @@
 
 @implementation CategoriesViewController
 
-@synthesize categories = _categories;
+- (id)initWithCategories:(NSArray *)categoriesOrNil
+{
+    self = [super init];
+    if (self) {
+        _categories = categoriesOrNil;
+    }
+    return self;
+}
 
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
-	self.title = @"Categories";
 	
-	__weak typeof(self) weakSelf = self;
-	[[PSShoppingAPIClient sharedClient] getCategoriesFromCategory:nil depth:nil success:^(NSArray *categories) {
-		weakSelf.categories = categories;
-		[weakSelf.tableView reloadData];
-	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-		NSLog(@"Request failed with error: %@", error);
-	}];
+	if (self.categories == nil) {
+		self.title = @"Categories";
+		
+		__weak typeof(self) weakSelf = self;
+		[[PSShoppingAPIClient sharedClient] categoryTreeFromCategoryId:nil depth:nil success:^(PSCategoryTree *categoryTree) {
+			weakSelf.categories = [categoryTree rootCategories];
+			[weakSelf.tableView reloadData];
+		} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+			NSLog(@"Request failed with error: %@", error);
+		}];
+	}
+	
 }
 
 #pragma mark - Table view data source
@@ -68,6 +79,11 @@
 	}
 	PSCategory *thisCategory = [self.categories objectAtIndex:indexPath.row];
 	cell.textLabel.text = thisCategory.name;
+	if (thisCategory.childCategories.count > 0) {
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+	} else {
+		cell.accessoryType = UITableViewCellAccessoryNone;
+	}
 	return cell;
 }
 
@@ -76,6 +92,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	
+	PSCategory *thisCategory = [self.categories objectAtIndex:indexPath.row];
+	if (thisCategory.childCategories.count > 0) {
+		CategoriesViewController *detailVC = [[CategoriesViewController alloc] initWithCategories:thisCategory.childCategories];
+		detailVC.title = thisCategory.name;
+		[self.navigationController pushViewController:detailVC animated:YES];
+	}
 }
 
 @end

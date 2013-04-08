@@ -26,7 +26,7 @@
 
 @class PSProduct;
 @class PSProductQuery;
-@class PSCategory;
+@class PSCategoryTree;
 
 /** A singleton subclass of AFHTTPClient that wraps the ShopSense API web services and converts the response into native Objective-C objects.  
  
@@ -121,14 +121,14 @@
  */
 - (void)getColorsSuccess:(void (^)(NSArray *colors))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
-/** Returns a list of the categories available. 
+/** Returns a tree of the categories available. 
  
- @param categoryOrNil The ID of the category to use as the starting point. By default, the global root of the category tree is used.
+ @param categoryIdOrNil The identifier of the category to use as the starting point. By default, the global root of the category tree is used.
  @param depthOrNil The number of levels from the root to include in the response. By default all the levels are included.
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: an array of `PSCategory` objects.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: a `PSCategoryTree` object.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)getCategoriesFromCategory:(PSCategory *)categoryOrNil depth:(NSNumber *)depthOrNil success:(void (^)(NSArray *categories))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)categoryTreeFromCategoryId:(NSString *)categoryIdOrNil depth:(NSNumber *)depthOrNil success:(void (^)(PSCategoryTree *categoryTree))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 @end
 

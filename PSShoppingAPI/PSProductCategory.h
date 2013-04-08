@@ -1,5 +1,5 @@
 //
-//  CategoriesViewController.h
+//  PSProductCategory.h
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -21,10 +21,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-@interface CategoriesViewController : UITableViewController
+/** A product's category.  */
 
-- (id)initWithCategories:(NSArray *)categoriesOrNil;
+@interface PSProductCategory : NSObject <NSCoding, PSRemoteObject>
+
+/** The unique identifier of the receiver. See `PSCategoryTree` to understand it's position in the hierarchy. */
+@property (nonatomic, copy, readonly) NSString *categoryId;
+
+/** A name to display for the receiver. */
+@property (nonatomic, copy, readonly) NSString *name;
 
 @end

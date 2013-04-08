@@ -102,7 +102,7 @@
 
 /** All categories on shopstyle.com that contain the receiver.
  
- @return An array of `PSCategory` objects representing all categories on shopstyle.com that contain this product. */
+ @return An array of `PSProductCategory` objects representing all categories on shopstyle.com that contain this product. */
 @property (nonatomic, copy, readonly) NSArray *categories;
 
 /** The locale of the retailer. */

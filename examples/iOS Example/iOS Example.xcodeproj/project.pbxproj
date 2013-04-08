@@ -41,6 +41,8 @@
 		8892729516CC0F0C00C2FCED /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 8892728C16CC0F0C00C2FCED /* UIImageView+AFNetworking.m */; };
 		889272A316CC11A900C2FCED /* PSProductQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 889272A016CC11A900C2FCED /* PSProductQuery.m */; };
 		889272A416CC11A900C2FCED /* PSShoppingAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 889272A216CC11A900C2FCED /* PSShoppingAPIClient.m */; };
+		889ABAB5170F96AC006364A5 /* PSProductCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 889ABAB4170F96AC006364A5 /* PSProductCategory.m */; };
+		889ABAB8170F9DFF006364A5 /* PSCategoryTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 889ABAB7170F9DFF006364A5 /* PSCategoryTree.m */; };
 		AD54415816CEFE4F00CA6A1C /* BrandsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD54415616CEFE4F00CA6A1C /* BrandsViewController.m */; };
 		AD54415D16CF0A2D00CA6A1C /* RetailersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD54415B16CF0A2D00CA6A1C /* RetailersViewController.m */; };
 		AD54416216CF0A3A00CA6A1C /* ColorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD54416016CF0A3A00CA6A1C /* ColorsViewController.m */; };
@@ -111,6 +113,10 @@
 		889272A016CC11A900C2FCED /* PSProductQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSProductQuery.m; sourceTree = "<group>"; };
 		889272A116CC11A900C2FCED /* PSShoppingAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSShoppingAPIClient.h; sourceTree = "<group>"; };
 		889272A216CC11A900C2FCED /* PSShoppingAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSShoppingAPIClient.m; sourceTree = "<group>"; };
+		889ABAB3170F96AB006364A5 /* PSProductCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSProductCategory.h; sourceTree = "<group>"; };
+		889ABAB4170F96AC006364A5 /* PSProductCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSProductCategory.m; sourceTree = "<group>"; };
+		889ABAB6170F9DFF006364A5 /* PSCategoryTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSCategoryTree.h; sourceTree = "<group>"; };
+		889ABAB7170F9DFF006364A5 /* PSCategoryTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSCategoryTree.m; sourceTree = "<group>"; };
 		AD54415516CEFE4F00CA6A1C /* BrandsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrandsViewController.h; sourceTree = "<group>"; };
 		AD54415616CEFE4F00CA6A1C /* BrandsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrandsViewController.m; sourceTree = "<group>"; };
 		AD54415A16CF0A2D00CA6A1C /* RetailersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RetailersViewController.h; sourceTree = "<group>"; };
@@ -265,8 +271,12 @@
 				883AC03F17066237006351B1 /* PSProductSize.m */,
 				883AC04117066259006351B1 /* PSProductColor.h */,
 				883AC04217066259006351B1 /* PSProductColor.m */,
+				889ABAB3170F96AB006364A5 /* PSProductCategory.h */,
+				889ABAB4170F96AC006364A5 /* PSProductCategory.m */,
 				88730A7316CEBE210070885F /* PSBrand.h */,
 				88730A7416CEBE210070885F /* PSBrand.m */,
+				889ABAB6170F9DFF006364A5 /* PSCategoryTree.h */,
+				889ABAB7170F9DFF006364A5 /* PSCategoryTree.m */,
 				88730A7516CEBE210070885F /* PSCategory.h */,
 				88730A7616CEBE210070885F /* PSCategory.m */,
 				88730A7B16CEBE210070885F /* PSRetailer.h */,
@@ -374,6 +384,8 @@
 				AD54417116CF181800CA6A1C /* ProductHistogramViewController.m in Sources */,
 				883AC04017066238006351B1 /* PSProductSize.m in Sources */,
 				883AC0431706625A006351B1 /* PSProductColor.m in Sources */,
+				889ABAB5170F96AC006364A5 /* PSProductCategory.m in Sources */,
+				889ABAB8170F9DFF006364A5 /* PSCategoryTree.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
