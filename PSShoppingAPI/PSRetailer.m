@@ -99,10 +99,14 @@
 {
 	for (NSString *key in aDictionary) {
 		id value = [aDictionary valueForKey:key];
-		if ([key isEqualToString:@"id"] && ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]])) {
-			self.retailerId = [NSNumber numberWithInteger:[[value description] integerValue]];
-		} else if ([key isEqualToString:@"url"] && [value isKindOfClass:[NSString class]]) {
-			self.browseURL = [NSURL URLWithString:value];
+		if ([key isEqualToString:@"id"]) {
+			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+				self.retailerId = [NSNumber numberWithInteger:[[value description] integerValue]];
+			}
+		} else if ([key isEqualToString:@"url"]) {
+			if ([value isKindOfClass:[NSString class]]) {
+				self.browseURL = [NSURL URLWithString:value];
+			}
 		} else {
 			[self setValue:value forKey:key];
 		}

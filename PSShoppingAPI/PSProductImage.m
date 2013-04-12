@@ -106,8 +106,10 @@ NSString * const kPSProductImageSizeNamedIPhone = @"IPhone";
 {
 	for (NSString *key in aDictionary) {
 		id value = [aDictionary valueForKey:key];
-		if ([key isEqualToString:@"url"] && [value isKindOfClass:[NSString class]]) {
-			self.URL = [NSURL URLWithString:value];
+		if ([key isEqualToString:@"url"]) {
+			if ([value isKindOfClass:[NSString class]]) {
+				self.URL = [NSURL URLWithString:value];
+			}
 		} else if ([key isEqualToString:@"width"]) {
 			[self setValue:value forKey:@"maxWidth"];
 		} else if ([key isEqualToString:@"height"]) {

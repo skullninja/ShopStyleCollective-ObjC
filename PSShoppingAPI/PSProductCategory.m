@@ -93,8 +93,8 @@
 {
 	for (NSString *key in aDictionary) {
 		id value = [aDictionary valueForKey:key];
-		if ([key isEqualToString:@"id"] && [value isKindOfClass:[NSString class]]) {
-			self.categoryId = value;
+		if ([key isEqualToString:@"id"]) {
+			self.categoryId = [value description];
 		} else {
 			[self setValue:value forKey:key];
 		}

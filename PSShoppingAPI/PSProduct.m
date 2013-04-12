@@ -246,34 +246,57 @@
 	}
 	for (NSString *key in aDictionary) {
 		id value = [aDictionary valueForKey:key];
-		if ([key isEqualToString:@"clickUrl"] && [value isKindOfClass:[NSString class]]) {
-			self.buyURL = [NSURL URLWithString:value];
+		if ([key isEqualToString:@"clickUrl"]) {
+			if ([value isKindOfClass:[NSString class]]) {
+				self.buyURL = [NSURL URLWithString:value];
+			}
 		} else if ([key isEqualToString:@"seeMoreUrl"] && [value isKindOfClass:[NSString class]]) {
-			self.seeMoreURL = [NSURL URLWithString:value];
+			if ([value isKindOfClass:[NSString class]]) {
+				self.seeMoreURL = [NSURL URLWithString:value];
+			}
 		} else if ([key isEqualToString:@"description"]) {
 			self.descriptionHTML = [value description];
 		} else if ([key isEqualToString:@"locale"]) {
 			self.localeId = [value description];
-		} else if ([key isEqualToString:@"id"] && ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]])) {
-			self.productId = [NSNumber numberWithInteger:[[value description] integerValue]];
-		} else if ([key isEqualToString:@"brand"] && [value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
-			self.brand = (PSBrand *)[self remoteObjectForRelationshipNamed:@"brand" fromRepresentation:value];
-		} else if ([key isEqualToString:@"categories"] && [value isKindOfClass:[NSArray class]]) {
-			self.categories = [self remoteObjectsForToManyRelationshipNamed:@"categories" fromRepresentations:value];
-		} else if ([key isEqualToString:@"colors"] && [value isKindOfClass:[NSArray class]]) {
-			self.colors = [self remoteObjectsForToManyRelationshipNamed:@"colors" fromRepresentations:value];
-		} else if ([key isEqualToString:@"images"] && [value isKindOfClass:[NSArray class]]) {
-			[self orderAndMapImages:[self remoteObjectsForToManyRelationshipNamed:@"images" fromRepresentations:value]];
-		} else if ([key isEqualToString:@"retailer"] && [value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
-			self.retailer = (PSRetailer *)[self remoteObjectForRelationshipNamed:@"retailer" fromRepresentation:value];
-		} else if ([key isEqualToString:@"sizes"] && [value isKindOfClass:[NSArray class]]) {
-			self.sizes = [self remoteObjectsForToManyRelationshipNamed:@"sizes" fromRepresentations:value];
-		} else if ([key isEqualToString:@"price"] && ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]])) {
-			self.regularPrice = [NSNumber numberWithInteger:[[value description] integerValue]];
+		} else if ([key isEqualToString:@"id"]) {
+			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+				self.productId = [NSNumber numberWithInteger:[[value description] integerValue]];
+			}
+		} else if ([key isEqualToString:@"brand"]) {
+			if ([value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
+				self.brand = (PSBrand *)[self remoteObjectForRelationshipNamed:@"brand" fromRepresentation:value];
+			}
+		} else if ([key isEqualToString:@"categories"]) {
+			if ([value isKindOfClass:[NSArray class]]) {
+				self.categories = [self remoteObjectsForToManyRelationshipNamed:@"categories" fromRepresentations:value];
+			}
+		} else if ([key isEqualToString:@"colors"]) {
+			if ([value isKindOfClass:[NSArray class]]) {
+				self.colors = [self remoteObjectsForToManyRelationshipNamed:@"colors" fromRepresentations:value];
+			}
+		} else if ([key isEqualToString:@"images"]) {
+			if ([value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
+				NSDictionary *imageMap = (NSDictionary *)value;
+				[self orderAndMapImages:[self remoteObjectsForToManyRelationshipNamed:@"images" fromRepresentations:imageMap.allValues]];
+			}
+		} else if ([key isEqualToString:@"retailer"]) {
+			if ([value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
+				self.retailer = (PSRetailer *)[self remoteObjectForRelationshipNamed:@"retailer" fromRepresentation:value];
+			}
+		} else if ([key isEqualToString:@"sizes"]) {
+			if ([value isKindOfClass:[NSArray class]]) {
+				self.sizes = [self remoteObjectsForToManyRelationshipNamed:@"sizes" fromRepresentations:value];
+			}
+		} else if ([key isEqualToString:@"price"]) {
+			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+				self.regularPrice = [NSNumber numberWithInteger:[[value description] integerValue]];
+			}
 		} else if ([key isEqualToString:@"priceLabel"]) {
 			self.regularPriceLabel = [value description];
-		} else if ([key isEqualToString:@"maxPrice"] && ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]])) {
-			self.maxRegularPrice = [NSNumber numberWithInteger:[[value description] integerValue]];
+		} else if ([key isEqualToString:@"maxPrice"]) {
+			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+				self.maxRegularPrice = [NSNumber numberWithInteger:[[value description] integerValue]];
+			}
 		} else if ([key isEqualToString:@"maxPriceLabel"]) {
 			self.maxRegularPriceLabel = [value description];
 		} else {
