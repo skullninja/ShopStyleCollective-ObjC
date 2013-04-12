@@ -1,5 +1,5 @@
 //
-//  PSCategoryTree.h
+//  PSSBrand.h
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -23,29 +23,17 @@
 
 #import <Foundation/Foundation.h>
 
-@class PSCategory;
+/** A brand found on shopstyle.com */
 
-/** A collection categories found on shopstyle.com  */
+@interface PSSBrand : NSObject <NSCoding, PSRemoteObject>
 
-@interface PSCategoryTree : NSObject <NSCoding>
+/** The unique identifier of the receiver. */
+@property (nonatomic, copy, readonly) NSNumber *brandId;
 
-/** The top-level categories for the receiver. */
-@property (nonatomic, strong, readonly) NSArray *rootCategories;
+/** A name to display for the receiver. */
+@property (nonatomic, copy, readonly) NSString *name;
 
-/** Initializes a category tree.
- 
- @param rootCategoryId The category identifier to consider the parent of the receiver.
- @param categories An array of `PSCategory` objects to build into the receiver.
- */
-- (id)initWithRootId:(NSString *)rootCategoryId categories:(NSArray *)categories;
-
-/** All categories that are part of the receiver in a flat array. */
-- (NSArray *)allCategories;
-
-/** Find a specific category in the receiver by it's identifier.
- 
- @param categoryId A category identifier.
- */
-- (PSCategory *)categoryWithId:(NSString *)categoryId;
+/** A shopstyle.com URL that shows more products like the receiver. */
+@property (nonatomic, copy, readonly) NSURL *browseURL;
 
 @end

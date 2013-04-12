@@ -1,5 +1,5 @@
 //
-//  PSColor.h
+//  PSSCategoryTree.h
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -23,17 +23,29 @@
 
 #import <Foundation/Foundation.h>
 
-/** A standard ShopStyle color. Primarily used for displaying filters. For the retailer/brand color of a product see `PSProductColor` */
+@class PSSCategory;
 
-@interface PSColor : NSObject <NSCoding, PSRemoteObject>
+/** A collection categories found on shopstyle.com  */
 
-/** The unique identifier of the receiver. */
-@property (nonatomic, copy, readonly) NSNumber *colorId;
+@interface PSSCategoryTree : NSObject <NSCoding>
 
-/** A name to display for the receiver. */
-@property (nonatomic, copy, readonly) NSString *name;
+/** The top-level categories for the receiver. */
+@property (nonatomic, strong, readonly) NSArray *rootCategories;
 
-/** A shopstyle.com URL that shows more products like the receiver. */
-@property (nonatomic, copy, readonly) NSURL *browseURL;
+/** Initializes a category tree.
+ 
+ @param rootCategoryId The category identifier to consider the parent of the receiver.
+ @param categories An array of `PSSCategory` objects to build into the receiver.
+ */
+- (id)initWithRootId:(NSString *)rootCategoryId categories:(NSArray *)categories;
+
+/** All categories that are part of the receiver in a flat array. */
+- (NSArray *)allCategories;
+
+/** Find a specific category in the receiver by it's identifier.
+ 
+ @param categoryId A category identifier.
+ */
+- (PSSCategory *)categoryWithId:(NSString *)categoryId;
 
 @end

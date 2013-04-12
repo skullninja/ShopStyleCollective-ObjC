@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "group:POPSUGARShopSense"
+      name = "POPSUGARShopSense">
+      <FileRef
+         location = "group:POPSUGARShopSense.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSSClient.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSSClient.m">
+      </FileRef>
+      <FileRef
+         location = "group:PSSProductQuery.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSSProductQuery.m">
+      </FileRef>
+      <FileRef
+         location = "group:PSSProductFilter.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSSProductFilter.m">
+      </FileRef>
+      <FileRef
+         location = "group:PSSProduct.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSSProduct.m">
+      </FileRef>
+      <FileRef
+         location = "group:PSSProductImage.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSSProductImage.m">
+      </FileRef>
+      <FileRef
+         location = "group:PSSProductColor.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSSProductColor.m">
+      </FileRef>
+      <FileRef
+         location = "group:PSSProductSize.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSSProductSize.m">
+      </FileRef>
+      <FileRef
+         location = "group:PSSProductCategory.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSSProductCategory.m">
+      </FileRef>
+      <FileRef
+         location = "group:PSSBrand.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSSBrand.m">
+      </FileRef>
+      <FileRef
+         location = "group:PSSCategoryTree.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSSCategoryTree.m">
+      </FileRef>
+      <FileRef
+         location = "group:PSSCategory.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSSCategory.m">
+      </FileRef>
+      <FileRef
+         location = "group:PSSRetailer.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSSRetailer.m">
+      </FileRef>
+      <FileRef
+         location = "group:PSSColor.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSSColor.m">
+      </FileRef>
+   </Group>
+   <FileRef
+      location = "group:examples/iOS Example/iOS Example.xcodeproj">
+   </FileRef>
+</Workspace>

@@ -1,5 +1,5 @@
 //
-//  PSProductColor.m
+//  PSSProductImage.m
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -21,21 +21,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "PSProductColor.h"
+#import "PSSProductImage.h"
 
-@interface PSProductColor ()
+NSString * const kPSSProductImageSizeNamedSmall = @"Small";
+NSString * const kPSSProductImageSizeNamedMedium = @"Medium";
+NSString * const kPSSProductImageSizeNamedLarge = @"Large";
+NSString * const kPSSProductImageSizeNamedOriginal = @"Original";
+NSString * const kPSSProductImageSizeNamedIPhoneSmall = @"IPhoneSmall";
+NSString * const kPSSProductImageSizeNamedIPhone = @"IPhone";
 
-@property (nonatomic, copy, readwrite) NSString *name;
+@interface PSSProductImage ()
+
+@property (nonatomic, copy, readwrite) NSString *sizeName;
+@property (nonatomic, copy, readwrite) NSURL *URL;
+@property (nonatomic, copy, readwrite) NSNumber *maxWidth;
+@property (nonatomic, copy, readwrite) NSNumber *maxHeight;
 
 @end
 
-@implementation PSProductColor
+@implementation PSSProductImage
 
 #pragma mark - NSObject
 
 - (NSString *)description
 {
-	return [[super description] stringByAppendingFormat:@" %@", self.name];
+	return [[super description] stringByAppendingFormat:@" %@(%@,%@): %@", self.sizeName, self.maxWidth, self.maxHeight, self.URL.absoluteString];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -45,7 +55,7 @@
 
 - (NSUInteger)hash
 {
-	return self.name.hash;
+	return self.URL.hash;
 }
 
 - (BOOL)isEqual:(id)object
@@ -56,20 +66,26 @@
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.name isEqualToString:[(PSProductColor *)object name]]);
+	return ([self.URL isEqual:[(PSSProductImage *)object URL]]);
 }
 
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-	[encoder encodeObject:self.name forKey:@"name"];
+	[encoder encodeObject:self.sizeName forKey:@"sizeName"];
+	[encoder encodeObject:self.URL forKey:@"URL"];
+	[encoder encodeObject:self.maxWidth forKey:@"maxWidth"];
+	[encoder encodeObject:self.maxHeight forKey:@"maxHeight"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [super init])) {
-		self.name = [decoder decodeObjectForKey:@"name"];
+		self.sizeName = [decoder decodeObjectForKey:@"sizeName"];
+		self.URL = [decoder decodeObjectForKey:@"URL"];
+		self.maxWidth = [decoder decodeObjectForKey:@"maxWidth"];
+		self.maxHeight = [decoder decodeObjectForKey:@"maxHeight"];
 	}
 	return self;
 }
@@ -81,7 +97,7 @@
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSProductColor *instance = [[PSProductColor alloc] init];
+	PSSProductImage *instance = [[PSSProductImage alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }
@@ -90,7 +106,17 @@
 {
 	for (NSString *key in aDictionary) {
 		id value = [aDictionary valueForKey:key];
-		[self setValue:value forKey:key];
+		if ([key isEqualToString:@"url"]) {
+			if ([value isKindOfClass:[NSString class]]) {
+				self.URL = [NSURL URLWithString:value];
+			}
+		} else if ([key isEqualToString:@"width"]) {
+			[self setValue:value forKey:@"maxWidth"];
+		} else if ([key isEqualToString:@"height"]) {
+			[self setValue:value forKey:@"maxHeight"];
+		} else {
+			[self setValue:value forKey:key];
+		}
 	}
 }
 

@@ -1,5 +1,5 @@
 //
-//  PSProduct.h
+//  PSSProduct.h
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -23,13 +23,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class PSBrand;
-@class PSRetailer;
-@class PSProductImage;
+@class PSSBrand;
+@class PSSRetailer;
+@class PSSProductImage;
 
 /** A product on shopstyle.com. */
 
-@interface PSProduct : NSObject <NSCoding, PSRemoteObject>
+@interface PSSProduct : NSObject <NSCoding, PSRemoteObject>
 
 /** The unique identifier of the receiver. */
 @property (nonatomic, copy, readonly) NSNumber *productId;
@@ -87,10 +87,10 @@
 @property (nonatomic, copy, readonly) NSString *currency;
 
 /** The brand of the receiver. */
-@property (nonatomic, strong, readonly) PSBrand *brand;
+@property (nonatomic, strong, readonly) PSSBrand *brand;
 
 /** The retailer of the receiver. */
-@property (nonatomic, strong, readonly) PSRetailer *retailer;
+@property (nonatomic, strong, readonly) PSSRetailer *retailer;
 
 /** A label that can be used for a control that takes the user to more products like the receiver.  
  
@@ -102,7 +102,7 @@
 
 /** All categories on shopstyle.com that contain the receiver.
  
- @return An array of `PSProductCategory` objects representing all categories on shopstyle.com that contain this product. */
+ @return An array of `PSSProductCategory` objects representing all categories on shopstyle.com that contain this product. */
 @property (nonatomic, copy, readonly) NSArray *categories;
 
 /** The locale of the retailer. */
@@ -110,12 +110,12 @@
 
 /** The colors available at the retailer.
  
- @return An array of `PSProductColor` objects representing the available colors at the retailer. */
+ @return An array of `PSSProductColor` objects representing the available colors at the retailer. */
 @property (nonatomic, copy, readonly) NSArray *colors;
 
 /** The sizes available at the retailer.
  
- @return An array of `PSProductSize` objects representing the available sizes at the retailer. */
+ @return An array of `PSSProductSize` objects representing the available sizes at the retailer. */
 @property (nonatomic, copy, readonly) NSArray *sizes;
 
 /** The receiver was in stock the last poll of the retailer's website.
@@ -130,7 +130,7 @@
 
 /** Images of the receiver.
  
- @return An array of `PSProductImage` objects. */
+ @return An array of `PSSProductImage` objects. */
 @property (nonatomic, copy, readonly) NSArray *images;
 
 /** The currency of the pricing information of the product from the locale it was extracted. Examples are USD, GBP, and EUR. 
@@ -255,9 +255,9 @@
  *  ---------------------------------------------------------------------------------------
  */
 
-/** A product image matching the size name. See `PSProductImage` for size name constants.
+/** A product image matching the size name. See `PSSProductImage` for size name constants.
  
- @return A `PSProductImage` or nil if not found for the given imageSizeName. */
-- (PSProductImage *)imageWithSizeName:(NSString *)imageSizeName;
+ @return A `PSSProductImage` or nil if not found for the given imageSizeName. */
+- (PSSProductImage *)imageWithSizeName:(NSString *)imageSizeName;
 
 @end

@@ -1,5 +1,5 @@
 //
-//  PSBrand.m
+//  PSSProductCategory.m
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -21,23 +21,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "PSBrand.h"
+#import "PSSProductCategory.h"
 
-@interface PSBrand ()
+@interface PSSProductCategory ()
 
-@property (nonatomic, copy, readwrite) NSNumber *brandId;
+@property (nonatomic, copy, readwrite) NSString *categoryId;
 @property (nonatomic, copy, readwrite) NSString *name;
-@property (nonatomic, copy, readwrite) NSURL *browseURL;
 
 @end
 
-@implementation PSBrand
+@implementation PSSProductCategory
 
 #pragma mark - NSObject
 
 - (NSString *)description
 {
-	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.brandId];
+	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.categoryId];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -47,7 +46,7 @@
 
 - (NSUInteger)hash
 {
-	return self.brandId.hash;
+	return self.categoryId.hash;
 }
 
 - (BOOL)isEqual:(id)object
@@ -58,24 +57,22 @@
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.brandId isEqualToNumber:[(PSBrand *)object brandId]]);
+	return ([self.categoryId isEqualToString:[(PSSProductCategory *)object categoryId]]);
 }
 
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
+	[encoder encodeObject:self.categoryId forKey:@"categoryId"];
 	[encoder encodeObject:self.name forKey:@"name"];
-	[encoder encodeObject:self.brandId forKey:@"brandId"];
-	[encoder encodeObject:self.browseURL forKey:@"browseURL"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [super init])) {
+		self.categoryId = [decoder decodeObjectForKey:@"categoryId"];
 		self.name = [decoder decodeObjectForKey:@"name"];
-		self.brandId = [decoder decodeObjectForKey:@"brandId"];
-		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
 	}
 	return self;
 }
@@ -87,7 +84,7 @@
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSBrand *instance = [[PSBrand alloc] init];
+	PSSProductCategory *instance = [[PSSProductCategory alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }
@@ -97,13 +94,7 @@
 	for (NSString *key in aDictionary) {
 		id value = [aDictionary valueForKey:key];
 		if ([key isEqualToString:@"id"]) {
-			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
-				self.brandId = [NSNumber numberWithInteger:[[value description] integerValue]];
-			}
-		} else if ([key isEqualToString:@"url"]) {
-			if ([value isKindOfClass:[NSString class]]) {
-				self.browseURL = [NSURL URLWithString:value];
-			}
+			self.categoryId = [value description];
 		} else {
 			[self setValue:value forKey:key];
 		}

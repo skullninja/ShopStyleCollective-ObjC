@@ -1,5 +1,5 @@
 //
-//  PSCategory.h
+//  PSSProductCategory.h
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -22,13 +22,15 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "PSProductCategory.h"
 
-/** A category found on shopstyle.com  */
+/** A product's category.  */
 
-@interface PSCategory : PSProductCategory <NSCoding, PSRemoteObject>
+@interface PSSProductCategory : NSObject <NSCoding, PSRemoteObject>
 
-/** The child categories of the receiver if any exists. */
-@property (nonatomic, strong, readonly) NSArray *childCategories;
+/** The unique identifier of the receiver. See `PSSCategoryTree` to understand it's position in the hierarchy. */
+@property (nonatomic, copy, readonly) NSString *categoryId;
+
+/** A name to display for the receiver. */
+@property (nonatomic, copy, readonly) NSString *name;
 
 @end

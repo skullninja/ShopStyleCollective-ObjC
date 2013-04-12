@@ -15,5 +15,5 @@
 	#import <MobileCoreServices/MobileCoreServices.h>
 
 	#import "AFNetworking.h"
-	#import "PSShoppingAPI.h"
+	#import "POPSUGARShopSense.h"
 #endif

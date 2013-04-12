@@ -1,5 +1,5 @@
 //
-//  PSCategoryTree.m
+//  PSSCategoryTree.m
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -21,24 +21,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "PSCategoryTree.h"
-#import "PSCategory.h"
+#import "PSSCategoryTree.h"
+#import "PSSCategory.h"
 
-@interface PSCategory (PRIVATE_CATEGORY_EXT)
+@interface PSSCategory (PRIVATE_CATEGORY_EXT)
 
 - (NSMutableOrderedSet *)mutableChildCategorySet;
 - (NSString *)parentId;
 
 @end
 
-@interface PSCategoryTree ()
+@interface PSSCategoryTree ()
 
 @property (nonatomic, strong) NSMutableDictionary *categoryIdMap;
 @property (nonatomic, strong, readwrite) NSArray *rootCategories;
 
 @end
 
-@implementation PSCategoryTree
+@implementation PSSCategoryTree
 
 - (id)initWithRootId:(NSString *)rootCategoryId categories:(NSArray *)categories
 {
@@ -46,15 +46,15 @@
 	if (self) {
 		NSMutableDictionary *mutableCategoryIdMap = [[NSMutableDictionary alloc] initWithCapacity:categories.count];
 		NSMutableArray *mutableRootCategories = [[NSMutableArray alloc] init];
-		for (PSCategory *category in categories) {
+		for (PSSCategory *category in categories) {
 			[mutableCategoryIdMap setObject:category forKey:category.categoryId];
 			if ([category.parentId isEqualToString:rootCategoryId]) {
 				[mutableRootCategories addObject:category];
 			}
 		}
-		for (PSCategory *category in categories) {
+		for (PSSCategory *category in categories) {
 			if (category.parentId != nil && ![category.parentId isEqualToString:rootCategoryId]) {
-				PSCategory *parent = [mutableCategoryIdMap objectForKey:category.parentId];
+				PSSCategory *parent = [mutableCategoryIdMap objectForKey:category.parentId];
 				if (parent != nil) {
 					[parent.mutableChildCategorySet addObject:category];
 				}
@@ -71,7 +71,7 @@
 	return self.categoryIdMap.allValues;
 }
 
-- (PSCategory *)categoryWithId:(NSString *)categoryId
+- (PSSCategory *)categoryWithId:(NSString *)categoryId
 {
 	return [self.categoryIdMap objectForKey:categoryId];
 }
@@ -96,7 +96,7 @@
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.categoryIdMap isEqualToDictionary:[(PSCategoryTree *)object categoryIdMap]]);
+	return ([self.categoryIdMap isEqualToDictionary:[(PSSCategoryTree *)object categoryIdMap]]);
 }
 
 #pragma mark - NSCoding

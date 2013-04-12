@@ -1,5 +1,5 @@
 //
-//  PSShopSenseAPIClient.h
+//  PSSClient.h
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -22,11 +22,11 @@
 // THE SOFTWARE.
 
 #import "AFHTTPClient.h"
-#import "PSProductFilter.h"
+#import "PSSProductFilter.h"
 
-@class PSProduct;
-@class PSProductQuery;
-@class PSCategoryTree;
+@class PSSProduct;
+@class PSSProductQuery;
+@class PSSCategoryTree;
 
 /** A singleton subclass of AFHTTPClient that wraps the ShopSense API web services and converts the response into native Objective-C objects.  
  
@@ -38,7 +38,7 @@
  @warning before calling any methods don't forget to set partnerId!
  */
 
-@interface PSShoppingAPIClient : AFHTTPClient
+@interface PSSClient : AFHTTPClient
 
 /**---------------------------------------------------------------------------------------
  * @name Setting up the Client
@@ -60,40 +60,40 @@
 /** Returns a single product object matching a supplied product identifier.
  
  @param productId The product identifier.
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: a `PSProduct` object matching the productId or nil.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: a `PSSProduct` object matching the productId or nil.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)getProductByID:(NSNumber *)productId success:(void (^)(PSProduct *product))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)getProductByID:(NSNumber *)productId success:(void (^)(PSSProduct *product))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /** Returns an array of products that match a query specified by the parameters below.
  
  @param searchTerm Text search term, as a user would enter in a "Search:" field.
  @param offset The index of the first product to return, or 0 (zero) if not specified. A client can use this to implement paging through large result sets.
  @param limit The maximum number of results to return, or 100 if not specified. The maximum value is 100. Combine with the offset parameter to implement paging.
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes two arguments: the total count of products that match the provided criteria and an array of `PSProduct` objects within the offset and limit parameters.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes two arguments: the total count of products that match the provided criteria and an array of `PSSProduct` objects within the offset and limit parameters.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
 - (void)searchProductsWithTerm:(NSString *)searchTerm offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /** Returns an array of products that match a query specified by the parameters below.
  
- @param queryOrNil A `PSProductQuery` to define which products to return.
+ @param queryOrNil A `PSSProductQuery` to define which products to return.
  @param offset The index of the first product to return, or 0 (zero) if not specified. A client can use this to implement paging through large result sets.
  @param limit The maximum number of results to return, or 100 if not specified. The maximum value is 100. Combine with the offset parameter to implement paging.
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes two arguments: the total count of products that match the provided criteria and an array of `PSProduct` objects within the offset and limit parameters.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes two arguments: the total count of products that match the provided criteria and an array of `PSSProduct` objects within the offset and limit parameters.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)searchProductsWithQuery:(PSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)searchProductsWithQuery:(PSSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /** This method returns a list of filters and product counts that describe the results of a given product query. The query is specified using the parameters below.
  
- @param queryOrNil A `PSProductQuery` to define which products are used in the calculation.
+ @param queryOrNil A `PSSProductQuery` to define which products are used in the calculation.
  @param filterType The type of filter to return on success. 
  @param floorOrNil The minimum count of products required for an entry to be included in the histogram.
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: an array of `PSProductFilter` objects.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: an array of `PSSProductFilter` objects.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)productHistogramWithQuery:(PSProductQuery *)queryOrNil filterType:(PSProductFilterType)filterType floor:(NSNumber *)floorOrNil success:(void (^)(NSArray *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil filterType:(PSSProductFilterType)filterType floor:(NSNumber *)floorOrNil success:(void (^)(NSArray *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /**---------------------------------------------------------------------------------------
  * @name Getting Lookup Values
@@ -102,21 +102,21 @@
 
 /** Returns a list of brands that have live products. Brands that have very few products will be omitted.
  
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: an array of `PSBrand` objects.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: an array of `PSSBrand` objects.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
 - (void)getBrandsSuccess:(void (^)(NSArray *brands))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /** Returns an array of retailers that have live products.
  
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: an array of `PSRetailer` objects.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: an array of `PSSRetailer` objects.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
 - (void)getRetailersSuccess:(void (^)(NSArray *retailers))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /** Returns the list of canonical colors available.
  
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: an array of `PSColor` objects.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: an array of `PSSColor` objects.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
 - (void)getColorsSuccess:(void (^)(NSArray *colors))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
@@ -125,10 +125,10 @@
  
  @param categoryIdOrNil The identifier of the category to use as the starting point. By default, the global root of the category tree is used.
  @param depthOrNil The number of levels from the root to include in the response. By default all the levels are included.
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: a `PSCategoryTree` object.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: a `PSSCategoryTree` object.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)categoryTreeFromCategoryId:(NSString *)categoryIdOrNil depth:(NSNumber *)depthOrNil success:(void (^)(PSCategoryTree *categoryTree))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)categoryTreeFromCategoryId:(NSString *)categoryIdOrNil depth:(NSNumber *)depthOrNil success:(void (^)(PSSCategoryTree *categoryTree))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 @end
 

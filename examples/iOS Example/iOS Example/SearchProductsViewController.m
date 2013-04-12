@@ -39,7 +39,7 @@
 	self.title = @"Search: 'Red Dress'";
 	
 	__weak typeof(self) weakSelf = self;
-	[[PSShoppingAPIClient sharedClient] searchProductsWithTerm:@"Red Dress" offset:nil limit:nil success:^(NSUInteger totalCount, NSArray *products) {
+	[[PSSClient sharedClient] searchProductsWithTerm:@"Red Dress" offset:nil limit:nil success:^(NSUInteger totalCount, NSArray *products) {
 		weakSelf.products = products;
 		[weakSelf.tableView reloadData];
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -71,7 +71,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
 	}
-	PSProduct *thisProduct = [self.products objectAtIndex:indexPath.row];
+	PSSProduct *thisProduct = [self.products objectAtIndex:indexPath.row];
 	cell.textLabel.text = thisProduct.name;
 	cell.textLabel.numberOfLines = 0;
 	if (thisProduct.salePriceLabel) {
@@ -80,7 +80,7 @@
 		cell.detailTextLabel.text = thisProduct.regularPriceLabel;
 	}
 	if (thisProduct.images.count > 0) {
-		PSProductImage *productImage = [thisProduct.images lastObject];
+		PSSProductImage *productImage = [thisProduct.images lastObject];
 		[cell.imageView setImageWithURL:productImage.URL placeholderImage:[UIImage imageNamed:@"Placeholder"]];
 	} else {
 		cell.imageView.image = [UIImage imageNamed:@"Placeholder"];

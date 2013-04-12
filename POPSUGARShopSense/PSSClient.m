@@ -1,5 +1,5 @@
 //
-//  PSShoppingAPIClient.m
+//  PSSClient.m
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -21,25 +21,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "PSShoppingAPIClient.h"
+#import "PSSClient.h"
 #import "AFJSONRequestOperation.h"
-#import "PSProduct.h"
-#import "PSProductQuery.h"
-#import "PSBrand.h"
-#import "PSRetailer.h"
-#import "PSColor.h"
-#import "PSCategory.h"
-#import "PSCategoryTree.h"
+#import "PSSProduct.h"
+#import "PSSProductQuery.h"
+#import "PSSBrand.h"
+#import "PSSRetailer.h"
+#import "PSSColor.h"
+#import "PSSCategory.h"
+#import "PSSCategoryTree.h"
 
-static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/api/v2/";
+static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 
-@interface PSShoppingAPIClient ()
+@interface PSSClient ()
 
 - (void)makeRequestForEntity:(NSString *)entity parameters:(NSDictionary *)parameters success:(void (^)(AFHTTPRequestOperation *operation, NSDictionary *response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 @end
 
-@implementation PSShoppingAPIClient
+@implementation PSSClient
 
 @synthesize partnerId = _partnerId;
 
@@ -47,10 +47,10 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 
 + (instancetype)sharedClient
 {
-	static PSShoppingAPIClient *_sharedClient = nil;
+	static PSSClient *_sharedClient = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		_sharedClient = [[PSShoppingAPIClient alloc] initWithBaseURL:[NSURL URLWithString:kPSShoppingBaseURLString]];
+		_sharedClient = [[PSSClient alloc] initWithBaseURL:[NSURL URLWithString:kPSSBaseURLString]];
 	});
 	
 	return _sharedClient;
@@ -117,13 +117,13 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 
 #pragma mark - Getting Products
 
-- (void)getProductByID:(NSNumber *)productId success:(void (^)(PSProduct *product))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (void)getProductByID:(NSNumber *)productId success:(void (^)(PSSProduct *product))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSParameterAssert(productId != nil);
 	NSString *entity = [NSString stringWithFormat:@"products/%d",productId.integerValue];
 	[self makeRequestForEntity:entity parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
 		if (success) {
-			PSProduct *product = (PSProduct *)[self remoteObjectForEntityNamed:@"product" fromRepresentation:responseObject];
+			PSSProduct *product = (PSSProduct *)[self remoteObjectForEntityNamed:@"product" fromRepresentation:responseObject];
 			success(product);
 		}
 	} failure:failure];
@@ -132,10 +132,10 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 - (void)searchProductsWithTerm:(NSString *)searchTerm offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSParameterAssert(searchTerm != nil && searchTerm.length > 0);
-	[self searchProductsWithQuery:[PSProductQuery productQueryWithSearchTerm:searchTerm] offset:offset limit:limit success:success failure:failure];
+	[self searchProductsWithQuery:[PSSProductQuery productQueryWithSearchTerm:searchTerm] offset:offset limit:limit success:success failure:failure];
 }
 
-- (void)searchProductsWithQuery:(PSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (void)searchProductsWithQuery:(PSSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSString *entity = @"products";
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
@@ -175,32 +175,32 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 	} failure:failure];
 }
 
-- (void)productHistogramWithQuery:(PSProductQuery *)queryOrNil filterType:(PSProductFilterType)filterType floor:(NSNumber *)floorOrNil success:(void (^)(NSArray *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil filterType:(PSSProductFilterType)filterType floor:(NSNumber *)floorOrNil success:(void (^)(NSArray *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
 	NSString *filterResponseKey = nil;
 	switch (filterType) {
-		case PSProductFilterTypeBrand:
+		case PSSProductFilterTypeBrand:
 			[params setValue:@"Brand" forKey:@"filters"];
 			filterResponseKey = @"brandHistogram";
 			break;
-		case PSProductFilterTypeRetailer:
+		case PSSProductFilterTypeRetailer:
 			[params setValue:@"Retailer" forKey:@"filters"];
 			filterResponseKey = @"retailerHistogram";
 			break;
-		case PSProductFilterTypeColor:
+		case PSSProductFilterTypeColor:
 			[params setValue:@"Color" forKey:@"filters"];
 			filterResponseKey = @"colorHistogram";
 			break;
-		case PSProductFilterTypePrice:
+		case PSSProductFilterTypePrice:
 			[params setValue:@"Price" forKey:@"filters"];
 			filterResponseKey = @"priceHistogram";
 			break;
-		case PSProductFilterTypeSale:
+		case PSSProductFilterTypeSale:
 			[params setValue:@"Discount" forKey:@"filters"];
 			filterResponseKey = @"discountHistogram";
 			break;
-		case PSProductFilterTypeSize:
+		case PSSProductFilterTypeSize:
 			[params setValue:@"Size" forKey:@"filters"];
 			filterResponseKey = @"sizeHistogram";
 			break;
@@ -224,7 +224,7 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 				NSMutableArray *filters = [NSMutableArray arrayWithCapacity:[filtersRepresentation count]];
 				for (id filterRep in filtersRepresentation) {
 					if ([filterRep isKindOfClass:[NSDictionary class]] && [filterRep objectForKey:@"id"] != nil) {
-						PSProductFilter *filter = [PSProductFilter filterWithType:filterType filterId:[filterRep objectForKey:@"id"]];
+						PSSProductFilter *filter = [PSSProductFilter filterWithType:filterType filterId:[filterRep objectForKey:@"id"]];
 						filter.browseURLString = [filterRep objectForKey:@"url"];
 						filter.name = [filterRep objectForKey:@"name"];
 						filter.productCount = [filterRep objectForKey:@"count"];
@@ -307,7 +307,7 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 
 #pragma mark - Categories
 
-- (void)categoryTreeFromCategoryId:(NSString *)categoryIdOrNil depth:(NSNumber *)depthOrNil success:(void (^)(PSCategoryTree *categoryTree))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (void)categoryTreeFromCategoryId:(NSString *)categoryIdOrNil depth:(NSNumber *)depthOrNil success:(void (^)(PSSCategoryTree *categoryTree))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	if (depthOrNil != nil && depthOrNil.integerValue <= 0) {
 		if (success) {
@@ -340,7 +340,7 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 			}
 			if (categories.count > 0 && rootId.length > 0) {
 				if (success) {
-					PSCategoryTree *categoryTree = [[PSCategoryTree alloc] initWithRootId:rootId categories:categories];
+					PSSCategoryTree *categoryTree = [[PSSCategoryTree alloc] initWithRootId:rootId categories:categories];
 					success(categoryTree);
 				}
 			} else {
@@ -385,15 +385,15 @@ static NSString * const kPSShoppingBaseURLString = @"http://api.shopstyle.com/ap
 - (id<PSRemoteObject>)remoteObjectForEntityNamed:(NSString *)entityName fromRepresentation:(NSDictionary *)representation
 {
 	if ([entityName isEqualToString:@"brand"]) {
-		return [PSBrand instanceFromRemoteRepresentation:representation];
+		return [PSSBrand instanceFromRemoteRepresentation:representation];
 	} else if ([entityName isEqualToString:@"category"]) {
-		return [PSCategory instanceFromRemoteRepresentation:representation];
+		return [PSSCategory instanceFromRemoteRepresentation:representation];
 	} else if ([entityName isEqualToString:@"color"]) {
-		return [PSColor instanceFromRemoteRepresentation:representation];
+		return [PSSColor instanceFromRemoteRepresentation:representation];
 	} else if ([entityName isEqualToString:@"product"]) {
-		return [PSProduct instanceFromRemoteRepresentation:representation];
+		return [PSSProduct instanceFromRemoteRepresentation:representation];
 	} else if ([entityName isEqualToString:@"retailer"]) {
-		return [PSRetailer instanceFromRemoteRepresentation:representation];
+		return [PSSRetailer instanceFromRemoteRepresentation:representation];
 	}
 	return nil;
 }

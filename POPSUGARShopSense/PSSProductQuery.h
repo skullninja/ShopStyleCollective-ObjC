@@ -1,5 +1,5 @@
 //
-//  PSProductQuery.h
+//  PSSProductQuery.h
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -22,32 +22,32 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "PSProductFilter.h"
+#import "PSSProductFilter.h"
 
 typedef enum {
-	PSProductQuerySortDefault = 0,
-	PSProductQuerySortPriceLoHi,
-	PSProductQuerySortPriceHiLo,
-	PSProductQuerySortRecency,
-	PSProductQuerySortPopular
-} PSProductQuerySort;
+	PSSProductQuerySortDefault = 0,
+	PSSProductQuerySortPriceLoHi,
+	PSSProductQuerySortPriceHiLo,
+	PSSProductQuerySortRecency,
+	PSSProductQuerySortPopular
+} PSSProductQuerySort;
 
 /**
  The ShopSense API is made up of several methods to return product data, including an array of products 
- and a product histogram. A `PSProductFilter` can be used to further refine the results from these requests.
+ and a product histogram. A `PSSProductFilter` can be used to further refine the results from these requests.
  */
 
-@interface PSProductQuery : NSObject <NSCoding>
+@interface PSSProductQuery : NSObject <NSCoding>
 
 /**---------------------------------------------------------------------------------------
  * @name Creating Product Queries
  *  ---------------------------------------------------------------------------------------
  */
 
-/** A convenience method to great a PSProductFilter initialized with a search term. */
+/** A convenience method to great a PSSProductFilter initialized with a search term. */
 + (instancetype)productQueryWithSearchTerm:(NSString *)searchTearm;
 
-/** A convenience method to great a PSProductFilter initialized with a product category identifier. */
+/** A convenience method to great a PSSProductFilter initialized with a product category identifier. */
 + (instancetype)productQueryWithCategoryId:(NSString *)productCategoryId;
 
 /**---------------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ typedef enum {
  This is also known as `fts` on the ShopSense API documentation. */
 @property (nonatomic, copy) NSString *searchTerm;
 
-/** A product category identifier. Only products within the category will be returned. This should be a `PSProductCategory categoryId`.  
+/** A product category identifier. Only products within the category will be returned. This should be a `PSSProductCategory categoryId`.  
  
   This is also known as `cat` on the ShopSense API documentation. */
 @property (nonatomic, copy) NSString *productCategoryId;
@@ -74,23 +74,23 @@ typedef enum {
  
  Possible values are:
  
- `PSProductQuerySortDefault`
+ `PSSProductQuerySortDefault`
  The most relevant products to the product query are listed first.
  
- `PSProductQuerySortPriceLoHi`
+ `PSSProductQuerySortPriceLoHi`
  Sort by price in ascending order.
  
- `PSProductQuerySortPriceHiLo`
+ `PSSProductQuerySortPriceHiLo`
  Sort by price in descending order.
  
- `PSProductQuerySortRecency`
+ `PSSProductQuerySortRecency`
  Sort by the recency of the products.
  
- `PSProductQuerySortPopular`
+ `PSSProductQuerySortPopular`
  Sort by the popularity of the products.
  
  This is also known as `sort` on the ShopSense API documentation.  */
-@property (nonatomic, assign) PSProductQuerySort sort;
+@property (nonatomic, assign) PSSProductQuerySort sort;
 
 /**---------------------------------------------------------------------------------------
  * @name Managing Product Filters
@@ -101,46 +101,46 @@ typedef enum {
  
  These are also known as `fl` parameters on the ShopSense API documentation. 
  
- @return An array of all `PSProductFilter` objects.
+ @return An array of all `PSSProductFilter` objects.
  */
 - (NSArray *)productFilters;
 
 /** All filters that are part of the receiver matching filterType.
  
  @param filterType The type of filters to return.
- @return An array of all `PSProductFilter` objects of a specific `PSProductFilterType` that are part of the receiver. */
-- (NSArray *)productFiltersOfType:(PSProductFilterType)filterType;
+ @return An array of all `PSSProductFilter` objects of a specific `PSSProductFilterType` that are part of the receiver. */
+- (NSArray *)productFiltersOfType:(PSSProductFilterType)filterType;
 
-/** Add a `PSProductFilter` object to the receiver. 
+/** Add a `PSSProductFilter` object to the receiver. 
  
  If the filter exists it will not be added again.
  
- @param newFilter The `PSProductFilter` to add.
+ @param newFilter The `PSSProductFilter` to add.
  */
-- (void)addProductFilter:(PSProductFilter *)newFilter;
+- (void)addProductFilter:(PSSProductFilter *)newFilter;
 
-/** Add an array of `PSProductFilter` objects to the receiver. 
+/** Add an array of `PSSProductFilter` objects to the receiver.
  
  If an individual filter exists it will not be added again.
  
- @param newFilters An array of `PSProductFilter` objects to add.
+ @param newFilters An array of `PSSProductFilter` objects to add.
  */
 - (void)addProductFilters:(NSArray *)newFilters;
 
-/** Remove a `PSProductFilter` objects from the receiver that matches the filter parameter.
+/** Remove a `PSSProductFilter` objects from the receiver that matches the filter parameter.
  
- @param filter A `PSProductFilter` to remove if found.
+ @param filter A `PSSProductFilter` to remove if found.
  */
-- (void)removeProductFilter:(PSProductFilter *)filter;
+- (void)removeProductFilter:(PSSProductFilter *)filter;
 
-/** Clears all `PSProductFilter` objects that are part of the receiver. */
+/** Clears all `PSSProductFilter` objects that are part of the receiver. */
 - (void)clearProductFilters;
 
-/** Clears all `PSProductFilter` objects of a specific `PSProductFilterType` that are part of the receiver. 
+/** Clears all `PSSProductFilter` objects of a specific `PSSProductFilterType` that are part of the receiver.
  
  @param filterType The type of filters to remove.
  */
-- (void)clearProductFiltersOfType:(PSProductFilterType)filterType;
+- (void)clearProductFiltersOfType:(PSSProductFilterType)filterType;
 
 /**---------------------------------------------------------------------------------------
  * @name Converting to URL Parameters
@@ -156,7 +156,7 @@ typedef enum {
  *  ---------------------------------------------------------------------------------------
  */
 
-/** Returns a Boolean value that indicates whether a given `PSProductQuery` is equal to the receiver using an isEqual: test on all properties. */
-- (BOOL)isEqualToProductQuery:(PSProductQuery *)productQuery;
+/** Returns a Boolean value that indicates whether a given `PSSProductQuery` is equal to the receiver using an isEqual: test on all properties. */
+- (BOOL)isEqualToProductQuery:(PSSProductQuery *)productQuery;
 
 @end

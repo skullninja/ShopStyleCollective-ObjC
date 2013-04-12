@@ -1,5 +1,5 @@
 //
-//  PSProductCategory.m
+//  PSSCategory.m
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -21,58 +21,52 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "PSProductCategory.h"
+#import "PSSCategory.h"
 
-@interface PSProductCategory ()
 
-@property (nonatomic, copy, readwrite) NSString *categoryId;
-@property (nonatomic, copy, readwrite) NSString *name;
+@interface PSSProductCategory (PRIVATE_CATEGORY_EXT)
+
+- (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary;
 
 @end
 
-@implementation PSProductCategory
+@interface PSSCategory ()
 
-#pragma mark - NSObject
+@property (nonatomic, strong, readwrite) NSMutableOrderedSet *mutableChildCategorySet;
+@property (nonatomic, copy, readwrite) NSString *parentId;
 
-- (NSString *)description
+@end
+
+@implementation PSSCategory
+
+- (NSArray *)childCategories
 {
-	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.categoryId];
+	return [self.mutableChildCategorySet array];
 }
 
-- (void)setValue:(id)value forUndefinedKey:(NSString *)key
+- (NSMutableOrderedSet *)mutableChildCategorySet
 {
-	PSDLog(@"Warning: Undefined Key Named '%@'", key);
-}
-
-- (NSUInteger)hash
-{
-	return self.categoryId.hash;
-}
-
-- (BOOL)isEqual:(id)object
-{
-	if (object == self) {
-		return YES;
+	if (_mutableChildCategorySet != nil) {
+		return _mutableChildCategorySet;
 	}
-	if (object == nil || ![object isKindOfClass:[self class]]) {
-		return NO;
-	}
-	return ([self.categoryId isEqualToString:[(PSProductCategory *)object categoryId]]);
+	_mutableChildCategorySet = [[NSMutableOrderedSet alloc] init];
+	return _mutableChildCategorySet;
 }
 
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-	[encoder encodeObject:self.categoryId forKey:@"categoryId"];
-	[encoder encodeObject:self.name forKey:@"name"];
+	[super encodeWithCoder:encoder];
+	[encoder encodeObject:self.parentId forKey:@"parentId"];
+	[encoder encodeObject:self.mutableChildCategorySet forKey:@"mutableChildCategorySet"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
-	if ((self = [super init])) {
-		self.categoryId = [decoder decodeObjectForKey:@"categoryId"];
-		self.name = [decoder decodeObjectForKey:@"name"];
+	if ((self = [super initWithCoder:decoder])) {
+		self.parentId = [decoder decodeObjectForKey:@"parentId"];
+		self.mutableChildCategorySet = [decoder decodeObjectForKey:@"mutableChildCategorySet"];
 	}
 	return self;
 }
@@ -84,21 +78,9 @@
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSProductCategory *instance = [[PSProductCategory alloc] init];
+	PSSCategory *instance = [[PSSCategory alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
-}
-
-- (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary
-{
-	for (NSString *key in aDictionary) {
-		id value = [aDictionary valueForKey:key];
-		if ([key isEqualToString:@"id"]) {
-			self.categoryId = [value description];
-		} else {
-			[self setValue:value forKey:key];
-		}
-	}
 }
 
 @end

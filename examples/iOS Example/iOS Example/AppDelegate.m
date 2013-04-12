@@ -30,7 +30,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 #warning You must sign up for a Partner ID at http://shopsense.shopstyle.com/
-	[[PSShoppingAPIClient sharedClient] setPartnerId:<#Partner ID#>];
+	[[PSSClient sharedClient] setPartnerId:<#Partner ID#>];
 	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	
 	MasterViewController *masterViewController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];

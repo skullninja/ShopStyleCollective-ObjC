@@ -1,5 +1,5 @@
 //
-//  PSProductImage.h
+//  PSSProductImage.h
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -23,32 +23,32 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString * const kPSProductImageSizeNamedSmall;
-extern NSString * const kPSProductImageSizeNamedMedium;
-extern NSString * const kPSProductImageSizeNamedLarge;
-extern NSString * const kPSProductImageSizeNamedOriginal;
-extern NSString * const kPSProductImageSizeNamedIPhoneSmall;
-extern NSString * const kPSProductImageSizeNamedIPhone;
+extern NSString * const kPSSProductImageSizeNamedSmall;
+extern NSString * const kPSSProductImageSizeNamedMedium;
+extern NSString * const kPSSProductImageSizeNamedLarge;
+extern NSString * const kPSSProductImageSizeNamedOriginal;
+extern NSString * const kPSSProductImageSizeNamedIPhoneSmall;
+extern NSString * const kPSSProductImageSizeNamedIPhone;
 
-/** An image of a `PSProduct` */
+/** An image of a `PSSProduct` */
 
-@interface PSProductImage : NSObject <NSCoding, PSRemoteObject>
+@interface PSSProductImage : NSObject <NSCoding, PSRemoteObject>
 
 /** A name for the size of this image.
  
  Possible values are:
  
- kPSProductImageSizeNamedSmall = @"Small";
+ kPSSProductImageSizeNamedSmall = @"Small";
  
- kPSProductImageSizeNamedMedium = @"Medium";
+ kPSSProductImageSizeNamedMedium = @"Medium";
  
- kPSProductImageSizeNamedLarge = @"Large";
+ kPSSProductImageSizeNamedLarge = @"Large";
  
- kPSProductImageSizeNamedOriginal = @"Original";
+ kPSSProductImageSizeNamedOriginal = @"Original";
  
- kPSProductImageSizeNamedIPhoneSmall = @"IPhoneSmall";
+ kPSSProductImageSizeNamedIPhoneSmall = @"IPhoneSmall";
  
- kPSProductImageSizeNamedIPhone = @"IPhone";
+ kPSSProductImageSizeNamedIPhone = @"IPhone";
  */
 @property (nonatomic, copy, readonly) NSString *sizeName;
 

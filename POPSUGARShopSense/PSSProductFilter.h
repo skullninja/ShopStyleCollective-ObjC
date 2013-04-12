@@ -1,5 +1,5 @@
 //
-//  PSProductFilter.h
+//  PSSProductFilter.h
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -24,17 +24,17 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
-	PSProductFilterTypeBrand = 1,
-	PSProductFilterTypeRetailer = 2,
-	PSProductFilterTypePrice = 3,
-	PSProductFilterTypeSale = 4,
-	PSProductFilterTypeSize = 5,
-	PSProductFilterTypeColor = 6
-} PSProductFilterType;
+	PSSProductFilterTypeBrand = 1,
+	PSSProductFilterTypeRetailer = 2,
+	PSSProductFilterTypePrice = 3,
+	PSSProductFilterTypeSale = 4,
+	PSSProductFilterTypeSize = 5,
+	PSSProductFilterTypeColor = 6
+} PSSProductFilterType;
 
 /** A filter used to refine a product query or understand a product histogram. */
 
-@interface PSProductFilter : NSObject <NSCoding>
+@interface PSSProductFilter : NSObject <NSCoding>
 
 /**---------------------------------------------------------------------------------------
  * @name Filter Parameters
@@ -50,26 +50,26 @@ typedef enum {
  
  The currently supported types are:
  
- `PSProductFilterTypeBrand`
+ `PSSProductFilterTypeBrand`
  Filter by brand.
  
-`PSProductFilterTypeRetailer`
+ `PSSProductFilterTypeRetailer`
  Filter by retailer.
  
- `PSProductFilterTypePrice`
+ `PSSProductFilterTypePrice`
  Filter by price range.
  
- `PSProductFilterTypeSale`
+ `PSSProductFilterTypeSale`
  Filter by sale amount.
  
- `PSProductFilterTypeSize`
+ `PSSProductFilterTypeSize`
  Filter by size.
 
- `PSProductFilterTypeColor`
+ `PSSProductFilterTypeColor`
  Filter by color.
  
  */
-@property (nonatomic, assign, readonly) PSProductFilterType type;
+@property (nonatomic, assign, readonly) PSSProductFilterType type;
 
 /** A name to display for the receiver. */
 @property (nonatomic, copy) NSString *name;
@@ -92,14 +92,14 @@ typedef enum {
  *  ---------------------------------------------------------------------------------------
  */
 
-/** Creating a `PSProductFilter` requires the type and filterId. */
-- (id)initWithType:(PSProductFilterType)type filterId:(NSNumber *)filterId;
+/** Creating a `PSSProductFilter` requires the type and filterId. */
+- (id)initWithType:(PSSProductFilterType)type filterId:(NSNumber *)filterId;
 
 /** A convenience method as an alternative to alloc and `initWithType:filterId:`
  
  @see initWithType:filterId:
  */
-+ (instancetype)filterWithType:(PSProductFilterType)type filterId:(NSNumber *)filterId;
++ (instancetype)filterWithType:(PSSProductFilterType)type filterId:(NSNumber *)filterId;
 
 /**---------------------------------------------------------------------------------------
  * @name Converting to URL Parameters

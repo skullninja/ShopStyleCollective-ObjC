@@ -39,7 +39,7 @@
 	self.title = @"Retailers";
 	
 	__weak typeof(self) weakSelf = self;
-	[[PSShoppingAPIClient sharedClient] getRetailersSuccess:^(NSArray *retailers) {
+	[[PSSClient sharedClient] getRetailersSuccess:^(NSArray *retailers) {
 		weakSelf.retailers = retailers;
 		[weakSelf.tableView reloadData];
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -66,7 +66,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 	}
-	PSRetailer *thisRetailer = [self.retailers objectAtIndex:indexPath.row];
+	PSSRetailer *thisRetailer = [self.retailers objectAtIndex:indexPath.row];
 	cell.textLabel.text = thisRetailer.name;
 	return cell;
 }

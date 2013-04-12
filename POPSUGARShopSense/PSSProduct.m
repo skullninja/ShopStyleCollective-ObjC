@@ -1,5 +1,5 @@
 //
-//  PSProduct.m
+//  PSSProduct.m
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -21,13 +21,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "PSProduct.h"
-#import "PSBrand.h"
-#import "PSProductCategory.h"
-#import "PSProductImage.h"
-#import "PSRetailer.h"
+#import "PSSProduct.h"
+#import "PSSBrand.h"
+#import "PSSProductCategory.h"
+#import "PSSProductImage.h"
+#import "PSSRetailer.h"
 
-@interface PSProduct ()
+@interface PSSProduct ()
 
 @property (nonatomic, copy, readwrite) NSNumber *productId;
 @property (nonatomic, copy, readwrite) NSString *name;
@@ -42,8 +42,8 @@
 @property (nonatomic, copy, readwrite) NSString *maxSalePriceLabel;
 @property (nonatomic, copy, readwrite) NSNumber *maxSalePrice;
 @property (nonatomic, copy, readwrite) NSString *currency;
-@property (nonatomic, strong, readwrite) PSBrand *brand;
-@property (nonatomic, strong, readwrite) PSRetailer *retailer;
+@property (nonatomic, strong, readwrite) PSSBrand *brand;
+@property (nonatomic, strong, readwrite) PSSRetailer *retailer;
 @property (nonatomic, copy, readwrite) NSString *seeMoreLabel;
 @property (nonatomic, copy, readwrite) NSURL *seeMoreURL;
 @property (nonatomic, copy, readwrite) NSArray *categories;
@@ -67,7 +67,7 @@
 
 @end
 
-@implementation PSProduct
+@implementation PSSProduct
 
 #pragma mark - Pricing Helpers
 
@@ -122,7 +122,7 @@
 
 - (NSArray *)orderedImageSizeNames
 {
-	return [NSArray arrayWithObjects:kPSProductImageSizeNamedSmall, kPSProductImageSizeNamedIPhoneSmall, kPSProductImageSizeNamedMedium, kPSProductImageSizeNamedLarge, kPSProductImageSizeNamedIPhone, kPSProductImageSizeNamedOriginal, nil];
+	return [NSArray arrayWithObjects:kPSSProductImageSizeNamedSmall, kPSSProductImageSizeNamedIPhoneSmall, kPSSProductImageSizeNamedMedium, kPSSProductImageSizeNamedLarge, kPSSProductImageSizeNamedIPhone, kPSSProductImageSizeNamedOriginal, nil];
 }
 
 - (void)orderAndMapImages:(NSArray *)images
@@ -132,7 +132,7 @@
 		self.imagesBySizeName = nil;
 	}
 	NSMutableDictionary *mappedImages = [[NSMutableDictionary alloc] initWithCapacity:images.count];
-	for (PSProductImage *image in images) {
+	for (PSSProductImage *image in images) {
 		[mappedImages setObject:image forKey:image.sizeName];
 	}
 	self.imagesBySizeName = mappedImages;
@@ -145,7 +145,7 @@
 	self.images = sortedImages;
 }
 
-- (PSProductImage *)imageWithSizeName:(NSString *)imageSizeName
+- (PSSProductImage *)imageWithSizeName:(NSString *)imageSizeName
 {
 	return [self.imagesBySizeName objectForKey:imageSizeName];
 }
@@ -175,7 +175,7 @@
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.productId isEqualToNumber:[(PSProduct *)object productId]]);
+	return ([self.productId isEqualToNumber:[(PSSProduct *)object productId]]);
 }
 
 #pragma mark - NSCoding
@@ -266,7 +266,7 @@
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSProduct *instance = [[PSProduct alloc] init];
+	PSSProduct *instance = [[PSSProduct alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }
@@ -296,7 +296,7 @@
 			}
 		} else if ([key isEqualToString:@"brand"]) {
 			if ([value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
-				self.brand = (PSBrand *)[self remoteObjectForRelationshipNamed:@"brand" fromRepresentation:value];
+				self.brand = (PSSBrand *)[self remoteObjectForRelationshipNamed:@"brand" fromRepresentation:value];
 			}
 		} else if ([key isEqualToString:@"categories"]) {
 			if ([value isKindOfClass:[NSArray class]]) {
@@ -313,7 +313,7 @@
 			}
 		} else if ([key isEqualToString:@"retailer"]) {
 			if ([value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
-				self.retailer = (PSRetailer *)[self remoteObjectForRelationshipNamed:@"retailer" fromRepresentation:value];
+				self.retailer = (PSSRetailer *)[self remoteObjectForRelationshipNamed:@"retailer" fromRepresentation:value];
 			}
 		} else if ([key isEqualToString:@"sizes"]) {
 			if ([value isKindOfClass:[NSArray class]]) {
@@ -357,17 +357,17 @@
 - (id<PSRemoteObject>)remoteObjectForRelationshipNamed:(NSString *)relationshipName fromRepresentation:(NSDictionary *)representation
 {
 	if ([relationshipName isEqualToString:@"brand"]) {
-		return [PSBrand instanceFromRemoteRepresentation:representation];
+		return [PSSBrand instanceFromRemoteRepresentation:representation];
 	} else if ([relationshipName isEqualToString:@"categories"]) {
-		return [PSProductCategory instanceFromRemoteRepresentation:representation];
+		return [PSSProductCategory instanceFromRemoteRepresentation:representation];
 	} else if ([relationshipName isEqualToString:@"colors"]) {
-		return [PSProductColor instanceFromRemoteRepresentation:representation];
+		return [PSSProductColor instanceFromRemoteRepresentation:representation];
 	} else if ([relationshipName isEqualToString:@"images"]) {
-		return [PSProductImage instanceFromRemoteRepresentation:representation];
+		return [PSSProductImage instanceFromRemoteRepresentation:representation];
 	} else if ([relationshipName isEqualToString:@"retailer"]) {
-		return [PSRetailer instanceFromRemoteRepresentation:representation];
+		return [PSSRetailer instanceFromRemoteRepresentation:representation];
 	} else if ([relationshipName isEqualToString:@"sizes"]) {
-		return [PSProductSize instanceFromRemoteRepresentation:representation];
+		return [PSSProductSize instanceFromRemoteRepresentation:representation];
 	}
 	return nil;
 }

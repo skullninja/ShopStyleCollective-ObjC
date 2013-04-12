@@ -48,7 +48,7 @@
 		self.title = @"Categories";
 		
 		__weak typeof(self) weakSelf = self;
-		[[PSShoppingAPIClient sharedClient] categoryTreeFromCategoryId:nil depth:nil success:^(PSCategoryTree *categoryTree) {
+		[[PSSClient sharedClient] categoryTreeFromCategoryId:nil depth:nil success:^(PSSCategoryTree *categoryTree) {
 			weakSelf.categories = [categoryTree rootCategories];
 			[weakSelf.tableView reloadData];
 		} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -77,7 +77,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 	}
-	PSCategory *thisCategory = [self.categories objectAtIndex:indexPath.row];
+	PSSCategory *thisCategory = [self.categories objectAtIndex:indexPath.row];
 	cell.textLabel.text = thisCategory.name;
 	if (thisCategory.childCategories.count > 0) {
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -93,7 +93,7 @@
 {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	
-	PSCategory *thisCategory = [self.categories objectAtIndex:indexPath.row];
+	PSSCategory *thisCategory = [self.categories objectAtIndex:indexPath.row];
 	if (thisCategory.childCategories.count > 0) {
 		CategoriesViewController *detailVC = [[CategoriesViewController alloc] initWithCategories:thisCategory.childCategories];
 		detailVC.title = thisCategory.name;

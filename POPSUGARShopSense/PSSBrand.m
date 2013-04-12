@@ -1,5 +1,5 @@
 //
-//  PSProductImage.m
+//  PSSBrand.m
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -21,31 +21,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "PSProductImage.h"
+#import "PSSBrand.h"
 
-NSString * const kPSProductImageSizeNamedSmall = @"Small";
-NSString * const kPSProductImageSizeNamedMedium = @"Medium";
-NSString * const kPSProductImageSizeNamedLarge = @"Large";
-NSString * const kPSProductImageSizeNamedOriginal = @"Original";
-NSString * const kPSProductImageSizeNamedIPhoneSmall = @"IPhoneSmall";
-NSString * const kPSProductImageSizeNamedIPhone = @"IPhone";
+@interface PSSBrand ()
 
-@interface PSProductImage ()
-
-@property (nonatomic, copy, readwrite) NSString *sizeName;
-@property (nonatomic, copy, readwrite) NSURL *URL;
-@property (nonatomic, copy, readwrite) NSNumber *maxWidth;
-@property (nonatomic, copy, readwrite) NSNumber *maxHeight;
+@property (nonatomic, copy, readwrite) NSNumber *brandId;
+@property (nonatomic, copy, readwrite) NSString *name;
+@property (nonatomic, copy, readwrite) NSURL *browseURL;
 
 @end
 
-@implementation PSProductImage
+@implementation PSSBrand
 
 #pragma mark - NSObject
 
 - (NSString *)description
 {
-	return [[super description] stringByAppendingFormat:@" %@(%@,%@): %@", self.sizeName, self.maxWidth, self.maxHeight, self.URL.absoluteString];
+	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.brandId];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -55,7 +47,7 @@ NSString * const kPSProductImageSizeNamedIPhone = @"IPhone";
 
 - (NSUInteger)hash
 {
-	return self.URL.hash;
+	return self.brandId.hash;
 }
 
 - (BOOL)isEqual:(id)object
@@ -66,26 +58,24 @@ NSString * const kPSProductImageSizeNamedIPhone = @"IPhone";
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.URL isEqual:[(PSProductImage *)object URL]]);
+	return ([self.brandId isEqualToNumber:[(PSSBrand *)object brandId]]);
 }
 
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-	[encoder encodeObject:self.sizeName forKey:@"sizeName"];
-	[encoder encodeObject:self.URL forKey:@"URL"];
-	[encoder encodeObject:self.maxWidth forKey:@"maxWidth"];
-	[encoder encodeObject:self.maxHeight forKey:@"maxHeight"];
+	[encoder encodeObject:self.name forKey:@"name"];
+	[encoder encodeObject:self.brandId forKey:@"brandId"];
+	[encoder encodeObject:self.browseURL forKey:@"browseURL"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [super init])) {
-		self.sizeName = [decoder decodeObjectForKey:@"sizeName"];
-		self.URL = [decoder decodeObjectForKey:@"URL"];
-		self.maxWidth = [decoder decodeObjectForKey:@"maxWidth"];
-		self.maxHeight = [decoder decodeObjectForKey:@"maxHeight"];
+		self.name = [decoder decodeObjectForKey:@"name"];
+		self.brandId = [decoder decodeObjectForKey:@"brandId"];
+		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
 	}
 	return self;
 }
@@ -97,7 +87,7 @@ NSString * const kPSProductImageSizeNamedIPhone = @"IPhone";
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSProductImage *instance = [[PSProductImage alloc] init];
+	PSSBrand *instance = [[PSSBrand alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }
@@ -106,14 +96,14 @@ NSString * const kPSProductImageSizeNamedIPhone = @"IPhone";
 {
 	for (NSString *key in aDictionary) {
 		id value = [aDictionary valueForKey:key];
-		if ([key isEqualToString:@"url"]) {
-			if ([value isKindOfClass:[NSString class]]) {
-				self.URL = [NSURL URLWithString:value];
+		if ([key isEqualToString:@"id"]) {
+			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+				self.brandId = [NSNumber numberWithInteger:[[value description] integerValue]];
 			}
-		} else if ([key isEqualToString:@"width"]) {
-			[self setValue:value forKey:@"maxWidth"];
-		} else if ([key isEqualToString:@"height"]) {
-			[self setValue:value forKey:@"maxHeight"];
+		} else if ([key isEqualToString:@"url"]) {
+			if ([value isKindOfClass:[NSString class]]) {
+				self.browseURL = [NSURL URLWithString:value];
+			}
 		} else {
 			[self setValue:value forKey:key];
 		}

@@ -1,5 +1,5 @@
 //
-//  PSBrand.h
+//  PSSRetailer.h
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -23,17 +23,19 @@
 
 #import <Foundation/Foundation.h>
 
-/** A brand found on shopstyle.com */
+/** A retailer found on shopstyle.com */
 
-@interface PSBrand : NSObject <NSCoding, PSRemoteObject>
+@interface PSSRetailer : NSObject <NSCoding, PSRemoteObject>
 
 /** The unique identifier of the receiver. */
-@property (nonatomic, copy, readonly) NSNumber *brandId;
+@property (nonatomic, copy, readonly) NSNumber *retailerId;
 
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;
 
 /** A shopstyle.com URL that shows more products like the receiver. */
 @property (nonatomic, copy, readonly) NSURL *browseURL;
+
+@property (nonatomic, assign, readonly) BOOL deeplinkSupport;
 
 @end

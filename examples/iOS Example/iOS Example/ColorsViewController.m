@@ -39,7 +39,7 @@
 	self.title = @"Colors";
 	
 	__weak typeof(self) weakSelf = self;
-	[[PSShoppingAPIClient sharedClient] getColorsSuccess:^(NSArray *colors) {
+	[[PSSClient sharedClient] getColorsSuccess:^(NSArray *colors) {
 		weakSelf.colors = colors;
 		[weakSelf.tableView reloadData];
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -66,7 +66,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 	}
-	PSColor *thisColor = (PSColor *)[self.colors objectAtIndex:indexPath.row];
+	PSSColor *thisColor = (PSSColor *)[self.colors objectAtIndex:indexPath.row];
 	cell.textLabel.text = thisColor.name;
 	return cell;
 }

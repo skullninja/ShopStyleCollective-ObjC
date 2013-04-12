@@ -1,5 +1,5 @@
 //
-//  PSProductFilter.m
+//  PSSProductFilter.m
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -21,26 +21,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "PSProductFilter.h"
+#import "PSSProductFilter.h"
 
-@interface PSProductFilter ()
+@interface PSSProductFilter ()
 
-@property (nonatomic, assign, readwrite) PSProductFilterType type;
+@property (nonatomic, assign, readwrite) PSSProductFilterType type;
 @property (nonatomic, copy, readwrite) NSNumber *filterId;
 
 @end
 
-@implementation PSProductFilter
+@implementation PSSProductFilter
 
 #pragma mark - Init
 
-+ (instancetype)filterWithType:(PSProductFilterType)type filterId:(NSNumber *)filterId
++ (instancetype)filterWithType:(PSSProductFilterType)type filterId:(NSNumber *)filterId
 {
-	PSProductFilter *filter = [[PSProductFilter alloc] initWithType:type filterId:filterId];
+	PSSProductFilter *filter = [[PSSProductFilter alloc] initWithType:type filterId:filterId];
 	return filter;
 }
 
-- (id)initWithType:(PSProductFilterType)type filterId:(NSNumber *)filterId
+- (id)initWithType:(PSSProductFilterType)type filterId:(NSNumber *)filterId
 {
 	NSParameterAssert(filterId != nil);
 	self = [super init];
@@ -64,22 +64,22 @@
 	// c - color
 	NSString *prefix = @"";
 	switch (self.type) {
-		case PSProductFilterTypeBrand:
+		case PSSProductFilterTypeBrand:
 			prefix = @"b";
 			break;
-		case PSProductFilterTypeRetailer:
+		case PSSProductFilterTypeRetailer:
 			prefix = @"r";
 			break;
-		case PSProductFilterTypePrice:
+		case PSSProductFilterTypePrice:
 			prefix = @"p";
 			break;
-		case PSProductFilterTypeSale:
+		case PSSProductFilterTypeSale:
 			prefix = @"d";
 			break;
-		case PSProductFilterTypeSize:
+		case PSSProductFilterTypeSize:
 			prefix = @"s";
 			break;
-		case PSProductFilterTypeColor:
+		case PSSProductFilterTypeColor:
 			prefix = @"c";
 			break;
 			
@@ -98,7 +98,7 @@
 
 - (NSUInteger)hash
 {
-	return ((self.filterId.hash << sizeof(PSProductFilterType)) ^ self.type);
+	return ((self.filterId.hash << sizeof(PSSProductFilterType)) ^ self.type);
 }
 
 - (BOOL)isEqual:(id)object
@@ -109,7 +109,7 @@
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.filterId isEqualToNumber:[(PSProductFilter *)object filterId]] && self.type == [(PSProductFilter *)object type]);
+	return ([self.filterId isEqualToNumber:[(PSSProductFilter *)object filterId]] && self.type == [(PSSProductFilter *)object type]);
 }
 
 #pragma mark - NSCoding

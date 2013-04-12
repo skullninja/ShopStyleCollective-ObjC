@@ -1,5 +1,5 @@
 //
-//  PSProductSize.m
+//  PSSProductSize.m
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -21,15 +21,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "PSProductSize.h"
+#import "PSSProductSize.h"
 
-@interface PSProductSize ()
+@interface PSSProductSize ()
 
 @property (nonatomic, copy, readwrite) NSString *name;
 
 @end
 
-@implementation PSProductSize
+@implementation PSSProductSize
 
 #pragma mark - NSObject
 
@@ -56,7 +56,7 @@
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.name isEqualToString:[(PSProductSize *)object name]]);
+	return ([self.name isEqualToString:[(PSSProductSize *)object name]]);
 }
 
 #pragma mark - NSCoding
@@ -81,7 +81,7 @@
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSProductSize *instance = [[PSProductSize alloc] init];
+	PSSProductSize *instance = [[PSSProductSize alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }

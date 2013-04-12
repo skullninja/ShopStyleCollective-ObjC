@@ -1,5 +1,5 @@
 //
-//  PSProductColor.h
+//  PSSCategory.h
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -22,12 +22,13 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "PSSProductCategory.h"
 
-/** The retailer/brand color description */
+/** A category found on shopstyle.com  */
 
-@interface PSProductColor : NSObject <NSCoding, PSRemoteObject>
+@interface PSSCategory : PSSProductCategory <NSCoding, PSRemoteObject>
 
-/** A name to display for the receiver. */
-@property (nonatomic, copy, readonly) NSString *name;
+/** The child categories of the receiver if any exists. */
+@property (nonatomic, strong, readonly) NSArray *childCategories;
 
 @end

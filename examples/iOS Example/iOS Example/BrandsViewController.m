@@ -39,7 +39,7 @@
 	self.title = @"Brands";
 	
 	__weak typeof(self) weakSelf = self;
-	[[PSShoppingAPIClient sharedClient] getBrandsSuccess:^(NSArray *brands) {
+	[[PSSClient sharedClient] getBrandsSuccess:^(NSArray *brands) {
 		weakSelf.brands = brands;
 		[weakSelf.tableView reloadData];
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -66,7 +66,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 	}
-	PSBrand *thisBrand = [self.brands objectAtIndex:indexPath.row];
+	PSSBrand *thisBrand = [self.brands objectAtIndex:indexPath.row];
 	cell.textLabel.text = thisBrand.name;
 	return cell;
 }

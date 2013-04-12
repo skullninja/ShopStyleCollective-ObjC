@@ -1,5 +1,5 @@
 //
-//  PSProductSize.h
+//  PSSProductColor.h
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -23,9 +23,9 @@
 
 #import <Foundation/Foundation.h>
 
-/** The retailer/brand size description */
+/** The retailer/brand color description */
 
-@interface PSProductSize : NSObject <NSCoding, PSRemoteObject>
+@interface PSSProductColor : NSObject <NSCoding, PSRemoteObject>
 
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;

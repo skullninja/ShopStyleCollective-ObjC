@@ -1,5 +1,5 @@
 //
-//  PSProductCategory.h
+//  PSSColor.h
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -23,14 +23,17 @@
 
 #import <Foundation/Foundation.h>
 
-/** A product's category.  */
+/** A standard ShopStyle color. Primarily used for displaying filters. For the retailer/brand color of a product see `PSSProductColor` */
 
-@interface PSProductCategory : NSObject <NSCoding, PSRemoteObject>
+@interface PSSColor : NSObject <NSCoding, PSRemoteObject>
 
-/** The unique identifier of the receiver. See `PSCategoryTree` to understand it's position in the hierarchy. */
-@property (nonatomic, copy, readonly) NSString *categoryId;
+/** The unique identifier of the receiver. */
+@property (nonatomic, copy, readonly) NSNumber *colorId;
 
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;
+
+/** A shopstyle.com URL that shows more products like the receiver. */
+@property (nonatomic, copy, readonly) NSURL *browseURL;
 
 @end

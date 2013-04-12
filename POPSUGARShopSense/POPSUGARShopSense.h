@@ -1,5 +1,5 @@
 //
-//  PSRetailer.h
+//  POPSUGARShopSense.h
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -21,21 +21,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import "AFNetworking.h"
 
-/** A retailer found on shopstyle.com */
+#ifndef _POPSUGARShopSense_
+	#define _POPSUGARShopSense_
+	#import "PSSClient.h"
+	#import "PSSProductQuery.h"
+	#import "PSSProductFilter.h"
+	#import "PSSProduct.h"
+	#import "PSSBrand.h"
+	#import "PSSCategoryTree.h"
+	#import "PSSCategory.h"
+	#import "PSSProductImage.h"
+	#import "PSSProductSize.h"
+	#import "PSSProductColor.h"
+	#import "PSSProductCategory.h"
+	#import "PSSRetailer.h"
+	#import "PSSColor.h"
+#endif
 
-@interface PSRetailer : NSObject <NSCoding, PSRemoteObject>
-
-/** The unique identifier of the receiver. */
-@property (nonatomic, copy, readonly) NSNumber *retailerId;
-
-/** A name to display for the receiver. */
-@property (nonatomic, copy, readonly) NSString *name;
-
-/** A shopstyle.com URL that shows more products like the receiver. */
-@property (nonatomic, copy, readonly) NSURL *browseURL;
-
-@property (nonatomic, assign, readonly) BOOL deeplinkSupport;
-
-@end
+#ifdef _POPSUGARShopSense_DEBUG_
+	#define PSDLog(...) NSLog(@"%s(%p) %@", __PRETTY_FUNCTION__, self, [NSString stringWithFormat:__VA_ARGS__])
+#else
+	#define PSDLog(...)
+#endif

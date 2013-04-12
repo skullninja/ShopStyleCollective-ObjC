@@ -38,11 +38,11 @@
 	[super viewDidLoad];
 	self.title = @"Brand Histogram: 'Red Dress'";
 	
-	PSProductQuery *productQuery = [[PSProductQuery alloc] init];
+	PSSProductQuery *productQuery = [[PSSProductQuery alloc] init];
 	productQuery.searchTerm = @"red dress";
 	
 	__weak typeof(self) weakSelf = self;
-	[[PSShoppingAPIClient sharedClient] productHistogramWithQuery:productQuery filterType:PSProductFilterTypeBrand floor:nil success:^(NSArray *filters) {
+	[[PSSClient sharedClient] productHistogramWithQuery:productQuery filterType:PSSProductFilterTypeBrand floor:nil success:^(NSArray *filters) {
 		weakSelf.filters = filters;
 		[weakSelf.tableView reloadData];
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -69,7 +69,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
 	}
-	PSProductFilter *thisFilter = [self.filters objectAtIndex:indexPath.row];
+	PSSProductFilter *thisFilter = [self.filters objectAtIndex:indexPath.row];
 	cell.textLabel.text = thisFilter.name;
 	cell.detailTextLabel.text = thisFilter.productCount.stringValue;
 	return cell;

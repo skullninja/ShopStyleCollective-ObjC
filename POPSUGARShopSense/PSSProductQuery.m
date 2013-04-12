@@ -1,5 +1,5 @@
 //
-//  PSProductQuery.m
+//  PSSProductQuery.m
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -21,30 +21,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "PSProductQuery.h"
+#import "PSSProductQuery.h"
 
-@interface PSProductQuery ()
+@interface PSSProductQuery ()
 
 @property (nonatomic, strong) NSMutableSet *productFilterSet;
 
-- (NSSet *)productFilterSetOfType:(PSProductFilterType)filterType;
+- (NSSet *)productFilterSetOfType:(PSSProductFilterType)filterType;
 
 @end
 
-@implementation PSProductQuery
+@implementation PSSProductQuery
 
 #pragma mark - init
 
 + (instancetype)productQueryWithSearchTerm:(NSString *)searchTearm
 {
-	PSProductQuery *instance = [[PSProductQuery alloc] init];
+	PSSProductQuery *instance = [[PSSProductQuery alloc] init];
 	instance.searchTerm = searchTearm;
 	return instance;
 }
 
 + (instancetype)productQueryWithCategoryId:(NSString *)productCategoryId
 {
-	PSProductQuery *instance = [[PSProductQuery alloc] init];
+	PSSProductQuery *instance = [[PSSProductQuery alloc] init];
 	instance.productCategoryId = productCategoryId;
 	return instance;
 }
@@ -60,7 +60,7 @@
 
 #pragma mark - Product Filters
 
-- (void)addProductFilter:(PSProductFilter *)newFilter
+- (void)addProductFilter:(PSSProductFilter *)newFilter
 {
 	[self.productFilterSet addObject:newFilter];
 }
@@ -70,7 +70,7 @@
 	[self.productFilterSet addObjectsFromArray:newFilters];
 }
 
-- (void)removeProductFilter:(PSProductFilter *)filter
+- (void)removeProductFilter:(PSSProductFilter *)filter
 {
 	[self.productFilterSet removeObject:filter];
 }
@@ -80,10 +80,10 @@
 	return self.productFilterSet.allObjects;
 }
 
-- (NSSet *)productFilterSetOfType:(PSProductFilterType)filterType
+- (NSSet *)productFilterSetOfType:(PSSProductFilterType)filterType
 {
 	NSSet *filteredSet = [self.productFilterSet objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-		if ([(PSProductFilter *)obj type] == filterType) {
+		if ([(PSSProductFilter *)obj type] == filterType) {
 			return YES;
 		}
 		return NO;
@@ -91,7 +91,7 @@
 	return filteredSet;
 }
 
-- (NSArray *)productFiltersOfType:(PSProductFilterType)filterType
+- (NSArray *)productFiltersOfType:(PSSProductFilterType)filterType
 {
 	return [[self productFilterSetOfType:filterType] allObjects];
 }
@@ -101,7 +101,7 @@
 	[self.productFilterSet removeAllObjects];
 }
 
-- (void)clearProductFiltersOfType:(PSProductFilterType)filterType
+- (void)clearProductFiltersOfType:(PSSProductFilterType)filterType
 {
 	[self.productFilterSet minusSet:[self productFilterSetOfType:filterType]];
 }
@@ -121,7 +121,7 @@
 	
 	if (self.productFilterSet.count > 0) {
 		NSArray *allFilters = [self productFilters];
-		for (PSProductFilter *filter in allFilters) {
+		for (PSSProductFilter *filter in allFilters) {
 			[dictionary setObject:filter.queryParameterRepresentation forKey:@"fl"];
 		}
 	}
@@ -131,13 +131,13 @@
 		[dictionary setObject:numberRep forKey:@"pdd"];
 	}
 	
-	if (self.sort == PSProductQuerySortPriceLoHi) {
+	if (self.sort == PSSProductQuerySortPriceLoHi) {
 		[dictionary setObject:@"PriceLoHi" forKey:@"sort"];
-	} else if (self.sort == PSProductQuerySortPriceHiLo) {
+	} else if (self.sort == PSSProductQuerySortPriceHiLo) {
 		[dictionary setObject:@"PriceHiLo" forKey:@"sort"];
-	} else if (self.sort == PSProductQuerySortRecency) {
+	} else if (self.sort == PSSProductQuerySortRecency) {
 		[dictionary setObject:@"Recency" forKey:@"sort"];
-	} else if (self.sort == PSProductQuerySortPopular) {
+	} else if (self.sort == PSSProductQuerySortPopular) {
 		[dictionary setObject:@"Popular" forKey:@"sort"];
 	}
 	
@@ -171,7 +171,7 @@
 	return [self isEqualToProductQuery:object];
 }
 
-- (BOOL)isEqualToProductQuery:(PSProductQuery *)productQuery
+- (BOOL)isEqualToProductQuery:(PSSProductQuery *)productQuery
 {
 	NSParameterAssert(productQuery != nil);
 	if (productQuery == self) {

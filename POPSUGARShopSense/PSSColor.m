@@ -1,5 +1,5 @@
 //
-//  PSRetailer.m
+//  PSSColor.m
 //
 //  Copyright (c) 2013 POPSUGAR Inc.
 //
@@ -21,24 +21,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "PSRetailer.h"
+#import "PSSColor.h"
 
-@interface PSRetailer ()
+@interface PSSColor ()
 
-@property (nonatomic, copy, readwrite) NSNumber *retailerId;
+@property (nonatomic, copy, readwrite) NSNumber *colorId;
 @property (nonatomic, copy, readwrite) NSString *name;
 @property (nonatomic, copy, readwrite) NSURL *browseURL;
-@property (nonatomic, assign, readwrite) BOOL deeplinkSupport;
 
 @end
 
-@implementation PSRetailer
+@implementation PSSColor
 
 #pragma mark - NSObject
 
 - (NSString *)description
 {
-	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.retailerId];
+	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.colorId];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -48,7 +47,7 @@
 
 - (NSUInteger)hash
 {
-	return self.retailerId.hash;
+	return self.colorId.hash;
 }
 
 - (BOOL)isEqual:(id)object
@@ -59,7 +58,7 @@
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.retailerId isEqualToNumber:[(PSRetailer *)object retailerId]]);
+	return ([self.colorId isEqualToNumber:[(PSSColor *)object colorId]]);
 }
 
 #pragma mark - NSCoding
@@ -67,18 +66,16 @@
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
 	[encoder encodeObject:self.name forKey:@"name"];
-	[encoder encodeObject:self.retailerId forKey:@"retailerId"];
+	[encoder encodeObject:self.colorId forKey:@"colorId"];
 	[encoder encodeObject:self.browseURL forKey:@"browseURL"];
-	[encoder encodeObject:[NSNumber numberWithBool:self.deeplinkSupport] forKey:@"deeplinkSupport"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [super init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
-		self.retailerId = [decoder decodeObjectForKey:@"retailerId"];
+		self.colorId = [decoder decodeObjectForKey:@"colorId"];
 		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
-		self.deeplinkSupport = [(NSNumber *)[decoder decodeObjectForKey:@"deeplinkSupport"] boolValue];
 	}
 	return self;
 }
@@ -90,7 +87,7 @@
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSRetailer *instance = [[PSRetailer alloc] init];
+	PSSColor *instance = [[PSSColor alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }
@@ -101,7 +98,7 @@
 		id value = [aDictionary valueForKey:key];
 		if ([key isEqualToString:@"id"]) {
 			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
-				self.retailerId = [NSNumber numberWithInteger:[[value description] integerValue]];
+				self.colorId = [NSNumber numberWithInteger:[[value description] integerValue]];
 			}
 		} else if ([key isEqualToString:@"url"]) {
 			if ([value isKindOfClass:[NSString class]]) {
