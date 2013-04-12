@@ -66,7 +66,7 @@
 /** A string representation of the `salePrice`. */
 @property (nonatomic, copy, readonly) NSString *salePriceLabel;
 
-/** The product's sale price.  
+/** The sale price in the currency of the receiver.  
  
  If the product is not priced on sale this property is nil.
  */
@@ -75,7 +75,7 @@
 /** A string representation of the `maxSalePrice`. */
 @property (nonatomic, copy, readonly) NSString *maxSalePriceLabel;
 
-/** The product's maximum sale price when on sale and priced in a range.  
+/** The maximum sale price in the currency of the receiver when on sale and priced in a range.  
  
  Some products are price as a range (e.g., sets of sheets that come in different sizes).  If the product
  is priced as a range, the salePrice contains the lower end of the range.  If the product is not priced 
@@ -133,6 +133,74 @@
  @return An array of `PSProductImage` objects. */
 @property (nonatomic, copy, readonly) NSArray *images;
 
+/** The currency of the pricing information of the product from the locale it was extracted. Examples are USD, GBP, and EUR. 
+ 
+ For example, if a product from a Japanese retailer is displayed in a US local it's currency will 
+ be USD and it's nativeCurrency will be YEN.
+ 
+ @warning When a product originates in a locale other than the one used to fetch the receiver the price properties contain 
+ converted values. Native price properties contain the pricing information in it's original currancy.
+ 
+ @see hasNativePrice
+ */
+@property (nonatomic, copy, readonly) NSString *nativeCurrency;
+
+/** A string representation of the `nativePrice`. */
+@property (nonatomic, copy, readonly) NSString *nativePriceLabel;
+
+/** The regular price in the nativeCurrency of the receiver.
+ 
+ The price of the product when not on sale. If the product isOnSale use nativeSalePrice for the price.
+ 
+ @see nativeCurrency
+ 
+ @return A price in nativeCurrency or nil if regularPrice was not converted for the receiver's locale.
+ */
+@property (nonatomic, assign, readonly) NSNumber *nativePrice;
+
+/** A string representation of the `nativeMaxPrice`. */
+@property (nonatomic, copy, readonly) NSString *nativeMaxPriceLabel;
+
+/** The maximum price in the nativeCurrency of the receiver when priced in a range.
+ 
+ Some products are price as a range (e.g., sets of sheets that come in different sizes).  If the product
+ is priced as a range, the nativePrice contains the lower end of the range.  If the product is not priced as
+ a range this property is nil.
+ 
+ @see nativeCurrency
+ 
+ @return A max price in nativeCurrency or nil if regularMaxPrice was not converted for the receiver's locale.
+ */
+@property (nonatomic, assign, readonly) NSNumber *nativeMaxPrice;
+
+/** A string representation of the `nativeSalePrice`. */
+@property (nonatomic, copy, readonly) NSString *nativeSalePriceLabel;
+
+/** The sale price in the nativeCurrency of the receiver.
+ 
+ If the product is not priced on sale this property is nil.
+ 
+ @see nativeCurrency
+ 
+ @return A sale price in nativeCurrency or nil if salePrice was not converted for the receiver's locale.
+ */
+@property (nonatomic, assign, readonly) NSNumber *nativeSalePrice;
+
+/** A string representation of the `nativeMaxSalePrice`. */
+@property (nonatomic, copy, readonly) NSString *nativeMaxSalePriceLabel;
+
+/** The maximum sale price in the nativeCurrency of the receiver when on sale and priced in a range.
+ 
+ Some products are price as a range (e.g., sets of sheets that come in different sizes).  If the product
+ is priced as a range, the nativeSalePrice contains the lower end of the range.  If the product is not priced
+ as a range or is not on sale this property is nil.
+ 
+ @see nativeCurrency
+ 
+ @return A max sale price in nativeCurrency or nil if maxSalePrice was not converted for the receiver's locale.
+ */
+@property (nonatomic, assign, readonly) NSNumber *nativeMaxSalePrice;
+
 /**---------------------------------------------------------------------------------------
  * @name Pricing Helpers
  *  ---------------------------------------------------------------------------------------
@@ -175,6 +243,12 @@
  @return The maxSalePrice if there is one, otherwise returns the maxRegularPrice. If the receiver does not have a price range returns nil.
  */
 - (NSNumber *)currentMaxPrice;
+
+/** The currentPrice of the reciever has been converted and a price is available for the native local of the receiver.
+ 
+ @return YES if the price fields contain a translated value and native price information is available.
+ */
+- (BOOL)hasNativePrice;
 
 /**---------------------------------------------------------------------------------------
  * @name Product Image Helpers

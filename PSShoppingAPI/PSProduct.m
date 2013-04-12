@@ -53,6 +53,15 @@
 @property (nonatomic, assign, readwrite) BOOL inStock;
 @property (nonatomic, copy, readwrite) NSString *extractDate;
 @property (nonatomic, copy, readwrite) NSArray *images;
+@property (nonatomic, copy, readwrite) NSString *nativeCurrency;
+@property (nonatomic, copy, readwrite) NSString *nativePriceLabel;
+@property (nonatomic, assign, readwrite) NSNumber *nativePrice;
+@property (nonatomic, copy, readwrite) NSString *nativeMaxPriceLabel;
+@property (nonatomic, assign, readwrite) NSNumber *nativeMaxPrice;
+@property (nonatomic, copy, readwrite) NSString *nativeSalePriceLabel;
+@property (nonatomic, assign, readwrite) NSNumber *nativeSalePrice;
+@property (nonatomic, copy, readwrite) NSString *nativeMaxSalePriceLabel;
+@property (nonatomic, assign, readwrite) NSNumber *nativeMaxSalePrice;
 
 @property (nonatomic, strong) NSDictionary *imagesBySizeName;
 
@@ -70,6 +79,11 @@
 - (BOOL)hasPriceRange
 {
 	return ([self currentMaxPrice] != nil);
+}
+
+- (BOOL)hasNativePrice
+{
+	return (self.nativeCurrency != nil);
 }
 
 - (NSString *)currentPriceLabel
@@ -193,6 +207,15 @@
 	[encoder encodeObject:self.seeMoreURL forKey:@"seeMoreURL"];
 	[encoder encodeObject:self.sizes forKey:@"sizes"];
 	[encoder encodeObject:self.imagesBySizeName forKey:@"imagesBySizeName"];
+	[encoder encodeObject:self.nativeCurrency forKey:@"nativeCurrency"];
+	[encoder encodeObject:self.nativePriceLabel forKey:@"nativePriceLabel"];
+	[encoder encodeObject:self.nativePrice forKey:@"nativePrice"];
+	[encoder encodeObject:self.nativeMaxPriceLabel forKey:@"nativeMaxPriceLabel"];
+	[encoder encodeObject:self.nativeMaxPrice forKey:@"nativeMaxPrice"];
+	[encoder encodeObject:self.nativeSalePriceLabel forKey:@"nativeSalePriceLabel"];
+	[encoder encodeObject:self.nativeSalePrice forKey:@"nativeSalePrice"];
+	[encoder encodeObject:self.nativeMaxSalePriceLabel forKey:@"nativeMaxSalePriceLabel"];
+	[encoder encodeObject:self.nativeMaxSalePrice forKey:@"nativeMaxSalePrice"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -223,6 +246,15 @@
 		self.seeMoreURL = [decoder decodeObjectForKey:@"seeMoreURL"];
 		self.sizes = [decoder decodeObjectForKey:@"sizes"];
 		self.imagesBySizeName = [decoder decodeObjectForKey:@"imagesBySizeName"];
+		self.nativeCurrency = [decoder decodeObjectForKey:@"nativeCurrency"];
+		self.nativePriceLabel = [decoder decodeObjectForKey:@"nativePriceLabel"];
+		self.nativePrice = [decoder decodeObjectForKey:@"nativePrice"];
+		self.nativeMaxPriceLabel = [decoder decodeObjectForKey:@"nativeMaxPriceLabel"];
+		self.nativeMaxPrice = [decoder decodeObjectForKey:@"nativeMaxPrice"];
+		self.nativeSalePriceLabel = [decoder decodeObjectForKey:@"nativeSalePriceLabel"];
+		self.nativeSalePrice = [decoder decodeObjectForKey:@"nativeSalePrice"];
+		self.nativeMaxSalePriceLabel = [decoder decodeObjectForKey:@"nativeMaxSalePriceLabel"];
+		self.nativeMaxSalePrice = [decoder decodeObjectForKey:@"nativeMaxSalePrice"];
 	}
 	return self;
 }
