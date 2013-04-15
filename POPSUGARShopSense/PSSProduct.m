@@ -159,7 +159,7 @@
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
-	PSDLog(@"Warning: Undefined Key Named '%@'", key);
+	PSSDLog(@"Warning: Undefined Key Named '%@'", key);
 }
 
 - (NSUInteger)hash
@@ -259,7 +259,7 @@
 	return self;
 }
 
-#pragma mark - PSRemoteObject
+#pragma mark - PSSRemoteObject
 
 + (instancetype)instanceFromRemoteRepresentation:(NSDictionary *)representation
 {
@@ -354,7 +354,7 @@
 	return nil;
 }
 
-- (id<PSRemoteObject>)remoteObjectForRelationshipNamed:(NSString *)relationshipName fromRepresentation:(NSDictionary *)representation
+- (id<PSSRemoteObject>)remoteObjectForRelationshipNamed:(NSString *)relationshipName fromRepresentation:(NSDictionary *)representation
 {
 	if ([relationshipName isEqualToString:@"brand"]) {
 		return [PSSBrand instanceFromRemoteRepresentation:representation];

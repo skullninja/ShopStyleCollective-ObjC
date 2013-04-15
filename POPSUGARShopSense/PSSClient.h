@@ -134,7 +134,7 @@
 
 /** Objects that provide a local representation of a remote object. */
 
-@protocol PSRemoteObject <NSObject>
+@protocol PSSRemoteObject <NSObject>
 
 /** Creates an instance of the receiver from a remote representation of the object. 
  

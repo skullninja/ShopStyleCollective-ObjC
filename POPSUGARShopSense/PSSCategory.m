@@ -71,7 +71,7 @@
 	return self;
 }
 
-#pragma mark - PSRemoteObject
+#pragma mark - PSSRemoteObject
 
 + (instancetype)instanceFromRemoteRepresentation:(NSDictionary *)representation
 {

@@ -25,7 +25,7 @@
 
 /** A standard ShopStyle color. Primarily used for displaying filters. For the retailer/brand color of a product see `PSSProductColor` */
 
-@interface PSSColor : NSObject <NSCoding, PSRemoteObject>
+@interface PSSColor : NSObject <NSCoding, PSSRemoteObject>
 
 /** The unique identifier of the receiver. */
 @property (nonatomic, copy, readonly) NSNumber *colorId;

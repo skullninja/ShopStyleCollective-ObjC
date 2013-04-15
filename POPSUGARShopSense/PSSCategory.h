@@ -26,7 +26,7 @@
 
 /** A category found on shopstyle.com  */
 
-@interface PSSCategory : PSSProductCategory <NSCoding, PSRemoteObject>
+@interface PSSCategory : PSSProductCategory <NSCoding, PSSRemoteObject>
 
 /** The child categories of the receiver if any exists. */
 @property (nonatomic, strong, readonly) NSArray *childCategories;

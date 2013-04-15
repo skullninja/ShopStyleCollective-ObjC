@@ -25,7 +25,7 @@
 
 /** A brand found on shopstyle.com */
 
-@interface PSSBrand : NSObject <NSCoding, PSRemoteObject>
+@interface PSSBrand : NSObject <NSCoding, PSSRemoteObject>
 
 /** The unique identifier of the receiver. */
 @property (nonatomic, copy, readonly) NSNumber *brandId;

@@ -29,7 +29,7 @@
 
 /** A product on shopstyle.com. */
 
-@interface PSSProduct : NSObject <NSCoding, PSRemoteObject>
+@interface PSSProduct : NSObject <NSCoding, PSSRemoteObject>
 
 /** The unique identifier of the receiver. */
 @property (nonatomic, copy, readonly) NSNumber *productId;

@@ -32,7 +32,7 @@ extern NSString * const kPSSProductImageSizeNamedIPhone;
 
 /** An image of a `PSSProduct` */
 
-@interface PSSProductImage : NSObject <NSCoding, PSRemoteObject>
+@interface PSSProductImage : NSObject <NSCoding, PSSRemoteObject>
 
 /** A name for the size of this image.
  

@@ -50,7 +50,7 @@ NSString * const kPSSProductImageSizeNamedIPhone = @"IPhone";
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
-	PSDLog(@"Warning: Undefined Key Named '%@'", key);
+	PSSDLog(@"Warning: Undefined Key Named '%@'", key);
 }
 
 - (NSUInteger)hash
@@ -90,7 +90,7 @@ NSString * const kPSSProductImageSizeNamedIPhone = @"IPhone";
 	return self;
 }
 
-#pragma mark - PSRemoteObject
+#pragma mark - PSSRemoteObject
 
 + (instancetype)instanceFromRemoteRepresentation:(NSDictionary *)representation
 {

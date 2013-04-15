@@ -363,7 +363,7 @@ static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 	return [NSError errorWithDomain:NSStringFromClass([self class]) code:500 userInfo:@{NSLocalizedDescriptionKey : @"Malformed Response From Server"}];
 }
 
-#pragma mark - PSRemoteObject Conversion
+#pragma mark - PSSRemoteObject Conversion
 
 - (NSArray *)remoteObjectsForEntityNamed:(NSString *)entityName fromRepresentations:(NSArray *)representations
 {
@@ -382,7 +382,7 @@ static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 	return nil;
 }
 
-- (id<PSRemoteObject>)remoteObjectForEntityNamed:(NSString *)entityName fromRepresentation:(NSDictionary *)representation
+- (id<PSSRemoteObject>)remoteObjectForEntityNamed:(NSString *)entityName fromRepresentation:(NSDictionary *)representation
 {
 	if ([entityName isEqualToString:@"brand"]) {
 		return [PSSBrand instanceFromRemoteRepresentation:representation];

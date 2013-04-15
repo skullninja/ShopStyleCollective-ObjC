@@ -25,7 +25,7 @@
 
 /** The retailer/brand color description */
 
-@interface PSSProductColor : NSObject <NSCoding, PSRemoteObject>
+@interface PSSProductColor : NSObject <NSCoding, PSSRemoteObject>
 
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;

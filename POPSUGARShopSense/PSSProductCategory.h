@@ -25,7 +25,7 @@
 
 /** A product's category.  */
 
-@interface PSSProductCategory : NSObject <NSCoding, PSRemoteObject>
+@interface PSSProductCategory : NSObject <NSCoding, PSSRemoteObject>
 
 /** The unique identifier of the receiver. See `PSSCategoryTree` to understand it's position in the hierarchy. */
 @property (nonatomic, copy, readonly) NSString *categoryId;

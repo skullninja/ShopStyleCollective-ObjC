@@ -41,7 +41,7 @@
 #endif
 
 #ifdef _POPSUGARShopSense_DEBUG_
-	#define PSDLog(...) NSLog(@"%s(%p) %@", __PRETTY_FUNCTION__, self, [NSString stringWithFormat:__VA_ARGS__])
+	#define PSSDLog(...) NSLog(@"%s(%p) %@", __PRETTY_FUNCTION__, self, [NSString stringWithFormat:__VA_ARGS__])
 #else
-	#define PSDLog(...)
+	#define PSSDLog(...)
 #endif
