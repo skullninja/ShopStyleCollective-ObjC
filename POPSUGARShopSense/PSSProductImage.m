@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 #import "PSSProductImage.h"
+#import "POPSUGARShopSense.h"
 
 NSString * const kPSSProductImageSizeNamedSmall = @"Small";
 NSString * const kPSSProductImageSizeNamedMedium = @"Medium";

@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 #import "PSSProductSize.h"
+#import "POPSUGARShopSense.h"
 
 @interface PSSProductSize ()
 

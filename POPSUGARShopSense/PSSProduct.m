@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 #import "PSSProduct.h"
+#import "POPSUGARShopSense.h"
 #import "PSSBrand.h"
 #import "PSSProductCategory.h"
 #import "PSSProductImage.h"

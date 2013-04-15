@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 #import "PSSProductCategory.h"
+#import "POPSUGARShopSense.h"
 
 @interface PSSProductCategory ()
 

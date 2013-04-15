@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 #import "PSSBrand.h"
+#import "POPSUGARShopSense.h"
 
 @interface PSSBrand ()
 

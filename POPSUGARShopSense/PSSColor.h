@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "PSSClient.h"
 
 /** A standard ShopStyle color. Primarily used for displaying filters. For the retailer/brand color of a product see `PSSProductColor` */
 

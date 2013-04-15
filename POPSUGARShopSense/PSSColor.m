@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 #import "PSSColor.h"
+#import "POPSUGARShopSense.h"
 
 @interface PSSColor ()
 

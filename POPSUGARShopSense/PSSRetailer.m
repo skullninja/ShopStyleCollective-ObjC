@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 #import "PSSRetailer.h"
+#import "POPSUGARShopSense.h"
 
 @interface PSSRetailer ()
 

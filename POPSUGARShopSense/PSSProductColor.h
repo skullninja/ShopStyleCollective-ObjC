@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "PSSClient.h"
 
 /** The retailer/brand color description */
 
