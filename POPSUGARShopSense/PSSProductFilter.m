@@ -30,6 +30,27 @@
 
 @end
 
+NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
+{
+	// FIXME: Localize
+	switch (filterType) {
+		case PSSProductFilterTypeBrand:
+			return @"Brand";
+		case PSSProductFilterTypeRetailer:
+			return @"Retailer";
+		case PSSProductFilterTypePrice:
+			return @"Price";
+		case PSSProductFilterTypeSale:
+			return @"Sale";
+		case PSSProductFilterTypeSize:
+			return @"Size";
+		case PSSProductFilterTypeColor:
+			return @"Color";
+		default:
+			return nil;
+	}
+}
+
 @implementation PSSProductFilter
 
 #pragma mark - Init

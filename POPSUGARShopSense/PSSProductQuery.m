@@ -31,6 +31,25 @@
 
 @end
 
+NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
+{
+	// FIXME: Localize
+	switch (sort) {
+		case PSSProductQuerySortDefault:
+			return @"Relevance";
+		case PSSProductQuerySortPriceLoHi:
+			return @"Price Low to High";
+		case PSSProductQuerySortPriceHiLo:
+			return @"Price High to Low";
+		case PSSProductQuerySortRecency:
+			return @"Recent Additions";
+		case PSSProductQuerySortPopular:
+			return @"Most Popular";
+		default:
+			return nil;
+	}
+}
+
 @implementation PSSProductQuery
 
 #pragma mark - init
@@ -131,14 +150,23 @@
 		[dictionary setObject:numberRep forKey:@"pdd"];
 	}
 	
-	if (self.sort == PSSProductQuerySortPriceLoHi) {
-		[dictionary setObject:@"PriceLoHi" forKey:@"sort"];
-	} else if (self.sort == PSSProductQuerySortPriceHiLo) {
-		[dictionary setObject:@"PriceHiLo" forKey:@"sort"];
-	} else if (self.sort == PSSProductQuerySortRecency) {
-		[dictionary setObject:@"Recency" forKey:@"sort"];
-	} else if (self.sort == PSSProductQuerySortPopular) {
-		[dictionary setObject:@"Popular" forKey:@"sort"];
+	switch (self.sort) {
+		case PSSProductQuerySortPriceLoHi:
+			[dictionary setObject:@"PriceLoHi" forKey:@"sort"];
+			break;
+		case PSSProductQuerySortPriceHiLo:
+			[dictionary setObject:@"PriceHiLo" forKey:@"sort"];
+			break;
+		case PSSProductQuerySortRecency:
+			[dictionary setObject:@"Recency" forKey:@"sort"];
+			break;
+		case PSSProductQuerySortPopular:
+			[dictionary setObject:@"Popular" forKey:@"sort"];
+			break;
+		case PSSProductQuerySortDefault:
+			break;
+		default:
+			break;
 	}
 	
 	return dictionary;

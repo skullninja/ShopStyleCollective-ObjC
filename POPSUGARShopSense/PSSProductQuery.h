@@ -32,6 +32,8 @@ typedef enum {
 	PSSProductQuerySortPopular
 } PSSProductQuerySort;
 
+extern NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort);
+
 /**
  The ShopSense API is made up of several methods to return product data, including an array of products 
  and a product histogram. A `PSSProductFilter` can be used to further refine the results from these requests.
@@ -89,7 +91,12 @@ typedef enum {
  `PSSProductQuerySortPopular`
  Sort by the popularity of the products.
  
- This is also known as `sort` on the ShopSense API documentation.  */
+ This is also known as `sort` on the ShopSense API documentation. 
+ 
+ A sort can be converted to it's string representation using:
+ 
+ `NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort);`
+ */
 @property (nonatomic, assign) PSSProductQuerySort sort;
 
 /**---------------------------------------------------------------------------------------

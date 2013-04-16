@@ -32,7 +32,27 @@ typedef enum {
 	PSSProductFilterTypeColor = 6
 } PSSProductFilterType;
 
-/** A filter used to refine a product query or understand a product histogram. */
+extern NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType);
+
+/** A filter used to refine a product query or understand a product histogram.
+ 
+ Filters are created with a filter type and identifier unique to that filter type.
+ 
+ Filter types are defined as:
+ 
+	 typedef enum {
+		 PSSProductFilterTypeBrand = 1,
+		 PSSProductFilterTypeRetailer = 2,
+		 PSSProductFilterTypePrice = 3,
+		 PSSProductFilterTypeSale = 4,
+		 PSSProductFilterTypeSize = 5,
+		 PSSProductFilterTypeColor = 6
+	 } PSSProductFilterType;
+ 
+ You can convert a filter type to a string with:
+ 
+ `NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType);`
+ */
 
 @interface PSSProductFilter : NSObject <NSCoding>
 
@@ -68,6 +88,9 @@ typedef enum {
  `PSSProductFilterTypeColor`
  Filter by color.
  
+ A filter type can be converted to it's string representation using:
+ 
+ `NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType);`
  */
 @property (nonatomic, assign, readonly) PSSProductFilterType type;
 

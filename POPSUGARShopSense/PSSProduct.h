@@ -32,6 +32,11 @@
 
 @interface PSSProduct : NSObject <NSCoding, PSSRemoteObject>
 
+/**---------------------------------------------------------------------------------------
+ * @name Product Properties
+ *  ---------------------------------------------------------------------------------------
+ */
+
 /** The unique identifier of the receiver. */
 @property (nonatomic, copy, readonly) NSNumber *productId;
 
@@ -256,7 +261,7 @@
  *  ---------------------------------------------------------------------------------------
  */
 
-/** A product image matching the size name. See `PSSProductImage` for size name constants.
+/** A product image matching the size naming constant. See `PSSProductImage` for size naming constants.
  
  @return A `PSSProductImage` or nil if not found for the given imageSizeName. */
 - (PSSProductImage *)imageWithSizeName:(NSString *)imageSizeName;
