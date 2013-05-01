@@ -23,10 +23,12 @@
 
 #import "PSSProductColor.h"
 #import "POPSUGARShopSense.h"
+#import "PSSProductImage.h"
 
 @interface PSSProductColor ()
 
 @property (nonatomic, copy, readwrite) NSString *name;
+@property (nonatomic, strong, readwrite) PSSProductImage *image;
 
 @end
 
@@ -65,12 +67,14 @@
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
 	[encoder encodeObject:self.name forKey:@"name"];
+	[encoder encodeObject:self.image forKey:@"image"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [super init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
+		self.image = [decoder decodeObjectForKey:@"image"];
 	}
 	return self;
 }
@@ -91,8 +95,22 @@
 {
 	for (NSString *key in aDictionary) {
 		id value = [aDictionary valueForKey:key];
-		[self setValue:value forKey:key];
+		if ([key isEqualToString:@"image"]) {
+			if ([value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
+				self.image = (PSSProductImage *)[self remoteObjectForRelationshipNamed:@"image" fromRepresentation:value];
+			}
+		} else {
+			[self setValue:value forKey:key];
+		}
 	}
+}
+
+- (id<PSSRemoteObject>)remoteObjectForRelationshipNamed:(NSString *)relationshipName fromRepresentation:(NSDictionary *)representation
+{
+	if ([relationshipName isEqualToString:@"image"]) {
+		return [PSSProductImage instanceFromRemoteRepresentation:representation];
+	}
+	return nil;
 }
 
 @end

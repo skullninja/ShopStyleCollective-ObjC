@@ -53,18 +53,16 @@
 @property (nonatomic, copy, readwrite) NSArray *sizes;
 @property (nonatomic, assign, readwrite) BOOL inStock;
 @property (nonatomic, copy, readwrite) NSString *extractDate;
-@property (nonatomic, copy, readwrite) NSArray *images;
+@property (nonatomic, strong, readwrite) PSSProductImage *image;
 @property (nonatomic, copy, readwrite) NSString *nativeCurrency;
 @property (nonatomic, copy, readwrite) NSString *nativePriceLabel;
-@property (nonatomic, assign, readwrite) NSNumber *nativePrice;
+@property (nonatomic, copy, readwrite) NSNumber *nativePrice;
 @property (nonatomic, copy, readwrite) NSString *nativeMaxPriceLabel;
-@property (nonatomic, assign, readwrite) NSNumber *nativeMaxPrice;
+@property (nonatomic, copy, readwrite) NSNumber *nativeMaxPrice;
 @property (nonatomic, copy, readwrite) NSString *nativeSalePriceLabel;
-@property (nonatomic, assign, readwrite) NSNumber *nativeSalePrice;
+@property (nonatomic, copy, readwrite) NSNumber *nativeSalePrice;
 @property (nonatomic, copy, readwrite) NSString *nativeMaxSalePriceLabel;
-@property (nonatomic, assign, readwrite) NSNumber *nativeMaxSalePrice;
-
-@property (nonatomic, strong) NSDictionary *imagesBySizeName;
+@property (nonatomic, copy, readwrite) NSNumber *nativeMaxSalePrice;
 
 @end
 
@@ -119,38 +117,6 @@
 	return self.maxRegularPrice;
 }
 
-#pragma mark - Product Image Helpers
-
-- (NSArray *)orderedImageSizeNames
-{
-	return [NSArray arrayWithObjects:kPSSProductImageSizeNamedSmall, kPSSProductImageSizeNamedIPhoneSmall, kPSSProductImageSizeNamedMedium, kPSSProductImageSizeNamedLarge, kPSSProductImageSizeNamedIPhone, kPSSProductImageSizeNamedOriginal, nil];
-}
-
-- (void)orderAndMapImages:(NSArray *)images
-{
-	if (images == nil || images.count == 0) {
-		self.images = nil;
-		self.imagesBySizeName = nil;
-	}
-	NSMutableDictionary *mappedImages = [[NSMutableDictionary alloc] initWithCapacity:images.count];
-	for (PSSProductImage *image in images) {
-		[mappedImages setObject:image forKey:image.sizeName];
-	}
-	self.imagesBySizeName = mappedImages;
-	NSMutableArray *sortedImages = [[NSMutableArray alloc] initWithCapacity:mappedImages.count];
-	for (NSString *sizeName in [self orderedImageSizeNames]) {
-		if ([self.imagesBySizeName objectForKey:sizeName] != nil) {
-			[sortedImages addObject:[self.imagesBySizeName objectForKey:sizeName]];
-		}
-	}
-	self.images = sortedImages;
-}
-
-- (PSSProductImage *)imageWithSizeName:(NSString *)imageSizeName
-{
-	return [self.imagesBySizeName objectForKey:imageSizeName];
-}
-
 #pragma mark - NSObject
 
 - (NSString *)description
@@ -190,7 +156,7 @@
 	[encoder encodeObject:self.currency forKey:@"currency"];
 	[encoder encodeObject:self.descriptionHTML forKey:@"descriptionHTML"];
 	[encoder encodeObject:self.extractDate forKey:@"extractDate"];
-	[encoder encodeObject:self.images forKey:@"images"];
+	[encoder encodeObject:self.image forKey:@"image"];
 	[encoder encodeObject:[NSNumber numberWithBool:self.inStock] forKey:@"inStock"];
 	[encoder encodeObject:self.localeId forKey:@"localeId"];
 	[encoder encodeObject:self.maxRegularPrice forKey:@"maxRegularPrice"];
@@ -207,7 +173,6 @@
 	[encoder encodeObject:self.seeMoreLabel forKey:@"seeMoreLabel"];
 	[encoder encodeObject:self.seeMoreURL forKey:@"seeMoreURL"];
 	[encoder encodeObject:self.sizes forKey:@"sizes"];
-	[encoder encodeObject:self.imagesBySizeName forKey:@"imagesBySizeName"];
 	[encoder encodeObject:self.nativeCurrency forKey:@"nativeCurrency"];
 	[encoder encodeObject:self.nativePriceLabel forKey:@"nativePriceLabel"];
 	[encoder encodeObject:self.nativePrice forKey:@"nativePrice"];
@@ -229,7 +194,7 @@
 		self.currency = [decoder decodeObjectForKey:@"currency"];
 		self.descriptionHTML = [decoder decodeObjectForKey:@"descriptionHTML"];
 		self.extractDate = [decoder decodeObjectForKey:@"extractDate"];
-		self.images = [decoder decodeObjectForKey:@"images"];
+		self.image = [decoder decodeObjectForKey:@"image"];
 		self.inStock = [(NSNumber *)[decoder decodeObjectForKey:@"inStock"] boolValue];
 		self.localeId = [decoder decodeObjectForKey:@"localeId"];
 		self.maxRegularPrice = [decoder decodeObjectForKey:@"maxRegularPrice"];
@@ -246,7 +211,6 @@
 		self.seeMoreLabel = [decoder decodeObjectForKey:@"seeMoreLabel"];
 		self.seeMoreURL = [decoder decodeObjectForKey:@"seeMoreURL"];
 		self.sizes = [decoder decodeObjectForKey:@"sizes"];
-		self.imagesBySizeName = [decoder decodeObjectForKey:@"imagesBySizeName"];
 		self.nativeCurrency = [decoder decodeObjectForKey:@"nativeCurrency"];
 		self.nativePriceLabel = [decoder decodeObjectForKey:@"nativePriceLabel"];
 		self.nativePrice = [decoder decodeObjectForKey:@"nativePrice"];
@@ -307,10 +271,9 @@
 			if ([value isKindOfClass:[NSArray class]]) {
 				self.colors = [self remoteObjectsForToManyRelationshipNamed:@"colors" fromRepresentations:value];
 			}
-		} else if ([key isEqualToString:@"images"]) {
+		} else if ([key isEqualToString:@"image"]) {
 			if ([value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
-				NSDictionary *imageMap = (NSDictionary *)value;
-				[self orderAndMapImages:[self remoteObjectsForToManyRelationshipNamed:@"images" fromRepresentations:imageMap.allValues]];
+				self.image = (PSSProductImage *)[self remoteObjectForRelationshipNamed:@"image" fromRepresentation:value];
 			}
 		} else if ([key isEqualToString:@"retailer"]) {
 			if ([value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
@@ -363,7 +326,7 @@
 		return [PSSProductCategory instanceFromRemoteRepresentation:representation];
 	} else if ([relationshipName isEqualToString:@"colors"]) {
 		return [PSSProductColor instanceFromRemoteRepresentation:representation];
-	} else if ([relationshipName isEqualToString:@"images"]) {
+	} else if ([relationshipName isEqualToString:@"image"]) {
 		return [PSSProductImage instanceFromRemoteRepresentation:representation];
 	} else if ([relationshipName isEqualToString:@"retailer"]) {
 		return [PSSRetailer instanceFromRemoteRepresentation:representation];

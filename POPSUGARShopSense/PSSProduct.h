@@ -134,10 +134,8 @@
 /** The date this product was first extracted from the retailer's website and added to shopstyle.com. */
 @property (nonatomic, copy, readonly) NSString *extractDate;
 
-/** Images of the receiver.
- 
- @return An array of `PSSProductImage` objects. */
-@property (nonatomic, copy, readonly) NSArray *images;
+/** Default image of the receiver. */
+@property (nonatomic, strong, readonly) PSSProductImage *image;
 
 /** The currency of the pricing information of the product from the locale it was extracted. Examples are USD, GBP, and EUR. 
  
@@ -162,7 +160,7 @@
  
  @return A price in nativeCurrency or nil if regularPrice was not converted for the receiver's locale.
  */
-@property (nonatomic, assign, readonly) NSNumber *nativePrice;
+@property (nonatomic, copy, readonly) NSNumber *nativePrice;
 
 /** A string representation of the `nativeMaxPrice`. */
 @property (nonatomic, copy, readonly) NSString *nativeMaxPriceLabel;
@@ -177,7 +175,7 @@
  
  @return A max price in nativeCurrency or nil if regularMaxPrice was not converted for the receiver's locale.
  */
-@property (nonatomic, assign, readonly) NSNumber *nativeMaxPrice;
+@property (nonatomic, copy, readonly) NSNumber *nativeMaxPrice;
 
 /** A string representation of the `nativeSalePrice`. */
 @property (nonatomic, copy, readonly) NSString *nativeSalePriceLabel;
@@ -190,7 +188,7 @@
  
  @return A sale price in nativeCurrency or nil if salePrice was not converted for the receiver's locale.
  */
-@property (nonatomic, assign, readonly) NSNumber *nativeSalePrice;
+@property (nonatomic, copy, readonly) NSNumber *nativeSalePrice;
 
 /** A string representation of the `nativeMaxSalePrice`. */
 @property (nonatomic, copy, readonly) NSString *nativeMaxSalePriceLabel;
@@ -205,7 +203,7 @@
  
  @return A max sale price in nativeCurrency or nil if maxSalePrice was not converted for the receiver's locale.
  */
-@property (nonatomic, assign, readonly) NSNumber *nativeMaxSalePrice;
+@property (nonatomic, copy, readonly) NSNumber *nativeMaxSalePrice;
 
 /**---------------------------------------------------------------------------------------
  * @name Pricing Helpers
@@ -255,15 +253,5 @@
  @return YES if the price fields contain a translated value and native price information is available.
  */
 - (BOOL)hasNativePrice;
-
-/**---------------------------------------------------------------------------------------
- * @name Product Image Helpers
- *  ---------------------------------------------------------------------------------------
- */
-
-/** A product image matching the size naming constant. See `PSSProductImage` for size naming constants.
- 
- @return A `PSSProductImage` or nil if not found for the given imageSizeName. */
-- (PSSProductImage *)imageWithSizeName:(NSString *)imageSizeName;
 
 @end

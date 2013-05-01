@@ -24,29 +24,77 @@
 #import "PSSProductImage.h"
 #import "POPSUGARShopSense.h"
 
-NSString * const kPSSProductImageSizeNamedSmall = @"Small";
-NSString * const kPSSProductImageSizeNamedMedium = @"Medium";
-NSString * const kPSSProductImageSizeNamedLarge = @"Large";
-NSString * const kPSSProductImageSizeNamedOriginal = @"Original";
-NSString * const kPSSProductImageSizeNamedIPhoneSmall = @"IPhoneSmall";
-NSString * const kPSSProductImageSizeNamedIPhone = @"IPhone";
+static NSString * const kOriginalImageURLKey = @"Original";
 
 @interface PSSProductImage ()
 
-@property (nonatomic, copy, readwrite) NSString *sizeName;
+@property (nonatomic, copy, readwrite) NSString *imageId;
 @property (nonatomic, copy, readwrite) NSURL *URL;
-@property (nonatomic, copy, readwrite) NSNumber *maxWidth;
-@property (nonatomic, copy, readwrite) NSNumber *maxHeight;
+@property (nonatomic, strong) NSMutableDictionary *imageURLsBySizeName;
 
 @end
 
+NSString * NSStringFromPSSProductImageSizeName(PSSProductImageSize size)
+{
+	switch (size) {
+		case PSSProductImageSizeSmall:
+			return @"Small";
+		case PSSProductImageSizeIPhoneSmall:
+			return @"IPhoneSmall";
+		case PSSProductImageSizeMedium:
+			return @"Medium";
+		case PSSProductImageSizeLarge:
+			return @"Large";
+		case PSSProductImageSizeIPhone:
+			return @"IPhone";
+		default:
+			return nil;
+	}
+}
+
+CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size)
+{
+	switch (size) {
+		case PSSProductImageSizeSmall:
+			return CGSizeMake(32, 40);
+		case PSSProductImageSizeIPhoneSmall:
+			return CGSizeMake(100, 125);
+		case PSSProductImageSizeMedium:
+			return CGSizeMake(112, 140);
+		case PSSProductImageSizeLarge:
+			return CGSizeMake(164, 205);
+		case PSSProductImageSizeIPhone:
+			return CGSizeMake(288, 360);
+		default:
+			return CGSizeZero;
+	}
+}
+
 @implementation PSSProductImage
+
+#pragma mark - Resized Images
+
+- (NSURL *)imageURLWithSize:(PSSProductImageSize)size
+{
+	return [self.imageURLsBySizeName objectForKey:NSStringFromPSSProductImageSizeName(size)];
+}
+
+#pragma mark - Product Image Helpers
+
+- (NSArray *)orderedImageSizeNames
+{
+	return [NSArray arrayWithObjects:NSStringFromPSSProductImageSizeName(PSSProductImageSizeSmall),
+			NSStringFromPSSProductImageSizeName(PSSProductImageSizeIPhoneSmall),
+			NSStringFromPSSProductImageSizeName(PSSProductImageSizeMedium),
+			NSStringFromPSSProductImageSizeName(PSSProductImageSizeLarge),
+			NSStringFromPSSProductImageSizeName(PSSProductImageSizeIPhone), nil];
+}
 
 #pragma mark - NSObject
 
 - (NSString *)description
 {
-	return [[super description] stringByAppendingFormat:@" %@(%@,%@): %@", self.sizeName, self.maxWidth, self.maxHeight, self.URL.absoluteString];
+	return [[super description] stringByAppendingFormat:@" %@: %@", self.imageId, self.URL.absoluteString];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -56,7 +104,7 @@ NSString * const kPSSProductImageSizeNamedIPhone = @"IPhone";
 
 - (NSUInteger)hash
 {
-	return self.URL.hash;
+	return self.imageId.hash;
 }
 
 - (BOOL)isEqual:(id)object
@@ -67,26 +115,24 @@ NSString * const kPSSProductImageSizeNamedIPhone = @"IPhone";
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.URL isEqual:[(PSSProductImage *)object URL]]);
+	return ([self.imageId isEqualToString:[(PSSProductImage *)object imageId]]);
 }
 
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-	[encoder encodeObject:self.sizeName forKey:@"sizeName"];
+	[encoder encodeObject:self.imageURLsBySizeName forKey:@"imageURLsBySizeName"];
 	[encoder encodeObject:self.URL forKey:@"URL"];
-	[encoder encodeObject:self.maxWidth forKey:@"maxWidth"];
-	[encoder encodeObject:self.maxHeight forKey:@"maxHeight"];
+	[encoder encodeObject:self.imageId forKey:@"imageId"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [super init])) {
-		self.sizeName = [decoder decodeObjectForKey:@"sizeName"];
+		self.imageURLsBySizeName = [decoder decodeObjectForKey:@"imageURLsBySizeName"];
 		self.URL = [decoder decodeObjectForKey:@"URL"];
-		self.maxWidth = [decoder decodeObjectForKey:@"maxWidth"];
-		self.maxHeight = [decoder decodeObjectForKey:@"maxHeight"];
+		self.imageId = [decoder decodeObjectForKey:@"imageId"];
 	}
 	return self;
 }
@@ -107,18 +153,41 @@ NSString * const kPSSProductImageSizeNamedIPhone = @"IPhone";
 {
 	for (NSString *key in aDictionary) {
 		id value = [aDictionary valueForKey:key];
-		if ([key isEqualToString:@"url"]) {
+		if ([key isEqualToString:@"id"]) {
 			if ([value isKindOfClass:[NSString class]]) {
-				self.URL = [NSURL URLWithString:value];
+				self.imageId = [value description];
 			}
-		} else if ([key isEqualToString:@"width"]) {
-			[self setValue:value forKey:@"maxWidth"];
-		} else if ([key isEqualToString:@"height"]) {
-			[self setValue:value forKey:@"maxHeight"];
+		} else if ([key isEqualToString:@"sizes"]) {
+			if ([value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
+				NSDictionary *imageURLData = value;
+				id originalData = [imageURLData valueForKey:kOriginalImageURLKey];
+				if ([originalData isKindOfClass:[NSDictionary class]] && [(NSDictionary *)originalData count] > 0) {
+					self.URL = [self imageURLFromRepresentation:originalData];
+				}
+				for (NSString *sizeName in [self orderedImageSizeNames]) {
+					id sizeData = [imageURLData valueForKey:sizeName];
+					if ([sizeData isKindOfClass:[NSDictionary class]] && [(NSDictionary *)sizeData count] > 0) {
+						NSURL *sizeURL = [self imageURLFromRepresentation:sizeData];
+						if (sizeURL != nil) {
+							[self.imageURLsBySizeName setValue:sizeURL forKey:sizeName];
+						}
+					}
+				}
+			}
 		} else {
 			[self setValue:value forKey:key];
 		}
 	}
+}
+
+- (NSURL *)imageURLFromRepresentation:(NSDictionary *)representation
+{
+	NSURL *imageURL = nil;
+	id imageURLString = [representation objectForKey:@"url"];
+	if ([imageURLString isKindOfClass:[NSString class]]) {
+		imageURL = [NSURL URLWithString:imageURLString];
+	}
+	return imageURL;
 }
 
 @end

@@ -79,9 +79,8 @@
 	} else {
 		cell.detailTextLabel.text = thisProduct.regularPriceLabel;
 	}
-	if (thisProduct.images.count > 0) {
-		PSSProductImage *productImage = [thisProduct.images lastObject];
-		[cell.imageView setImageWithURL:productImage.URL placeholderImage:[UIImage imageNamed:@"Placeholder"]];
+	if (thisProduct.image != nil) {
+		[cell.imageView setImageWithURL:thisProduct.image.URL placeholderImage:[UIImage imageNamed:@"Placeholder"]];
 	} else {
 		cell.imageView.image = [UIImage imageNamed:@"Placeholder"];
 	}

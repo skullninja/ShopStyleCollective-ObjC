@@ -24,11 +24,16 @@
 #import <Foundation/Foundation.h>
 #import "PSSClient.h"
 
+@class PSSProductImage;
+
 /** The retailer/brand color description */
 
 @interface PSSProductColor : NSObject <NSCoding, PSSRemoteObject>
 
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;
+
+/** Image of the receiver. */
+@property (nonatomic, strong, readonly) PSSProductImage *image;
 
 @end

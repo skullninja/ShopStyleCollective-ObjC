@@ -24,48 +24,52 @@
 #import <Foundation/Foundation.h>
 #import "PSSClient.h"
 
-extern NSString * const kPSSProductImageSizeNamedSmall;
-extern NSString * const kPSSProductImageSizeNamedMedium;
-extern NSString * const kPSSProductImageSizeNamedLarge;
-extern NSString * const kPSSProductImageSizeNamedOriginal;
-extern NSString * const kPSSProductImageSizeNamedIPhoneSmall;
-extern NSString * const kPSSProductImageSizeNamedIPhone;
+typedef enum {
+	PSSProductImageSizeSmall = 1,
+	PSSProductImageSizeIPhoneSmall = 2,
+	PSSProductImageSizeMedium = 3,
+	PSSProductImageSizeLarge = 4,
+	PSSProductImageSizeIPhone = 5
+} PSSProductImageSize;
+
+extern NSString * NSStringFromPSSProductImageSize(PSSProductImageSize size);
+extern CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size);
 
 /** An image of a `PSSProduct` */
 
 @interface PSSProductImage : NSObject <NSCoding, PSSRemoteObject>
 
-/** A name for the size of this image.
- 
- Possible values are:
- 
- kPSSProductImageSizeNamedSmall = @"Small";
- 
- kPSSProductImageSizeNamedMedium = @"Medium";
- 
- kPSSProductImageSizeNamedLarge = @"Large";
- 
- kPSSProductImageSizeNamedOriginal = @"Original";
- 
- kPSSProductImageSizeNamedIPhoneSmall = @"IPhoneSmall";
- 
- kPSSProductImageSizeNamedIPhone = @"IPhone";
- */
-@property (nonatomic, copy, readonly) NSString *sizeName;
+/** The unique identifier of the receiver. */
+@property (nonatomic, copy, readonly) NSString *imageId;
 
-/** The absolute URL to fetch the image data. */
+/** The absolute URL to fetch the original image data. */
 @property (nonatomic, copy, readonly) NSURL *URL;
 
-/** The maximum width of the receiver.
+/** The absolute URL to fetch the resized image data. 
  
- The original image is resized to fit within this width
- without changing the aspect ratio. Therefor the actual width may be less than this number. */
-@property (nonatomic, copy, readonly) NSNumber *maxWidth;
-
-/** The maximum height of the receiver. 
+ Images are cut into different sizes. Possible sizes are:
  
- The original image is resized to fit within this height
- without changing the aspect ratio. Therefor the actual height may be less than this number. */
-@property (nonatomic, copy, readonly) NSNumber *maxHeight;
+ PSSProductImageSizeNamedSmall: "Small" image with a maximum size (32,40)
+ 
+ PSSProductImageSizeNamedIPhoneSmall = "IPhoneSmall" image with a maximum size (100,125)
+ 
+ PSSProductImageSizeNamedMedium = "Medium" image with a maximum size (112,140)
+ 
+ PSSProductImageSizeNamedLarge = "Large" image with a maximum size (164,205)
+ 
+ PSSProductImageSizeNamedIPhone = "IPhone" image with a maximum size (288,360)
+ 
+ You can get a string representation of the size with:
+ 
+ `NSString * NSStringFromPSSProductImageSize(PSSProductImageSize size)`
+ 
+ You can get the bounding CGSize of a size with:
+ 
+ `CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size);`
+ 
+ The original image is resized to fit within this size
+ without changing the aspect ratio. Therefor the actual width may be less than this number.
+ */
+- (NSURL *)imageURLWithSize:(PSSProductImageSize)size;
 
 @end
