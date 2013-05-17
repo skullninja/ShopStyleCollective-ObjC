@@ -32,6 +32,8 @@
 #import "PSSCategoryTree.h"
 
 static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
+NSString * const PSSInvalidPartnerException = @"com.shopstyle.shopsense:InvalidPartnerException";
+static NSString *const kPSSPLISTPartnerIDKey = @"ShopSensePartnerID";
 
 @interface PSSClient ()
 
@@ -40,8 +42,6 @@ static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 @end
 
 @implementation PSSClient
-
-@synthesize partnerId = _partnerId;
 
 #pragma mark - Shared Client
 
@@ -77,11 +77,27 @@ static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 	return self;
 }
 
+#pragma mark - partnerId
+
+- (NSString *)partnerId
+{
+	if (_partnerId == nil) {
+		NSBundle* bundle = [NSBundle mainBundle];
+        _partnerId = [bundle objectForInfoDictionaryKey:kPSSPLISTPartnerIDKey];
+	}
+	return _partnerId;
+}
+
 #pragma mark - Base API Request
 
 - (void)makeRequestForEntityAtPath:(NSString *)entityPath parameters:(NSDictionary *)parameters success:(void (^)(AFHTTPRequestOperation *operation, NSDictionary *responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-	NSAssert(self.partnerId != nil, @"You must provide your Partner ID before making API requests.");
+	if (self.partnerId == nil) {
+		[[NSException exceptionWithName:PSSInvalidPartnerException
+								 reason:[NSString stringWithFormat:@"%@: No Partner ID provided; either set partnerID or add a string valued key with the appropriate id named %@ to the bundle *.plist", NSStringFromClass([self class]), kPSSPLISTPartnerIDKey]
+							   userInfo:nil]
+		 raise];
+	}
 	
 	NSMutableDictionary *mutableParameters = [[NSMutableDictionary alloc] init];
 	[mutableParameters addEntriesFromDictionary:parameters];

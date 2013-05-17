@@ -28,6 +28,8 @@
 @class PSSProductQuery;
 @class PSSCategoryTree;
 
+extern NSString * const PSSInvalidPartnerException;
+
 /** A singleton subclass of AFHTTPClient that wraps the ShopSense API web services and converts the response into native Objective-C objects.  
  
  ## Usage:
