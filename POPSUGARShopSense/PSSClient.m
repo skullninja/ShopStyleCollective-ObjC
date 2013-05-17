@@ -35,7 +35,7 @@ static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 
 @interface PSSClient ()
 
-- (void)makeRequestForEntity:(NSString *)entity parameters:(NSDictionary *)parameters success:(void (^)(AFHTTPRequestOperation *operation, NSDictionary *response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)makeRequestForEntityAtPath:(NSString *)entityPath parameters:(NSDictionary *)parameters success:(void (^)(AFHTTPRequestOperation *operation, NSDictionary *response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 @end
 
@@ -79,7 +79,7 @@ static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 
 #pragma mark - Base API Request
 
-- (void)makeRequestForEntity:(NSString *)entity parameters:(NSDictionary *)parameters success:(void (^)(AFHTTPRequestOperation *operation, NSDictionary *responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (void)makeRequestForEntityAtPath:(NSString *)entityPath parameters:(NSDictionary *)parameters success:(void (^)(AFHTTPRequestOperation *operation, NSDictionary *responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSAssert(self.partnerId != nil, @"You must provide your Partner ID before making API requests.");
 	
@@ -88,7 +88,7 @@ static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 	[mutableParameters setValue:self.partnerId forKey:@"pid"];
 	[mutableParameters setValue:@"true" forKey:@"suppressResponseCode"];
 	
-	NSMutableURLRequest *request = [self requestWithMethod:@"GET" path:entity parameters:mutableParameters];
+	NSMutableURLRequest *request = [self requestWithMethod:@"GET" path:entityPath parameters:mutableParameters];
 	[request setValue:@"gzip, deflate" forHTTPHeaderField:@"Accept-Encoding"];
 	AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		if ([responseObject isKindOfClass:[NSDictionary class]]) {
@@ -124,8 +124,8 @@ static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 - (void)getProductByID:(NSNumber *)productId success:(void (^)(PSSProduct *product))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSParameterAssert(productId != nil);
-	NSString *entity = [NSString stringWithFormat:@"products/%d",productId.integerValue];
-	[self makeRequestForEntity:entity parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	NSString *entityPath = [NSString stringWithFormat:@"products/%d",productId.integerValue];
+	[self makeRequestForEntityAtPath:entityPath parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
 		if (success) {
 			PSSProduct *product = (PSSProduct *)[self remoteObjectForEntityNamed:@"product" fromRepresentation:responseObject];
 			success(product);
@@ -141,7 +141,7 @@ static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 
 - (void)searchProductsWithQuery:(PSSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-	NSString *entity = @"products";
+	NSString *entityPath = @"products";
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
 	if (offset != nil) {
 		[params setValue:offset forKey:@"offset"];
@@ -156,7 +156,7 @@ static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 	if (params.count == 0) {
 		params = nil;
 	}
-	[self makeRequestForEntity:entity parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	[self makeRequestForEntityAtPath:entityPath parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
 		
 		if ([[responseObject objectForKey:@"metadata"] isKindOfClass:[NSDictionary class]] && [[responseObject objectForKey:@"products"] isKindOfClass:[NSArray class]]) {
 			
@@ -220,8 +220,8 @@ static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 		NSDictionary *queryParams = [queryOrNil queryParameterRepresentation];
 		[params addEntriesFromDictionary:queryParams];
 	}
-	NSString *entity = @"products/histogram";
-	[self makeRequestForEntity:entity parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	NSString *entityPath = @"products/histogram";
+	[self makeRequestForEntityAtPath:entityPath parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
 		if ([[responseObject objectForKey:filterResponseKey] isKindOfClass:[NSArray class]]) {
 			if (success) {
 				NSArray *filtersRepresentation = [responseObject objectForKey:filterResponseKey];
@@ -253,8 +253,8 @@ static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 
 - (void)getBrandsSuccess:(void (^)(NSArray *brands))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-	NSString *entity = @"brands";
-	[self makeRequestForEntity:entity parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	NSString *entityPath = @"brands";
+	[self makeRequestForEntityAtPath:entityPath parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
 		if ([[responseObject objectForKey:@"brands"] isKindOfClass:[NSArray class]]) {
 			if (success) {
 				NSArray *brandsRepresentation = [responseObject objectForKey:@"brands"];
@@ -273,8 +273,8 @@ static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 
 - (void)getRetailersSuccess:(void (^)(NSArray *retailers))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-	NSString *entity = @"retailers";
-	[self makeRequestForEntity:entity parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	NSString *entityPath = @"retailers";
+	[self makeRequestForEntityAtPath:entityPath parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
 		if ([[responseObject objectForKey:@"retailers"] isKindOfClass:[NSArray class]]) {
 			if (success) {
 				NSArray *retailersRepresentation = [responseObject objectForKey:@"retailers"];
@@ -293,8 +293,8 @@ static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 
 - (void)getColorsSuccess:(void (^)(NSArray *colors))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-	NSString *entity = @"colors";
-	[self makeRequestForEntity:entity parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	NSString *entityPath = @"colors";
+	[self makeRequestForEntityAtPath:entityPath parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
 		if ([[responseObject objectForKey:@"colors"] isKindOfClass:[NSArray class]]) {
 			if (success) {
 				NSArray *colorsRepresentation = [responseObject objectForKey:@"colors"];
@@ -329,8 +329,8 @@ static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 	if (params.count == 0) {
 		params = nil;
 	}
-	NSString *entity = @"categories";
-	[self makeRequestForEntity:entity parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	NSString *entityPath = @"categories";
+	[self makeRequestForEntityAtPath:entityPath parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
 		if ([[responseObject objectForKey:@"categories"] isKindOfClass:[NSArray class]] && [[responseObject objectForKey:@"metadata"] isKindOfClass:[NSDictionary class]]) {
 			NSArray *categoriesRepresentation = [responseObject objectForKey:@"categories"];
 			NSArray *categories = [self remoteObjectsForEntityNamed:@"category" fromRepresentations:categoriesRepresentation];
