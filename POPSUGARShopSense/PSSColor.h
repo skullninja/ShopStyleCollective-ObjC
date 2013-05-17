@@ -24,6 +24,8 @@
 #import <Foundation/Foundation.h>
 #import "PSSClient.h"
 
+@class PSSProductFilter;
+
 /** A standard ShopStyle color. Primarily used for displaying filters. For the retailer/brand color of a product see `PSSProductColor` */
 
 @interface PSSColor : NSObject <NSCoding, PSSRemoteObject>
@@ -36,5 +38,8 @@
 
 /** A shopstyle.com URL that shows more products like the receiver. */
 @property (nonatomic, copy, readonly) NSURL *browseURL;
+
+/** A product filter representing the receiver. */
+- (PSSProductFilter *)productFilter;
 
 @end

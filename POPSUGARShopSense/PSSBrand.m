@@ -34,6 +34,13 @@
 
 @implementation PSSBrand
 
+#pragma mark - Product Filter
+
+- (PSSProductFilter *)productFilter
+{
+	return [PSSProductFilter filterWithType:PSSProductFilterTypeBrand filterId:self.brandId];
+}
+
 #pragma mark - NSObject
 
 - (NSString *)description

@@ -35,6 +35,13 @@
 
 @implementation PSSRetailer
 
+#pragma mark - Product Filter
+
+- (PSSProductFilter *)productFilter
+{
+	return [PSSProductFilter filterWithType:PSSProductFilterTypeRetailer filterId:self.retailerId];
+}
+
 #pragma mark - NSObject
 
 - (NSString *)description

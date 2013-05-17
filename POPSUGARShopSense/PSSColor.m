@@ -34,6 +34,13 @@
 
 @implementation PSSColor
 
+#pragma mark - Product Filter
+
+- (PSSProductFilter *)productFilter
+{
+	return [PSSProductFilter filterWithType:PSSProductFilterTypeColor filterId:self.colorId];
+}
+
 #pragma mark - NSObject
 
 - (NSString *)description

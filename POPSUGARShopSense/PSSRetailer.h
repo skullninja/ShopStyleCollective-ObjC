@@ -24,6 +24,8 @@
 #import <Foundation/Foundation.h>
 #import "PSSClient.h"
 
+@class PSSProductFilter;
+
 /** A retailer found on shopstyle.com */
 
 @interface PSSRetailer : NSObject <NSCoding, PSSRemoteObject>
@@ -38,5 +40,8 @@
 @property (nonatomic, copy, readonly) NSURL *browseURL;
 
 @property (nonatomic, assign, readonly) BOOL deeplinkSupport;
+
+/** A product filter representing the receiver. */
+- (PSSProductFilter *)productFilter;
 
 @end
