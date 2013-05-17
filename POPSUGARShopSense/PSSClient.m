@@ -50,7 +50,11 @@ static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 	static PSSClient *_sharedClient = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		_sharedClient = [[PSSClient alloc] initWithBaseURL:[NSURL URLWithString:kPSSBaseURLString]];
+		NSString *baseURL = kPSSBaseURLString;
+#ifdef _POPSUGARShopSense_BASE_URL_
+		baseURL = _POPSUGARShopSense_BASE_URL_;
+#endif
+		_sharedClient = [[PSSClient alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
 	});
 	
 	return _sharedClient;
