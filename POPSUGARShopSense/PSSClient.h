@@ -30,6 +30,16 @@
 
 extern NSString * const PSSInvalidPartnerException;
 
+typedef enum {
+    PSSHistogramFilterNone		= 0,
+    PSSHistogramFilterBrand		= 1 << 0,
+    PSSHistogramFilterRetailer	= 1 << 1,
+    PSSHistogramFilterPrice		= 1 << 2,
+    PSSHistogramFilterDiscount	= 1 << 3,
+    PSSHistogramFilterSize		= 1 << 4,
+    PSSHistogramFilterColor		= 1 << 5
+} PSSHistogramFilterOptions;
+
 /** A singleton subclass of AFHTTPClient that wraps the ShopSense API web services and converts the response into native Objective-C objects.  
  
  ## Usage:
@@ -89,13 +99,21 @@ extern NSString * const PSSInvalidPartnerException;
 
 /** This method returns a list of filters and product counts that describe the results of a given product query. The query is specified using the parameters below.
  
+ Possible values for filter options are:  
+ PSSHistogramFilterBrand  
+ PSSHistogramFilterRetailer  
+ PSSHistogramFilterPrice  
+ PSSHistogramFilterDiscount  
+ PSSHistogramFilterSize  
+ PSSHistogramFilterColor  
+ 
  @param queryOrNil A `PSSProductQuery` to define which products are used in the calculation.
  @param filterType The type of filter to return on success. 
  @param floorOrNil The minimum count of products required for an entry to be included in the histogram.
  @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: an array of `PSSProductFilter` objects.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil filterType:(PSSProductFilterType)filterType floor:(NSNumber *)floorOrNil success:(void (^)(NSArray *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil filterOptions:(PSSHistogramFilterOptions)filterOptions floor:(NSNumber *)floorOrNil success:(void (^)(NSDictionary *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /**---------------------------------------------------------------------------------------
  * @name Getting Lookup Values

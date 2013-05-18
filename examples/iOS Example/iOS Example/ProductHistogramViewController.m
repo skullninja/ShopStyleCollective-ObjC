@@ -42,8 +42,8 @@
 	productQuery.searchTerm = @"red dress";
 	
 	__weak typeof(self) weakSelf = self;
-	[[PSSClient sharedClient] productHistogramWithQuery:productQuery filterType:PSSProductFilterTypeBrand floor:nil success:^(NSArray *filters) {
-		weakSelf.filters = filters;
+	[[PSSClient sharedClient] productHistogramWithQuery:productQuery filterOptions:PSSHistogramFilterBrand floor:nil success:^(NSDictionary *filters) {
+		weakSelf.filters = filters[NSStringFromPSSProductFilterType(PSSProductFilterTypeBrand)];
 		[weakSelf.tableView reloadData];
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 		NSLog(@"Request failed with error: %@", error);

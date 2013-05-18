@@ -195,40 +195,63 @@ static NSString *const kPSSPLISTPartnerIDKey = @"ShopSensePartnerID";
 	} failure:failure];
 }
 
-- (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil filterType:(PSSProductFilterType)filterType floor:(NSNumber *)floorOrNil success:(void (^)(NSArray *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (PSSProductFilter *)productFilterForHistogramResponseKey:(NSString *)key represention:(NSDictionary *)representation
+{
+	if ([representation objectForKey:@"id"] == nil) {
+		return nil;
+	}
+	
+	PSSProductFilterType filterType;
+	if ([key isEqualToString:@"brandHistogram"]) {
+		filterType = PSSProductFilterTypeBrand;
+	} else if ([key isEqualToString:@"retailerHistogram"]) {
+		filterType = PSSProductFilterTypeRetailer;
+	} else if ([key isEqualToString:@"colorHistogram"]) {
+		filterType = PSSProductFilterTypeColor;
+	} else if ([key isEqualToString:@"priceHistogram"]) {
+		filterType = PSSProductFilterTypePrice;
+	} else if ([key isEqualToString:@"discountHistogram"]) {
+		filterType = PSSProductFilterTypeSale;
+	} else if ([key isEqualToString:@"sizeHistogram"]) {
+		filterType = PSSProductFilterTypeSize;
+	} else {
+		PSSDLog(@"Unknown Histogram Response Key: %@", key);
+		return nil;
+	}
+	PSSProductFilter *filter = [PSSProductFilter filterWithType:filterType filterId:[representation objectForKey:@"id"]];
+	filter.browseURLString = [representation objectForKey:@"url"];
+	filter.name = [representation objectForKey:@"name"];
+	filter.productCount = [representation objectForKey:@"count"];
+	return filter;
+}
+
+- (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil filterOptions:(PSSHistogramFilterOptions)filterOptions floor:(NSNumber *)floorOrNil success:(void (^)(NSDictionary *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-	NSString *filterResponseKey = nil;
-	switch (filterType) {
-		case PSSProductFilterTypeBrand:
-			[params setValue:@"Brand" forKey:@"filters"];
-			filterResponseKey = @"brandHistogram";
-			break;
-		case PSSProductFilterTypeRetailer:
-			[params setValue:@"Retailer" forKey:@"filters"];
-			filterResponseKey = @"retailerHistogram";
-			break;
-		case PSSProductFilterTypeColor:
-			[params setValue:@"Color" forKey:@"filters"];
-			filterResponseKey = @"colorHistogram";
-			break;
-		case PSSProductFilterTypePrice:
-			[params setValue:@"Price" forKey:@"filters"];
-			filterResponseKey = @"priceHistogram";
-			break;
-		case PSSProductFilterTypeSale:
-			[params setValue:@"Discount" forKey:@"filters"];
-			filterResponseKey = @"discountHistogram";
-			break;
-		case PSSProductFilterTypeSize:
-			[params setValue:@"Size" forKey:@"filters"];
-			filterResponseKey = @"sizeHistogram";
-			break;
-			
-		default:
-			break;
+	NSMutableArray *filterResponseKeys = [NSMutableArray array];
+	NSMutableArray *filterParameters = [NSMutableArray array];
+	if ((filterOptions & PSSHistogramFilterBrand) == PSSHistogramFilterBrand) {
+		[filterResponseKeys addObject:@"brandHistogram"];
+		[filterParameters addObject:@"Brand"];
+	} else if ((filterOptions & PSSHistogramFilterRetailer) == PSSHistogramFilterRetailer) {
+		[filterResponseKeys addObject:@"retailerHistogram"];
+		[filterParameters addObject:@"Retailer"];
+	} else if ((filterOptions & PSSHistogramFilterPrice) == PSSHistogramFilterPrice) {
+		[filterResponseKeys addObject:@"priceHistogram"];
+		[filterParameters addObject:@"Price"];
+	} else if ((filterOptions & PSSHistogramFilterDiscount) == PSSHistogramFilterDiscount) {
+		[filterResponseKeys addObject:@"discountHistogram"];
+		[filterParameters addObject:@"Discount"];
+	} else if ((filterOptions & PSSHistogramFilterSize) == PSSHistogramFilterSize) {
+		[filterResponseKeys addObject:@"sizeHistogram"];
+		[filterParameters addObject:@"Size"];
+	} else if ((filterOptions & PSSHistogramFilterColor) == PSSHistogramFilterColor) {
+		[filterResponseKeys addObject:@"colorHistogram"];
+		[filterParameters addObject:@"Color"];
 	}
-	NSAssert(params.count > 0, @"You must provide a filter type to get a histogram");
+	NSAssert(filterParameters.count > 0, @"You must provide at least on filter option to get a histogram");
+	[params setValue:[filterParameters componentsJoinedByString:@","] forKey:@"filters"];
+
 	if (floorOrNil != nil) {
 		[params setValue:floorOrNil forKey:@"floor"];
 	}
@@ -238,24 +261,28 @@ static NSString *const kPSSPLISTPartnerIDKey = @"ShopSensePartnerID";
 	}
 	NSString *entityPath = @"products/histogram";
 	[self makeRequestForEntityAtPath:entityPath parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
-		if ([[responseObject objectForKey:filterResponseKey] isKindOfClass:[NSArray class]]) {
-			if (success) {
+		NSMutableDictionary *histograms = [NSMutableDictionary dictionary];
+		for (NSString *filterResponseKey in filterResponseKeys) {
+			if ([[responseObject objectForKey:filterResponseKey] isKindOfClass:[NSArray class]]) {
 				NSArray *filtersRepresentation = [responseObject objectForKey:filterResponseKey];
 				NSMutableArray *filters = [NSMutableArray arrayWithCapacity:[filtersRepresentation count]];
 				for (id filterRep in filtersRepresentation) {
-					if ([filterRep isKindOfClass:[NSDictionary class]] && [filterRep objectForKey:@"id"] != nil) {
-						PSSProductFilter *filter = [PSSProductFilter filterWithType:filterType filterId:[filterRep objectForKey:@"id"]];
-						filter.browseURLString = [filterRep objectForKey:@"url"];
-						filter.name = [filterRep objectForKey:@"name"];
-						filter.productCount = [filterRep objectForKey:@"count"];
-						[filters addObject:filter];
+					if ([filterRep isKindOfClass:[NSDictionary class]]) {
+						PSSProductFilter *filter = [self productFilterForHistogramResponseKey:filterResponseKey represention:filterRep];
+						if (filter != nil) {
+							[filters addObject:filter];
+						}
 					}
 				}
 				if (filters.count > 0) {
-					success(filters);
-					return;
+					NSString *key = NSStringFromPSSProductFilterType([(PSSProductFilter *)[filters lastObject] type]);
+					histograms[key] = filters;
 				}
-				success(nil);
+			}
+		}
+		if (histograms.count > 0) {
+			if (success) {
+				success(histograms);
 			}
 		} else {
 			if (failure) {
