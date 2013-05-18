@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '5.0'
   s.osx.deployment_target = '10.7'
 
-  s.source       = { :git => "https://github.com/PopSugar/objc-POPSUGAR-ShopSense-client.git", :tag => "0.3.0" }
+  s.source       = { :git => "https://github.com/PopSugar/objc-POPSUGAR-ShopSense-client.git", :tag => "0.4.0" }
   s.source_files = 'POPSUGARShopSense/*.{h,m}'
 
   s.requires_arc = true
