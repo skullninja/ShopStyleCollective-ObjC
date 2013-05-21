@@ -23,13 +23,7 @@
 
 #import "PSSClient.h"
 #import "AFJSONRequestOperation.h"
-#import "PSSProduct.h"
-#import "PSSProductQuery.h"
-#import "PSSBrand.h"
-#import "PSSRetailer.h"
-#import "PSSColor.h"
-#import "PSSCategory.h"
-#import "PSSCategoryTree.h"
+#import "POPSUGARShopSense.h"
 
 static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 NSString * const PSSInvalidPartnerException = @"com.shopstyle.shopsense:InvalidPartnerException";
