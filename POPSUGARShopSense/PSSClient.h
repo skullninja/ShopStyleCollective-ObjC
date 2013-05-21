@@ -57,6 +57,9 @@ typedef enum {
  *  ---------------------------------------------------------------------------------------
  */
 
+/** The ShopSense API Base URL */
++ (NSURL *)defaultBaseURL;
+
 /** Returns the shared client object. */
 + (instancetype)sharedClient;
 

@@ -37,6 +37,13 @@ static NSString *const kPSSPLISTPartnerIDKey = @"ShopSensePartnerID";
 
 @implementation PSSClient
 
+#pragma mark - Default Base URL
+
++ (NSURL *)defaultBaseURL
+{
+	return [NSURL URLWithString:kPSSBaseURLString];
+}
+
 #pragma mark - Shared Client
 
 + (instancetype)sharedClient
@@ -44,11 +51,14 @@ static NSString *const kPSSPLISTPartnerIDKey = @"ShopSensePartnerID";
 	static PSSClient *_sharedClient = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		NSString *baseURL = kPSSBaseURLString;
+		NSURL *baseURL = [self defaultBaseURL];
 #ifdef _POPSUGARShopSense_BASE_URL_
-		baseURL = _POPSUGARShopSense_BASE_URL_;
+		NSURL *definedBaseURL = [NSURL URLWithString:_POPSUGARShopSense_BASE_URL_];
+		if (definedBaseURL != nil) {
+			baseURL = definedBaseURL;
+		}
 #endif
-		_sharedClient = [[PSSClient alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
+		_sharedClient = [[PSSClient alloc] initWithBaseURL:baseURL];
 	});
 	
 	return _sharedClient;
