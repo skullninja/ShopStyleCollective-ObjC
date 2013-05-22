@@ -80,7 +80,7 @@
 		cell.detailTextLabel.text = thisProduct.regularPriceLabel;
 	}
 	if (thisProduct.image != nil) {
-		[cell.imageView setImageWithURL:thisProduct.image.URL placeholderImage:[UIImage imageNamed:@"Placeholder"]];
+		[cell.imageView setImageWithURL:[thisProduct.image imageURLWithSize:PSSProductImageSizeIPhoneSmall] placeholderImage:[UIImage imageNamed:@"Placeholder"]];
 	} else {
 		cell.imageView.image = [UIImage imageNamed:@"Placeholder"];
 	}

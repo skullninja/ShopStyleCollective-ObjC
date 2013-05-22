@@ -74,6 +74,14 @@ CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size)
 
 #pragma mark - Resized Images
 
+- (NSMutableDictionary *)imageURLsBySizeName
+{
+	if (_imageURLsBySizeName == nil) {
+		_imageURLsBySizeName = [[NSMutableDictionary alloc] init];
+	}
+	return _imageURLsBySizeName;
+}
+
 - (NSURL *)imageURLWithSize:(PSSProductImageSize)size
 {
 	return [self.imageURLsBySizeName objectForKey:NSStringFromPSSProductImageSizeName(size)];
