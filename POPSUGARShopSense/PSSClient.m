@@ -366,19 +366,24 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 	if ((filterOptions & PSSHistogramFilterBrand) == PSSHistogramFilterBrand) {
 		[filterResponseKeys addObject:@"brandHistogram"];
 		[filterParameters addObject:@"Brand"];
-	} else if ((filterOptions & PSSHistogramFilterRetailer) == PSSHistogramFilterRetailer) {
+	}
+	if ((filterOptions & PSSHistogramFilterRetailer) == PSSHistogramFilterRetailer) {
 		[filterResponseKeys addObject:@"retailerHistogram"];
 		[filterParameters addObject:@"Retailer"];
-	} else if ((filterOptions & PSSHistogramFilterPrice) == PSSHistogramFilterPrice) {
+	}
+	if ((filterOptions & PSSHistogramFilterPrice) == PSSHistogramFilterPrice) {
 		[filterResponseKeys addObject:@"priceHistogram"];
 		[filterParameters addObject:@"Price"];
-	} else if ((filterOptions & PSSHistogramFilterDiscount) == PSSHistogramFilterDiscount) {
+	}
+	if ((filterOptions & PSSHistogramFilterDiscount) == PSSHistogramFilterDiscount) {
 		[filterResponseKeys addObject:@"discountHistogram"];
 		[filterParameters addObject:@"Discount"];
-	} else if ((filterOptions & PSSHistogramFilterSize) == PSSHistogramFilterSize) {
+	}
+	if ((filterOptions & PSSHistogramFilterSize) == PSSHistogramFilterSize) {
 		[filterResponseKeys addObject:@"sizeHistogram"];
 		[filterParameters addObject:@"Size"];
-	} else if ((filterOptions & PSSHistogramFilterColor) == PSSHistogramFilterColor) {
+	}
+	if ((filterOptions & PSSHistogramFilterColor) == PSSHistogramFilterColor) {
 		[filterResponseKeys addObject:@"colorHistogram"];
 		[filterParameters addObject:@"Color"];
 	}
