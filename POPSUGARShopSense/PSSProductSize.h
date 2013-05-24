@@ -26,7 +26,7 @@
 
 /** The retailer/brand size description */
 
-@interface PSSProductSize : NSObject <NSCoding, PSSRemoteObject>
+@interface PSSProductSize : NSObject <NSCoding, NSCopying, PSSRemoteObject>
 
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;

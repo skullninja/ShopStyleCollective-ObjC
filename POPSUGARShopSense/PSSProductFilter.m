@@ -156,4 +156,17 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 	return self;
 }
 
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone
+{
+	typeof(self) copy = [[[self class] allocWithZone:zone] init];
+	copy.filterId = self.filterId;
+	copy.type = self.type;
+	copy.name = self.name;
+	copy.browseURLString = self.browseURLString;
+	copy.productCount = self.productCount;
+	return copy;
+}
+
 @end

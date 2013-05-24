@@ -95,4 +95,13 @@
 	}
 }
 
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone
+{
+	typeof(self) copy = [[[self class] allocWithZone:zone] init];
+	copy.name = self.name;
+	return copy;
+}
+
 @end

@@ -145,85 +145,6 @@
 	return ([self.productId isEqualToNumber:[(PSSProduct *)object productId]]);
 }
 
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)encoder
-{
-	[encoder encodeObject:self.brand forKey:@"brand"];
-	[encoder encodeObject:self.categories forKey:@"categories"];
-	[encoder encodeObject:self.buyURL forKey:@"buyURL"];
-	[encoder encodeObject:self.colors forKey:@"colors"];
-	[encoder encodeObject:self.currency forKey:@"currency"];
-	[encoder encodeObject:self.descriptionHTML forKey:@"descriptionHTML"];
-	[encoder encodeObject:self.extractDate forKey:@"extractDate"];
-	[encoder encodeObject:self.image forKey:@"image"];
-	[encoder encodeObject:[NSNumber numberWithBool:self.inStock] forKey:@"inStock"];
-	[encoder encodeObject:self.localeId forKey:@"localeId"];
-	[encoder encodeObject:self.maxRegularPrice forKey:@"maxRegularPrice"];
-	[encoder encodeObject:self.maxRegularPriceLabel forKey:@"maxRegularPriceLabel"];
-	[encoder encodeObject:self.maxSalePrice forKey:@"maxSalePrice"];
-	[encoder encodeObject:self.maxSalePriceLabel forKey:@"maxSalePriceLabel"];
-	[encoder encodeObject:self.name forKey:@"name"];
-	[encoder encodeObject:self.regularPrice forKey:@"price"];
-	[encoder encodeObject:self.regularPriceLabel forKey:@"regularPriceLabel"];
-	[encoder encodeObject:self.productId forKey:@"productId"];
-	[encoder encodeObject:self.retailer forKey:@"retailer"];
-	[encoder encodeObject:self.salePrice forKey:@"salePrice"];
-	[encoder encodeObject:self.salePriceLabel forKey:@"salePriceLabel"];
-	[encoder encodeObject:self.seeMoreLabel forKey:@"seeMoreLabel"];
-	[encoder encodeObject:self.seeMoreURL forKey:@"seeMoreURL"];
-	[encoder encodeObject:self.sizes forKey:@"sizes"];
-	[encoder encodeObject:self.nativeCurrency forKey:@"nativeCurrency"];
-	[encoder encodeObject:self.nativePriceLabel forKey:@"nativePriceLabel"];
-	[encoder encodeObject:self.nativePrice forKey:@"nativePrice"];
-	[encoder encodeObject:self.nativeMaxPriceLabel forKey:@"nativeMaxPriceLabel"];
-	[encoder encodeObject:self.nativeMaxPrice forKey:@"nativeMaxPrice"];
-	[encoder encodeObject:self.nativeSalePriceLabel forKey:@"nativeSalePriceLabel"];
-	[encoder encodeObject:self.nativeSalePrice forKey:@"nativeSalePrice"];
-	[encoder encodeObject:self.nativeMaxSalePriceLabel forKey:@"nativeMaxSalePriceLabel"];
-	[encoder encodeObject:self.nativeMaxSalePrice forKey:@"nativeMaxSalePrice"];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-	if ((self = [super init])) {
-		self.brand = [decoder decodeObjectForKey:@"brand"];
-		self.categories = [decoder decodeObjectForKey:@"categories"];
-		self.buyURL = [decoder decodeObjectForKey:@"buyURL"];
-		self.colors = [decoder decodeObjectForKey:@"colors"];
-		self.currency = [decoder decodeObjectForKey:@"currency"];
-		self.descriptionHTML = [decoder decodeObjectForKey:@"descriptionHTML"];
-		self.extractDate = [decoder decodeObjectForKey:@"extractDate"];
-		self.image = [decoder decodeObjectForKey:@"image"];
-		self.inStock = [(NSNumber *)[decoder decodeObjectForKey:@"inStock"] boolValue];
-		self.localeId = [decoder decodeObjectForKey:@"localeId"];
-		self.maxRegularPrice = [decoder decodeObjectForKey:@"maxRegularPrice"];
-		self.maxRegularPriceLabel = [decoder decodeObjectForKey:@"maxRegularPriceLabel"];
-		self.maxSalePrice = [decoder decodeObjectForKey:@"maxSalePrice"];
-		self.maxSalePriceLabel = [decoder decodeObjectForKey:@"maxSalePriceLabel"];
-		self.name = [decoder decodeObjectForKey:@"name"];
-		self.regularPrice = [decoder decodeObjectForKey:@"regularPrice"];
-		self.regularPriceLabel = [decoder decodeObjectForKey:@"regularPriceLabel"];
-		self.productId = [decoder decodeObjectForKey:@"productId"];
-		self.retailer = [decoder decodeObjectForKey:@"retailer"];
-		self.salePrice = [decoder decodeObjectForKey:@"salePrice"];
-		self.salePriceLabel = [decoder decodeObjectForKey:@"salePriceLabel"];
-		self.seeMoreLabel = [decoder decodeObjectForKey:@"seeMoreLabel"];
-		self.seeMoreURL = [decoder decodeObjectForKey:@"seeMoreURL"];
-		self.sizes = [decoder decodeObjectForKey:@"sizes"];
-		self.nativeCurrency = [decoder decodeObjectForKey:@"nativeCurrency"];
-		self.nativePriceLabel = [decoder decodeObjectForKey:@"nativePriceLabel"];
-		self.nativePrice = [decoder decodeObjectForKey:@"nativePrice"];
-		self.nativeMaxPriceLabel = [decoder decodeObjectForKey:@"nativeMaxPriceLabel"];
-		self.nativeMaxPrice = [decoder decodeObjectForKey:@"nativeMaxPrice"];
-		self.nativeSalePriceLabel = [decoder decodeObjectForKey:@"nativeSalePriceLabel"];
-		self.nativeSalePrice = [decoder decodeObjectForKey:@"nativeSalePrice"];
-		self.nativeMaxSalePriceLabel = [decoder decodeObjectForKey:@"nativeMaxSalePriceLabel"];
-		self.nativeMaxSalePrice = [decoder decodeObjectForKey:@"nativeMaxSalePrice"];
-	}
-	return self;
-}
-
 #pragma mark - PSSRemoteObject
 
 + (instancetype)instanceFromRemoteRepresentation:(NSDictionary *)representation
@@ -334,6 +255,126 @@
 		return [PSSProductSize instanceFromRemoteRepresentation:representation];
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[encoder encodeObject:self.brand forKey:@"brand"];
+	[encoder encodeObject:self.categories forKey:@"categories"];
+	[encoder encodeObject:self.buyURL forKey:@"buyURL"];
+	[encoder encodeObject:self.colors forKey:@"colors"];
+	[encoder encodeObject:self.currency forKey:@"currency"];
+	[encoder encodeObject:self.descriptionHTML forKey:@"descriptionHTML"];
+	[encoder encodeObject:self.extractDate forKey:@"extractDate"];
+	[encoder encodeObject:self.image forKey:@"image"];
+	[encoder encodeBool:self.inStock forKey:@"inStock"];
+	[encoder encodeObject:self.localeId forKey:@"localeId"];
+	[encoder encodeObject:self.maxRegularPrice forKey:@"maxRegularPrice"];
+	[encoder encodeObject:self.maxRegularPriceLabel forKey:@"maxRegularPriceLabel"];
+	[encoder encodeObject:self.maxSalePrice forKey:@"maxSalePrice"];
+	[encoder encodeObject:self.maxSalePriceLabel forKey:@"maxSalePriceLabel"];
+	[encoder encodeObject:self.name forKey:@"name"];
+	[encoder encodeObject:self.regularPrice forKey:@"price"];
+	[encoder encodeObject:self.regularPriceLabel forKey:@"regularPriceLabel"];
+	[encoder encodeObject:self.productId forKey:@"productId"];
+	[encoder encodeObject:self.retailer forKey:@"retailer"];
+	[encoder encodeObject:self.salePrice forKey:@"salePrice"];
+	[encoder encodeObject:self.salePriceLabel forKey:@"salePriceLabel"];
+	[encoder encodeObject:self.seeMoreLabel forKey:@"seeMoreLabel"];
+	[encoder encodeObject:self.seeMoreURL forKey:@"seeMoreURL"];
+	[encoder encodeObject:self.sizes forKey:@"sizes"];
+	[encoder encodeObject:self.nativeCurrency forKey:@"nativeCurrency"];
+	[encoder encodeObject:self.nativePriceLabel forKey:@"nativePriceLabel"];
+	[encoder encodeObject:self.nativePrice forKey:@"nativePrice"];
+	[encoder encodeObject:self.nativeMaxPriceLabel forKey:@"nativeMaxPriceLabel"];
+	[encoder encodeObject:self.nativeMaxPrice forKey:@"nativeMaxPrice"];
+	[encoder encodeObject:self.nativeSalePriceLabel forKey:@"nativeSalePriceLabel"];
+	[encoder encodeObject:self.nativeSalePrice forKey:@"nativeSalePrice"];
+	[encoder encodeObject:self.nativeMaxSalePriceLabel forKey:@"nativeMaxSalePriceLabel"];
+	[encoder encodeObject:self.nativeMaxSalePrice forKey:@"nativeMaxSalePrice"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	if ((self = [super init])) {
+		self.brand = [decoder decodeObjectForKey:@"brand"];
+		self.categories = [decoder decodeObjectForKey:@"categories"];
+		self.buyURL = [decoder decodeObjectForKey:@"buyURL"];
+		self.colors = [decoder decodeObjectForKey:@"colors"];
+		self.currency = [decoder decodeObjectForKey:@"currency"];
+		self.descriptionHTML = [decoder decodeObjectForKey:@"descriptionHTML"];
+		self.extractDate = [decoder decodeObjectForKey:@"extractDate"];
+		self.image = [decoder decodeObjectForKey:@"image"];
+		self.inStock = [decoder decodeBoolForKey:@"inStock"];
+		self.localeId = [decoder decodeObjectForKey:@"localeId"];
+		self.maxRegularPrice = [decoder decodeObjectForKey:@"maxRegularPrice"];
+		self.maxRegularPriceLabel = [decoder decodeObjectForKey:@"maxRegularPriceLabel"];
+		self.maxSalePrice = [decoder decodeObjectForKey:@"maxSalePrice"];
+		self.maxSalePriceLabel = [decoder decodeObjectForKey:@"maxSalePriceLabel"];
+		self.name = [decoder decodeObjectForKey:@"name"];
+		self.regularPrice = [decoder decodeObjectForKey:@"regularPrice"];
+		self.regularPriceLabel = [decoder decodeObjectForKey:@"regularPriceLabel"];
+		self.productId = [decoder decodeObjectForKey:@"productId"];
+		self.retailer = [decoder decodeObjectForKey:@"retailer"];
+		self.salePrice = [decoder decodeObjectForKey:@"salePrice"];
+		self.salePriceLabel = [decoder decodeObjectForKey:@"salePriceLabel"];
+		self.seeMoreLabel = [decoder decodeObjectForKey:@"seeMoreLabel"];
+		self.seeMoreURL = [decoder decodeObjectForKey:@"seeMoreURL"];
+		self.sizes = [decoder decodeObjectForKey:@"sizes"];
+		self.nativeCurrency = [decoder decodeObjectForKey:@"nativeCurrency"];
+		self.nativePriceLabel = [decoder decodeObjectForKey:@"nativePriceLabel"];
+		self.nativePrice = [decoder decodeObjectForKey:@"nativePrice"];
+		self.nativeMaxPriceLabel = [decoder decodeObjectForKey:@"nativeMaxPriceLabel"];
+		self.nativeMaxPrice = [decoder decodeObjectForKey:@"nativeMaxPrice"];
+		self.nativeSalePriceLabel = [decoder decodeObjectForKey:@"nativeSalePriceLabel"];
+		self.nativeSalePrice = [decoder decodeObjectForKey:@"nativeSalePrice"];
+		self.nativeMaxSalePriceLabel = [decoder decodeObjectForKey:@"nativeMaxSalePriceLabel"];
+		self.nativeMaxSalePrice = [decoder decodeObjectForKey:@"nativeMaxSalePrice"];
+	}
+	return self;
+}
+
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone
+{
+	typeof(self) copy = [[[self class] allocWithZone:zone] init];
+	copy.productId = self.productId;
+	copy.name = self.name;
+	copy.descriptionHTML = self.descriptionHTML;
+	copy.buyURL = self.buyURL;
+	copy.regularPriceLabel = self.regularPriceLabel;
+	copy.regularPrice = self.regularPrice;
+	copy.maxRegularPriceLabel = self.maxRegularPriceLabel;
+	copy.maxRegularPrice = self.maxRegularPrice;
+	copy.salePriceLabel = self.salePriceLabel;
+	copy.salePrice = self.salePrice;
+	copy.maxSalePriceLabel = self.maxSalePriceLabel;
+	copy.maxSalePrice = self.maxSalePrice;
+	copy.currency = self.currency;
+	copy.brand = [self.brand copy];
+	copy.retailer = [self.retailer copy];
+	copy.seeMoreLabel = self.seeMoreLabel;
+	copy.seeMoreURL = self.seeMoreURL;
+	copy.categories = self.categories;
+	copy.localeId = self.localeId;
+	copy.colors = self.colors;
+	copy.sizes = self.sizes;
+	copy.inStock = self.inStock;
+	copy.extractDate = self.extractDate;
+	copy.image = [self.image copy];
+	copy.nativeCurrency = self.nativeCurrency;
+	copy.nativePriceLabel = self.nativePriceLabel;
+	copy.nativePrice = self.nativePrice;
+	copy.nativeMaxPriceLabel = self.nativeMaxPriceLabel;
+	copy.nativeMaxPrice = self.nativeMaxPrice;
+	copy.nativeSalePriceLabel = self.nativeSalePriceLabel;
+	copy.nativeSalePrice = self.nativeSalePrice;
+	copy.nativeMaxSalePriceLabel = self.nativeMaxSalePriceLabel;
+	copy.nativeMaxSalePrice = self.nativeMaxSalePrice;
+	return copy;
 }
 
 @end

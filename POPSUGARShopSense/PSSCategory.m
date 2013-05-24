@@ -83,4 +83,14 @@
 	return instance;
 }
 
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone
+{
+	typeof(self) copy = [super copyWithZone:zone];
+	copy.parentId = self.parentId;
+	copy.mutableChildCategorySet = [self.mutableChildCategorySet copy];
+	return copy;
+}
+
 @end

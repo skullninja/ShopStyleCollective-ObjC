@@ -256,4 +256,18 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	return self;
 }
 
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone
+{
+	typeof(self) copy = [[[self class] allocWithZone:zone] init];
+	copy.searchTerm = self.searchTerm;
+	copy.productCategoryId = self.productCategoryId;
+	copy.priceDropDate = self.priceDropDate;
+	copy.sort = self.sort;
+	copy.productFilterSet = [self.productFilterSet copy];
+	copy.showInternationalProducts = self.showInternationalProducts;
+	return copy;
+}
+
 @end

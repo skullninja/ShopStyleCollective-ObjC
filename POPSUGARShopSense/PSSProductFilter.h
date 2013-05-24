@@ -54,7 +54,7 @@ extern NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterTy
  `NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType);`
  */
 
-@interface PSSProductFilter : NSObject <NSCoding>
+@interface PSSProductFilter : NSObject <NSCoding, NSCopying>
 
 /**---------------------------------------------------------------------------------------
  * @name Filter Parameters

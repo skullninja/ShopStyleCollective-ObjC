@@ -116,4 +116,14 @@
 	return self;
 }
 
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone
+{
+	typeof(self) copy = [[[self class] allocWithZone:zone] init];
+	copy.categoryIdMap = [self.categoryIdMap copy];
+	copy.rootCategories = [self.rootCategories copy];
+	return copy;
+}
+
 @end

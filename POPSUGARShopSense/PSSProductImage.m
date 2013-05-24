@@ -198,4 +198,15 @@ CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size)
 	return imageURL;
 }
 
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone
+{
+	typeof(self) copy = [[[self class] allocWithZone:zone] init];
+	copy.imageId = self.imageId;
+	copy.URL = self.URL;
+	copy.imageURLsBySizeName = [self.imageURLsBySizeName copy];
+	return copy;
+}
+
 @end

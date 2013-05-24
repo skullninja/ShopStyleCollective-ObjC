@@ -27,7 +27,7 @@
 
 /** A collection categories found on shopstyle.com  */
 
-@interface PSSCategoryTree : NSObject <NSCoding>
+@interface PSSCategoryTree : NSObject <NSCoding, NSCopying>
 
 /** The top-level categories for the receiver. */
 @property (nonatomic, strong, readonly) NSArray *rootCategories;

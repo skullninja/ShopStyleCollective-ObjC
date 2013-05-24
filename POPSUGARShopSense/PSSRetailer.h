@@ -28,7 +28,7 @@
 
 /** A retailer found on shopstyle.com */
 
-@interface PSSRetailer : NSObject <NSCoding, PSSRemoteObject>
+@interface PSSRetailer : NSObject <NSCoding, NSCopying, PSSRemoteObject>
 
 /** The unique identifier of the receiver. */
 @property (nonatomic, copy, readonly) NSNumber *retailerId;

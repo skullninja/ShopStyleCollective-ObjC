@@ -39,7 +39,7 @@ extern NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort);
  and a product histogram. A `PSSProductFilter` can be used to further refine the results from these requests.
  */
 
-@interface PSSProductQuery : NSObject <NSCoding>
+@interface PSSProductQuery : NSObject <NSCoding, NSCopying>
 
 /**---------------------------------------------------------------------------------------
  * @name Creating Product Queries

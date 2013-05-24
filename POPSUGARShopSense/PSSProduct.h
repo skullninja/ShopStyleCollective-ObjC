@@ -30,7 +30,7 @@
 
 /** A product on shopstyle.com. */
 
-@interface PSSProduct : NSObject <NSCoding, PSSRemoteObject>
+@interface PSSProduct : NSObject <NSCoding, NSCopying, PSSRemoteObject>
 
 /**---------------------------------------------------------------------------------------
  * @name Product Properties

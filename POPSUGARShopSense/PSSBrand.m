@@ -118,4 +118,15 @@
 	}
 }
 
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone
+{
+	typeof(self) copy = [[[self class] allocWithZone:zone] init];
+	copy.brandId = self.brandId;
+	copy.name = self.name;
+	copy.browseURL = self.browseURL;
+	return copy;
+}
+
 @end
