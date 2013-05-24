@@ -112,7 +112,7 @@
 @property (nonatomic, copy, readonly) NSArray *categories;
 
 /** The locale of the retailer. */
-@property (nonatomic, copy, readonly) NSString *localeId;
+@property (nonatomic, copy, readonly) NSString *localeIdentifier;
 
 /** The colors available at the retailer.
  

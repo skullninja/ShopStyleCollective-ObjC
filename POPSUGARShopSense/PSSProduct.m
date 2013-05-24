@@ -48,7 +48,7 @@
 @property (nonatomic, copy, readwrite) NSString *seeMoreLabel;
 @property (nonatomic, copy, readwrite) NSURL *seeMoreURL;
 @property (nonatomic, copy, readwrite) NSArray *categories;
-@property (nonatomic, copy, readwrite) NSString *localeId;
+@property (nonatomic, copy, readwrite) NSString *localeIdentifier;
 @property (nonatomic, copy, readwrite) NSArray *colors;
 @property (nonatomic, copy, readwrite) NSArray *sizes;
 @property (nonatomic, assign, readwrite) BOOL inStock;
@@ -175,7 +175,7 @@
 		} else if ([key isEqualToString:@"description"]) {
 			self.descriptionHTML = [value description];
 		} else if ([key isEqualToString:@"locale"]) {
-			self.localeId = [value description];
+			self.localeIdentifier = [value description];
 		} else if ([key isEqualToString:@"id"]) {
 			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
 				self.productId = [NSNumber numberWithInteger:[[value description] integerValue]];
@@ -270,7 +270,7 @@
 	[encoder encodeObject:self.extractDate forKey:@"extractDate"];
 	[encoder encodeObject:self.image forKey:@"image"];
 	[encoder encodeBool:self.inStock forKey:@"inStock"];
-	[encoder encodeObject:self.localeId forKey:@"localeId"];
+	[encoder encodeObject:self.localeIdentifier forKey:@"localeIdentifier"];
 	[encoder encodeObject:self.maxRegularPrice forKey:@"maxRegularPrice"];
 	[encoder encodeObject:self.maxRegularPriceLabel forKey:@"maxRegularPriceLabel"];
 	[encoder encodeObject:self.maxSalePrice forKey:@"maxSalePrice"];
@@ -308,7 +308,7 @@
 		self.extractDate = [decoder decodeObjectForKey:@"extractDate"];
 		self.image = [decoder decodeObjectForKey:@"image"];
 		self.inStock = [decoder decodeBoolForKey:@"inStock"];
-		self.localeId = [decoder decodeObjectForKey:@"localeId"];
+		self.localeIdentifier = [decoder decodeObjectForKey:@"localeIdentifier"];
 		self.maxRegularPrice = [decoder decodeObjectForKey:@"maxRegularPrice"];
 		self.maxRegularPriceLabel = [decoder decodeObjectForKey:@"maxRegularPriceLabel"];
 		self.maxSalePrice = [decoder decodeObjectForKey:@"maxSalePrice"];
@@ -359,7 +359,7 @@
 	copy.seeMoreLabel = self.seeMoreLabel;
 	copy.seeMoreURL = self.seeMoreURL;
 	copy.categories = self.categories;
-	copy.localeId = self.localeId;
+	copy.localeIdentifier = self.localeIdentifier;
 	copy.colors = self.colors;
 	copy.sizes = self.sizes;
 	copy.inStock = self.inStock;
