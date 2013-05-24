@@ -119,7 +119,7 @@
 {
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
 	copy.name = self.name;
-	copy.image = [self.image copy];
+	copy.image = [self.image copyWithZone:zone];
 	return copy;
 }
 

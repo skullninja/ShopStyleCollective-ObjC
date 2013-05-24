@@ -354,8 +354,8 @@
 	copy.maxSalePriceLabel = self.maxSalePriceLabel;
 	copy.maxSalePrice = self.maxSalePrice;
 	copy.currency = self.currency;
-	copy.brand = [self.brand copy];
-	copy.retailer = [self.retailer copy];
+	copy.brand = [self.brand copyWithZone:zone];
+	copy.retailer = [self.retailer copyWithZone:zone];
 	copy.seeMoreLabel = self.seeMoreLabel;
 	copy.seeMoreURL = self.seeMoreURL;
 	copy.categories = self.categories;
@@ -364,7 +364,7 @@
 	copy.sizes = self.sizes;
 	copy.inStock = self.inStock;
 	copy.extractDate = self.extractDate;
-	copy.image = [self.image copy];
+	copy.image = [self.image copyWithZone:zone];
 	copy.nativeCurrency = self.nativeCurrency;
 	copy.nativePriceLabel = self.nativePriceLabel;
 	copy.nativePrice = self.nativePrice;

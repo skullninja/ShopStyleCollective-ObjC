@@ -121,8 +121,8 @@
 - (id)copyWithZone:(NSZone *)zone
 {
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
-	copy.categoryIDMap = [self.categoryIDMap copy];
-	copy.rootCategories = [self.rootCategories copy];
+	copy.categoryIDMap = [self.categoryIDMap mutableCopyWithZone:zone];
+	copy.rootCategories = [self.rootCategories copyWithZone:zone];
 	return copy;
 }
 

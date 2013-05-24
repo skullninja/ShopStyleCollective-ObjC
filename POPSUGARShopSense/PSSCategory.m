@@ -34,7 +34,7 @@ static NSString * const kParentCategoryIDKey = @"parentId";
 
 @interface PSSCategory ()
 
-@property (nonatomic, strong, readwrite) NSMutableOrderedSet *mutableChildCategorySet;
+@property (nonatomic, strong) NSMutableOrderedSet *mutableChildCategorySet;
 @property (nonatomic, copy, readwrite) NSString *parentCategoryID;
 
 @end
@@ -101,7 +101,7 @@ static NSString * const kParentCategoryIDKey = @"parentId";
 {
 	typeof(self) copy = [super copyWithZone:zone];
 	copy.parentCategoryID = self.parentCategoryID;
-	copy.mutableChildCategorySet = [self.mutableChildCategorySet copy];
+	copy.mutableChildCategorySet = [self.mutableChildCategorySet mutableCopyWithZone:zone];
 	return copy;
 }
 

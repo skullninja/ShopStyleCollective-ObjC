@@ -205,7 +205,7 @@ CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size)
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
 	copy.imageID = self.imageID;
 	copy.URL = self.URL;
-	copy.imageURLsBySizeName = [self.imageURLsBySizeName copy];
+	copy.imageURLsBySizeName = [self.imageURLsBySizeName mutableCopyWithZone:zone];
 	return copy;
 }
 

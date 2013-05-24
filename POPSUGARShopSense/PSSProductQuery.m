@@ -265,7 +265,7 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	copy.productCategoryID = self.productCategoryID;
 	copy.priceDropDate = self.priceDropDate;
 	copy.sort = self.sort;
-	copy.productFilterSet = [self.productFilterSet copy];
+	copy.productFilterSet = [[NSMutableSet alloc] initWithSet:self.productFilterSet copyItems:YES];
 	copy.showInternationalProducts = self.showInternationalProducts;
 	return copy;
 }

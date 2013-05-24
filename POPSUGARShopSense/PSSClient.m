@@ -628,10 +628,10 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 #pragma mark - NSCopying
 
 - (id)copyWithZone:(NSZone *)zone {
-    PSSClient *client = [super copyWithZone:zone];
-	client.currentLocale = self.currentLocale;
-	client.partnerID = self.partnerID;
-    return client;
+	typeof(self) copy = [super copyWithZone:zone];
+	copy.currentLocale = self.currentLocale;
+	copy.partnerID = self.partnerID;
+    return copy;
 }
 
 @end
