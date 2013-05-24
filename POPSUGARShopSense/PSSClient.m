@@ -25,11 +25,30 @@
 #import "AFJSONRequestOperation.h"
 #import "POPSUGARShopSense.h"
 
-static NSString * const kPSSBaseURLString = @"http://api.shopstyle.com/api/v2/";
 NSString * const PSSInvalidPartnerException = @"com.shopstyle.shopsense:InvalidPartnerException";
-static NSString *const kPSSPLISTPartnerIDKey = @"ShopSensePartnerID";
+NSString * const PSSInvalidLocaleException = @"com.shopstyle.shopsense:InvalidLocaleException";
+
+static NSString * const kShopSenseBaseURLString = @"http://api.shopstyle.com/api/v2/";
+static NSString * const kPListPartnerIDKey = @"ShopSensePartnerID";
+static NSString * const kDefaultLocaleIdentifier = @"en_US";
+static NSString * const kUSLocaleIdentifier = @"en_US";
+static NSString * const kUSSiteIdentifier = @"www.shopstyle.com";
+static NSString * const kUKLocaleIdentifier = @"en_GB";
+static NSString * const kUKSiteIdentifier = @"www.shopstyle.co.uk";
+static NSString * const kFRLocaleIdentifier = @"fr_FR";
+static NSString * const kFRSiteIdentifier = @"www.shopstyle.fr";
+static NSString * const kDELocaleIdentifier = @"de_DE";
+static NSString * const kDESiteIdentifier = @"www.shopstyle.de";
+static NSString * const kJPLocaleIdentifier = @"ja_JP";
+static NSString * const kJPSiteIdentifier = @"www.shopstyle.co.jp";
+static NSString * const kAULocaleIdentifier = @"en_AU";
+static NSString * const kAUSiteIdentifier = @"www.shopstyle.com.au";
+static NSString * const kCALocaleIdentifier = @"en_CA";
+static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 
 @interface PSSClient ()
+
+@property (nonatomic, copy, readwrite) NSLocale *currentLocale;
 
 - (void)makeRequestForEntityAtPath:(NSString *)entityPath parameters:(NSDictionary *)parameters success:(void (^)(AFHTTPRequestOperation *operation, NSDictionary *response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
@@ -41,7 +60,7 @@ static NSString *const kPSSPLISTPartnerIDKey = @"ShopSensePartnerID";
 
 + (NSURL *)defaultBaseURL
 {
-	return [NSURL URLWithString:kPSSBaseURLString];
+	return [NSURL URLWithString:kShopSenseBaseURLString];
 }
 
 #pragma mark - Shared Client
@@ -73,12 +92,108 @@ static NSString *const kPSSPLISTPartnerIDKey = @"ShopSensePartnerID";
 		return nil;
 	}
 	
+	[self sharedInit];
+	
+	return self;
+}
+
+- (void)sharedInit
+{
 	[self registerHTTPOperationClass:[AFJSONRequestOperation class]];
 	
 	// Accept HTTP Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
 	[self setDefaultHeader:@"Accept" value:@"application/json"];
 	
-	return self;
+	_currentLocale = [[self class] defaultLocale];
+}
+
+- (NSString *)description
+{
+	NSString *superString = [super description];
+	return [superString stringByReplacingCharactersInRange:NSMakeRange(superString.length - 1, 1) withString:[NSString stringWithFormat:@", partnerId: %@, currentLocal: %@>", self.partnerId, self.currentLocale.localeIdentifier]];
+}
+
+#pragma mark - Locales
+
++ (NSLocale *)defaultLocale
+{
+	return [[NSLocale alloc] initWithLocaleIdentifier:kDefaultLocaleIdentifier];
+}
+
++ (NSArray *)supportedLocales
+{
+	return [NSArray arrayWithObjects:[[NSLocale alloc] initWithLocaleIdentifier:kUSLocaleIdentifier], [[NSLocale alloc] initWithLocaleIdentifier:kUKLocaleIdentifier], [[NSLocale alloc] initWithLocaleIdentifier:kFRLocaleIdentifier], [[NSLocale alloc] initWithLocaleIdentifier:kDELocaleIdentifier], [[NSLocale alloc] initWithLocaleIdentifier:kJPLocaleIdentifier], [[NSLocale alloc] initWithLocaleIdentifier:kAULocaleIdentifier], [[NSLocale alloc] initWithLocaleIdentifier:kCALocaleIdentifier], nil];
+}
+
++ (BOOL)isSupportedLocale:(NSLocale *)locale
+{
+	if (locale == nil) {
+		return NO;
+	}
+	if ([[self supportedLocales] indexOfObject:locale] != NSNotFound) {
+		return YES;
+	}
+	return NO;
+}
+
++ (NSLocale *)supportedLocaleForLocale:(NSLocale *)locale
+{
+	if (locale == nil) {
+		return [self defaultLocale];
+	}
+	
+	if ([self isSupportedLocale:locale]) {
+		return locale;
+	}
+	
+	// we prefer the default locale if the language matches
+	NSString *language = [locale objectForKey:NSLocaleLanguageCode];
+	if ([[[self defaultLocale] objectForKey:NSLocaleLanguageCode] isEqualToString:language]) {
+		return [self defaultLocale];
+	}
+	for (NSLocale *supportedLocale in [self supportedLocales]) {
+		if ([[supportedLocale objectForKey:NSLocaleLanguageCode] isEqualToString:language]) {
+			return supportedLocale;
+		}
+	}
+	return [self defaultLocale];
+}
+
++ (NSString *)siteIdentifierForLocale:(NSLocale *)locale
+{
+	if (locale == nil) {
+		return nil;
+	}
+	if ([locale.localeIdentifier isEqualToString:kUSLocaleIdentifier]) {
+		return kUSSiteIdentifier;
+	} else if ([locale.localeIdentifier isEqualToString:kUKLocaleIdentifier]) {
+		return kUKSiteIdentifier;
+	} else if ([locale.localeIdentifier isEqualToString:kFRLocaleIdentifier]) {
+		return kFRSiteIdentifier;
+	} else if ([locale.localeIdentifier isEqualToString:kDELocaleIdentifier]) {
+		return kDESiteIdentifier;
+	} else if ([locale.localeIdentifier isEqualToString:kJPLocaleIdentifier]) {
+		return kJPSiteIdentifier;
+	} else if ([locale.localeIdentifier isEqualToString:kAULocaleIdentifier]) {
+		return kAUSiteIdentifier;
+	} else if ([locale.localeIdentifier isEqualToString:kCALocaleIdentifier]) {
+		return kCASiteIdentifier;
+	}
+	return nil;
+}
+
+- (void)setLocale:(NSLocale *)newLocale cancelAllOperations:(BOOL)cancelAllOperations
+{
+	if ([[self class] isSupportedLocale:newLocale] == NO) {
+		[[NSException exceptionWithName:PSSInvalidLocaleException
+								 reason:@"Locale must be one of supportedLocales."
+							   userInfo:nil]
+		 raise];
+	}
+	self.currentLocale = newLocale;
+	if (cancelAllOperations) {
+		[self.operationQueue cancelAllOperations];
+	}
 }
 
 #pragma mark - partnerId
@@ -87,7 +202,7 @@ static NSString *const kPSSPLISTPartnerIDKey = @"ShopSensePartnerID";
 {
 	if (_partnerId == nil) {
 		NSBundle* bundle = [NSBundle mainBundle];
-        _partnerId = [bundle objectForInfoDictionaryKey:kPSSPLISTPartnerIDKey];
+        _partnerId = [bundle objectForInfoDictionaryKey:kPListPartnerIDKey];
 	}
 	return _partnerId;
 }
@@ -98,7 +213,7 @@ static NSString *const kPSSPLISTPartnerIDKey = @"ShopSensePartnerID";
 {
 	if (self.partnerId == nil) {
 		[[NSException exceptionWithName:PSSInvalidPartnerException
-								 reason:[NSString stringWithFormat:@"%@: No Partner ID provided; either set partnerID or add a string valued key with the appropriate id named %@ to the bundle *.plist", NSStringFromClass([self class]), kPSSPLISTPartnerIDKey]
+								 reason:[NSString stringWithFormat:@"%@: No Partner ID provided; either set partnerID or add a string valued key with the appropriate id named %@ to the bundle *.plist", NSStringFromClass([self class]), kPListPartnerIDKey]
 							   userInfo:nil]
 		 raise];
 	}
@@ -107,6 +222,9 @@ static NSString *const kPSSPLISTPartnerIDKey = @"ShopSensePartnerID";
 	[mutableParameters addEntriesFromDictionary:parameters];
 	[mutableParameters setValue:self.partnerId forKey:@"pid"];
 	[mutableParameters setValue:@"true" forKey:@"suppressResponseCode"];
+	if ([self.currentLocale isEqual:[[self class] defaultLocale]] == NO && [[self class] siteIdentifierForLocale:self.currentLocale] != nil) {
+		[mutableParameters setValue:[[self class] siteIdentifierForLocale:self.currentLocale] forKey:@"site"];
+	}
 	
 	NSMutableURLRequest *request = [self requestWithMethod:@"GET" path:entityPath parameters:mutableParameters];
 	[request setValue:@"gzip, deflate" forHTTPHeaderField:@"Accept-Encoding"];
@@ -447,6 +565,37 @@ static NSString *const kPSSPLISTPartnerIDKey = @"ShopSensePartnerID";
 		return [PSSRetailer instanceFromRemoteRepresentation:representation];
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	self = [super initWithCoder:aDecoder];
+    if (!self) {
+        return nil;
+    }
+	
+	[self sharedInit];
+	
+    self.partnerId = [aDecoder decodeObjectForKey:@"partnerId"];
+    self.currentLocale = [aDecoder decodeObjectForKey:@"currentLocale"];
+	
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+    [aCoder encodeObject:self.partnerId forKey:@"partnerId"];
+    [aCoder encodeObject:self.currentLocale forKey:@"currentLocale"];
+}
+
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone {
+    PSSClient *client = [super copyWithZone:zone];
+	client.currentLocale = self.currentLocale;
+	client.partnerId = self.partnerId;
+    return client;
 }
 
 @end

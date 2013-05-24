@@ -99,6 +99,11 @@ extern NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort);
  */
 @property (nonatomic, assign) PSSProductQuerySort sort;
 
+/** YES to include products from outside the -[PSSClient currentLocale] in the response to requests using the receiver. Default is NO.
+ 
+ This has no effect in the en_US locale. */
+@property (nonatomic, assign) BOOL showInternationalProducts;
+
 /**---------------------------------------------------------------------------------------
  * @name Managing Product Filters
  *  ---------------------------------------------------------------------------------------

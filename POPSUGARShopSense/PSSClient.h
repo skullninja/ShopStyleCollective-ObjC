@@ -50,7 +50,7 @@ typedef enum {
  @warning before calling any methods don't forget to set partnerId!
  */
 
-@interface PSSClient : AFHTTPClient
+@interface PSSClient : AFHTTPClient <NSCopying, NSCoding>
 
 /**---------------------------------------------------------------------------------------
  * @name Setting up the Client
@@ -66,6 +66,29 @@ typedef enum {
 /** Unique API_KEY string that is assigned to the caller. This parameter must be present before making any requests.  
  Your Partner ID can be found on the https://shopsense.shopstyle.com/ API page. */
 @property (nonatomic, copy) NSString *partnerId;
+
+/**---------------------------------------------------------------------------------------
+ * @name International Support
+ *  ---------------------------------------------------------------------------------------
+ */
+
+/** The ShopSense Default Locale */
++ (NSLocale *)defaultLocale;
+
+/** The locales supported by ShopSense */
++ (NSArray *)supportedLocales;
+
+/** Test if a particular locale is supported by ShopSense */
++ (BOOL)isSupportedLocale:(NSLocale *)locale;
+
+/** Returns a suggestion for a supported locale given any valid local */
++ (NSLocale *)supportedLocaleForLocale:(NSLocale *)locale;
+
+/** Change the locale of all future requests made by the receiver and optionally cancel any pending operations */
+- (void)setLocale:(NSLocale *)newLocale cancelAllOperations:(BOOL)cancelAllOperations;
+
+/** The current locale in use by the receiver */
+@property (nonatomic, copy, readonly) NSLocale *currentLocale;
 
 /**---------------------------------------------------------------------------------------
  * @name Finding Products

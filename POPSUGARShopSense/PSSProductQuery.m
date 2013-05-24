@@ -73,6 +73,7 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	self = [super init];
 	if (self) {
 		_productFilterSet = [[NSMutableSet alloc] init];
+		_showInternationalProducts = NO;
 	}
 	return self;
 }
@@ -169,6 +170,10 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 			break;
 	}
 	
+	if (self.showInternationalProducts) {
+		[dictionary setObject:@"all" forKey:@"locales"];
+	}
+	
 	return dictionary;
 }
 
@@ -188,6 +193,7 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	hash ^= self.productCategoryId.hash;
 	hash ^= self.priceDropDate.hash;
 	hash ^= self.sort;
+	hash ^= self.showInternationalProducts ? 1 : 0;
 	return hash;
 }
 
@@ -221,6 +227,9 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	if (productQuery.sort != self.sort) {
 		return NO;
 	}
+	if (productQuery.showInternationalProducts != self.showInternationalProducts) {
+		return NO;
+	}
 	
 	return YES;
 }
@@ -234,6 +243,7 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	[encoder encodeObject:self.priceDropDate forKey:@"priceDropDate"];
 	[encoder encodeInteger:self.sort forKey:@"sort"];
 	[encoder encodeObject:self.productFilterSet forKey:@"productFilterSet"];
+	[encoder encodeBool:self.showInternationalProducts forKey:@"showInternationalProducts"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -244,6 +254,7 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 		self.priceDropDate = [decoder decodeObjectForKey:@"priceDropDate"];
 		self.sort = [decoder decodeIntegerForKey:@"sort"];
 		self.productFilterSet = [decoder decodeObjectForKey:@"productFilterSet"];
+		self.showInternationalProducts = [decoder decodeBoolForKey:@"showInternationalProducts"];
 	}
 	return self;
 }

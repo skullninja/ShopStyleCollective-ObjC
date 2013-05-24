@@ -38,8 +38,10 @@
 	[super viewDidLoad];
 	self.title = @"Search: 'Red Dress'";
 	
+	PSSProductQuery *productQuery = [[PSSProductQuery alloc] init];
+	productQuery.searchTerm = @"red dress";
 	__weak typeof(self) weakSelf = self;
-	[[PSSClient sharedClient] searchProductsWithTerm:@"Red Dress" offset:nil limit:nil success:^(NSUInteger totalCount, NSArray *products) {
+	[[PSSClient sharedClient] searchProductsWithQuery:productQuery offset:nil limit:nil success:^(NSUInteger totalCount, NSArray *products) {
 		weakSelf.products = products;
 		[weakSelf.tableView reloadData];
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {

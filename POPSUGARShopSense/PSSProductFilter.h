@@ -111,7 +111,7 @@ extern NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterTy
 @property (nonatomic, copy) NSNumber *productCount;
 
 /**---------------------------------------------------------------------------------------
- * @name Comparing Product Filters
+ * @name Creating Product Filters
  *  ---------------------------------------------------------------------------------------
  */
 
