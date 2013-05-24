@@ -62,23 +62,6 @@
 	return ([self.name isEqualToString:[(PSSProductColor *)object name]]);
 }
 
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)encoder
-{
-	[encoder encodeObject:self.name forKey:@"name"];
-	[encoder encodeObject:self.image forKey:@"image"];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-	if ((self = [super init])) {
-		self.name = [decoder decodeObjectForKey:@"name"];
-		self.image = [decoder decodeObjectForKey:@"image"];
-	}
-	return self;
-}
-
 #pragma mark - PSSRemoteObject
 
 + (instancetype)instanceFromRemoteRepresentation:(NSDictionary *)representation
@@ -111,6 +94,23 @@
 		return [PSSProductImage instanceFromRemoteRepresentation:representation];
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[encoder encodeObject:self.name forKey:@"name"];
+	[encoder encodeObject:self.image forKey:@"image"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	if ((self = [super init])) {
+		self.name = [decoder decodeObjectForKey:@"name"];
+		self.image = [decoder decodeObjectForKey:@"image"];
+	}
+	return self;
 }
 
 #pragma mark - NSCopying

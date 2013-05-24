@@ -34,18 +34,18 @@
 
 /** Initializes a category tree.
  
- @param rootCategoryId The category identifier to consider the parent of the receiver.
+ @param rootCategoryID The category identifier to consider the parent of the receiver.
  @param categories An array of `PSSCategory` objects to build into the receiver.
  */
-- (id)initWithRootId:(NSString *)rootCategoryId categories:(NSArray *)categories;
+- (id)initWithRootID:(NSString *)rootCategoryID categories:(NSArray *)categories;
 
 /** All categories that are part of the receiver in a flat array. */
 - (NSArray *)allCategories;
 
 /** Find a specific category in the receiver by it's identifier.
  
- @param categoryId A category identifier.
+ @param categoryID A category identifier.
  */
-- (PSSCategory *)categoryWithId:(NSString *)categoryId;
+- (PSSCategory *)categoryWithID:(NSString *)categoryID;
 
 @end

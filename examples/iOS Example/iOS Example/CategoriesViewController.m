@@ -48,7 +48,7 @@
 		self.title = @"Categories";
 		
 		__weak typeof(self) weakSelf = self;
-		[[PSSClient sharedClient] categoryTreeFromCategoryId:nil depth:nil success:^(PSSCategoryTree *categoryTree) {
+		[[PSSClient sharedClient] categoryTreeFromCategoryID:nil depth:nil success:^(PSSCategoryTree *categoryTree) {
 			weakSelf.categories = [categoryTree rootCategories];
 			[weakSelf.tableView reloadData];
 		} failure:^(AFHTTPRequestOperation *operation, NSError *error) {

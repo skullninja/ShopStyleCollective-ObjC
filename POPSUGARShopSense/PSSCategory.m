@@ -30,10 +30,12 @@
 
 @end
 
+static NSString * const kParentCategoryIDKey = @"parentId";
+
 @interface PSSCategory ()
 
 @property (nonatomic, strong, readwrite) NSMutableOrderedSet *mutableChildCategorySet;
-@property (nonatomic, copy, readwrite) NSString *parentId;
+@property (nonatomic, copy, readwrite) NSString *parentCategoryID;
 
 @end
 
@@ -53,24 +55,6 @@
 	return _mutableChildCategorySet;
 }
 
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)encoder
-{
-	[super encodeWithCoder:encoder];
-	[encoder encodeObject:self.parentId forKey:@"parentId"];
-	[encoder encodeObject:self.mutableChildCategorySet forKey:@"mutableChildCategorySet"];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-	if ((self = [super initWithCoder:decoder])) {
-		self.parentId = [decoder decodeObjectForKey:@"parentId"];
-		self.mutableChildCategorySet = [decoder decodeObjectForKey:@"mutableChildCategorySet"];
-	}
-	return self;
-}
-
 #pragma mark - PSSRemoteObject
 
 + (instancetype)instanceFromRemoteRepresentation:(NSDictionary *)representation
@@ -83,12 +67,40 @@
 	return instance;
 }
 
+- (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary
+{
+	NSMutableDictionary *copyDictionary = [aDictionary mutableCopy];
+	if ([copyDictionary objectForKey:kParentCategoryIDKey] != nil) {
+		self.parentCategoryID = [copyDictionary objectForKey:kParentCategoryIDKey];
+		[copyDictionary removeObjectForKey:kParentCategoryIDKey];
+	}
+	[super setPropertiesWithDictionary:copyDictionary];
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[super encodeWithCoder:encoder];
+	[encoder encodeObject:self.parentCategoryID forKey:@"parentCategoryID"];
+	[encoder encodeObject:self.mutableChildCategorySet forKey:@"mutableChildCategorySet"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	if ((self = [super initWithCoder:decoder])) {
+		self.parentCategoryID = [decoder decodeObjectForKey:@"parentCategoryID"];
+		self.mutableChildCategorySet = [decoder decodeObjectForKey:@"mutableChildCategorySet"];
+	}
+	return self;
+}
+
 #pragma mark - NSCopying
 
 - (id)copyWithZone:(NSZone *)zone
 {
 	typeof(self) copy = [super copyWithZone:zone];
-	copy.parentId = self.parentId;
+	copy.parentCategoryID = self.parentCategoryID;
 	copy.mutableChildCategorySet = [self.mutableChildCategorySet copy];
 	return copy;
 }

@@ -50,7 +50,7 @@ extern NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort);
 + (instancetype)productQueryWithSearchTerm:(NSString *)searchTearm;
 
 /** A convenience method to great a PSSProductFilter initialized with a product category identifier. */
-+ (instancetype)productQueryWithCategoryId:(NSString *)productCategoryId;
++ (instancetype)productQueryWithCategoryID:(NSString *)productCategoryID;
 
 /**---------------------------------------------------------------------------------------
  * @name Query Parameters
@@ -62,10 +62,10 @@ extern NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort);
  This is also known as `fts` on the ShopSense API documentation. */
 @property (nonatomic, copy) NSString *searchTerm;
 
-/** A product category identifier. Only products within the category will be returned. This should be a `PSSProductCategory categoryId`.  
+/** A product category identifier. Only products within the category will be returned. This should be a `PSSProductCategory categoryID`.  
  
   This is also known as `cat` on the ShopSense API documentation. */
-@property (nonatomic, copy) NSString *productCategoryId;
+@property (nonatomic, copy) NSString *productCategoryID;
 
 /** A price drop date, if present, limits the results to products whose price has dropped since the given date.  
  

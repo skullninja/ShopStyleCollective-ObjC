@@ -27,40 +27,40 @@
 @interface PSSCategory (PRIVATE_CATEGORY_EXT)
 
 - (NSMutableOrderedSet *)mutableChildCategorySet;
-- (NSString *)parentId;
+- (NSString *)parentCategoryID;
 
 @end
 
 @interface PSSCategoryTree ()
 
-@property (nonatomic, strong) NSMutableDictionary *categoryIdMap;
+@property (nonatomic, strong) NSMutableDictionary *categoryIDMap;
 @property (nonatomic, strong, readwrite) NSArray *rootCategories;
 
 @end
 
 @implementation PSSCategoryTree
 
-- (id)initWithRootId:(NSString *)rootCategoryId categories:(NSArray *)categories
+- (id)initWithRootID:(NSString *)rootCategoryID categories:(NSArray *)categories
 {
 	self = [super init];
 	if (self) {
-		NSMutableDictionary *mutableCategoryIdMap = [[NSMutableDictionary alloc] initWithCapacity:categories.count];
+		NSMutableDictionary *mutableCategoryIDMap = [[NSMutableDictionary alloc] initWithCapacity:categories.count];
 		NSMutableArray *mutableRootCategories = [[NSMutableArray alloc] init];
 		for (PSSCategory *category in categories) {
-			[mutableCategoryIdMap setObject:category forKey:category.categoryId];
-			if ([category.parentId isEqualToString:rootCategoryId]) {
+			[mutableCategoryIDMap setObject:category forKey:category.categoryID];
+			if ([category.parentCategoryID isEqualToString:rootCategoryID]) {
 				[mutableRootCategories addObject:category];
 			}
 		}
 		for (PSSCategory *category in categories) {
-			if (category.parentId != nil && ![category.parentId isEqualToString:rootCategoryId]) {
-				PSSCategory *parent = [mutableCategoryIdMap objectForKey:category.parentId];
+			if (category.parentCategoryID != nil && ![category.parentCategoryID isEqualToString:rootCategoryID]) {
+				PSSCategory *parent = [mutableCategoryIDMap objectForKey:category.parentCategoryID];
 				if (parent != nil) {
 					[parent.mutableChildCategorySet addObject:category];
 				}
 			}
 		}
-		_categoryIdMap = mutableCategoryIdMap;
+		_categoryIDMap = mutableCategoryIDMap;
 		_rootCategories = mutableRootCategories;
 	}
 	return self;
@@ -68,12 +68,12 @@
 
 - (NSArray *)allCategories
 {
-	return self.categoryIdMap.allValues;
+	return self.categoryIDMap.allValues;
 }
 
-- (PSSCategory *)categoryWithId:(NSString *)categoryId
+- (PSSCategory *)categoryWithID:(NSString *)categoryID
 {
-	return [self.categoryIdMap objectForKey:categoryId];
+	return [self.categoryIDMap objectForKey:categoryID];
 }
 
 #pragma mark - NSObject
@@ -85,7 +85,7 @@
 
 - (NSUInteger)hash
 {
-	return self.categoryIdMap.hash;
+	return self.categoryIDMap.hash;
 }
 
 - (BOOL)isEqual:(id)object
@@ -96,21 +96,21 @@
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.categoryIdMap isEqualToDictionary:[(PSSCategoryTree *)object categoryIdMap]]);
+	return ([self.categoryIDMap isEqualToDictionary:[(PSSCategoryTree *)object categoryIDMap]]);
 }
 
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-	[encoder encodeObject:self.categoryIdMap forKey:@"categoryIdMap"];
+	[encoder encodeObject:self.categoryIDMap forKey:@"categoryIDMap"];
 	[encoder encodeObject:self.rootCategories forKey:@"rootCategories"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [super init])) {
-		self.categoryIdMap = [decoder decodeObjectForKey:@"categoryIdMap"];
+		self.categoryIDMap = [decoder decodeObjectForKey:@"categoryIDMap"];
 		self.rootCategories = [decoder decodeObjectForKey:@"rootCategories"];
 	}
 	return self;
@@ -121,7 +121,7 @@
 - (id)copyWithZone:(NSZone *)zone
 {
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
-	copy.categoryIdMap = [self.categoryIdMap copy];
+	copy.categoryIDMap = [self.categoryIDMap copy];
 	copy.rootCategories = [self.rootCategories copy];
 	return copy;
 }

@@ -26,7 +26,7 @@
 @interface PSSProductFilter ()
 
 @property (nonatomic, assign, readwrite) PSSProductFilterType type;
-@property (nonatomic, copy, readwrite) NSNumber *filterId;
+@property (nonatomic, copy, readwrite) NSNumber *filterID;
 
 @end
 
@@ -55,18 +55,18 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 
 #pragma mark - Init
 
-+ (instancetype)filterWithType:(PSSProductFilterType)type filterId:(NSNumber *)filterId
++ (instancetype)filterWithType:(PSSProductFilterType)type filterID:(NSNumber *)filterID
 {
-	PSSProductFilter *filter = [[PSSProductFilter alloc] initWithType:type filterId:filterId];
+	PSSProductFilter *filter = [[PSSProductFilter alloc] initWithType:type filterID:filterID];
 	return filter;
 }
 
-- (id)initWithType:(PSSProductFilterType)type filterId:(NSNumber *)filterId
+- (id)initWithType:(PSSProductFilterType)type filterID:(NSNumber *)filterID
 {
-	NSParameterAssert(filterId != nil);
+	NSParameterAssert(filterID != nil);
 	self = [super init];
 	if (self) {
-		_filterId = [filterId copy];
+		_filterID = [filterID copy];
 		_type = type;
 	}
 	return self;
@@ -107,7 +107,7 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 		default:
 			break;
 	}
-	return [prefix stringByAppendingFormat:@"%d", self.filterId.integerValue];
+	return [prefix stringByAppendingFormat:@"%d", self.filterID.integerValue];
 }
 
 #pragma mark - NSObject
@@ -119,7 +119,7 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 
 - (NSUInteger)hash
 {
-	return ((self.filterId.hash << sizeof(PSSProductFilterType)) ^ self.type);
+	return ((self.filterID.hash << sizeof(PSSProductFilterType)) ^ self.type);
 }
 
 - (BOOL)isEqual:(id)object
@@ -130,7 +130,7 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.filterId isEqualToNumber:[(PSSProductFilter *)object filterId]] && self.type == [(PSSProductFilter *)object type]);
+	return ([self.filterID isEqualToNumber:[(PSSProductFilter *)object filterID]] && self.type == [(PSSProductFilter *)object type]);
 }
 
 #pragma mark - NSCoding
@@ -138,7 +138,7 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
 	[encoder encodeObject:self.name forKey:@"name"];
-	[encoder encodeObject:self.filterId forKey:@"filterId"];
+	[encoder encodeObject:self.filterID forKey:@"filterID"];
 	[encoder encodeObject:self.browseURLString forKey:@"browseURLString"];
 	[encoder encodeInteger:self.type forKey:@"type"];
 	[encoder encodeObject:self.productCount forKey:@"productCount"];
@@ -148,7 +148,7 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 {
 	if ((self = [super init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
-		self.filterId = [decoder decodeObjectForKey:@"filterId"];
+		self.filterID = [decoder decodeObjectForKey:@"filterID"];
 		self.browseURLString = [decoder decodeObjectForKey:@"browseURLString"];
 		self.type = [decoder decodeIntegerForKey:@"type"];
 		self.productCount = [decoder decodeObjectForKey:@"productCount"];
@@ -161,7 +161,7 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 - (id)copyWithZone:(NSZone *)zone
 {
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
-	copy.filterId = self.filterId;
+	copy.filterID = self.filterID;
 	copy.type = self.type;
 	copy.name = self.name;
 	copy.browseURLString = self.browseURLString;

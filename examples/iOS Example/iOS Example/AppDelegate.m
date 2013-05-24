@@ -31,7 +31,7 @@
 {
 	#warning You must sign up for a Partner ID at http://shopsense.shopstyle.com/
 	/// alternativly you can add a string valued key with the appropriate id named ShopSensePartnerID to the bundle *.plist
-	[[PSSClient sharedClient] setPartnerId:<#Partner ID#>];
+	[[PSSClient sharedClient] setPartnerID:<#Partner ID#>];
 	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	
 	MasterViewController *masterViewController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];

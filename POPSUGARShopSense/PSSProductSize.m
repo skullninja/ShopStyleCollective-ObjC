@@ -60,21 +60,6 @@
 	return ([self.name isEqualToString:[(PSSProductSize *)object name]]);
 }
 
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)encoder
-{
-	[encoder encodeObject:self.name forKey:@"name"];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-	if ((self = [super init])) {
-		self.name = [decoder decodeObjectForKey:@"name"];
-	}
-	return self;
-}
-
 #pragma mark - PSSRemoteObject
 
 + (instancetype)instanceFromRemoteRepresentation:(NSDictionary *)representation
@@ -93,6 +78,21 @@
 		id value = [aDictionary valueForKey:key];
 		[self setValue:value forKey:key];
 	}
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[encoder encodeObject:self.name forKey:@"name"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	if ((self = [super init])) {
+		self.name = [decoder decodeObjectForKey:@"name"];
+	}
+	return self;
 }
 
 #pragma mark - NSCopying

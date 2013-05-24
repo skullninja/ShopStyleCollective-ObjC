@@ -61,10 +61,10 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	return instance;
 }
 
-+ (instancetype)productQueryWithCategoryId:(NSString *)productCategoryId
++ (instancetype)productQueryWithCategoryID:(NSString *)productCategoryID
 {
 	PSSProductQuery *instance = [[PSSProductQuery alloc] init];
-	instance.productCategoryId = productCategoryId;
+	instance.productCategoryID = productCategoryID;
 	return instance;
 }
 
@@ -135,8 +135,8 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	if (self.searchTerm && self.searchTerm.length > 0) {
 		[dictionary setObject:self.searchTerm forKey:@"fts"];
 	}
-	if (self.productCategoryId && self.productCategoryId.length > 0) {
-		[dictionary setObject:self.productCategoryId forKey:@"cat"];
+	if (self.productCategoryID && self.productCategoryID.length > 0) {
+		[dictionary setObject:self.productCategoryID forKey:@"cat"];
 	}
 	
 	if (self.productFilterSet.count > 0) {
@@ -187,7 +187,7 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	NSUInteger hash = 0;
 	hash ^= self.productFilterSet.hash;
 	hash ^= self.searchTerm.hash;
-	hash ^= self.productCategoryId.hash;
+	hash ^= self.productCategoryID.hash;
 	hash ^= self.priceDropDate.hash;
 	hash ^= self.sort;
 	hash ^= self.showInternationalProducts ? 1 : 0;
@@ -215,7 +215,7 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	if (![productQuery.searchTerm isEqualToString:self.searchTerm]) {
 		return NO;
 	}
-	if (![productQuery.productCategoryId isEqualToString:self.productCategoryId]) {
+	if (![productQuery.productCategoryID isEqualToString:self.productCategoryID]) {
 		return NO;
 	}
 	if (![productQuery.priceDropDate isEqualToDate:self.priceDropDate]) {
@@ -236,7 +236,7 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
 	[encoder encodeObject:self.searchTerm forKey:@"searchTerm"];
-	[encoder encodeObject:self.productCategoryId forKey:@"productCategoryId"];
+	[encoder encodeObject:self.productCategoryID forKey:@"productCategoryID"];
 	[encoder encodeObject:self.priceDropDate forKey:@"priceDropDate"];
 	[encoder encodeInteger:self.sort forKey:@"sort"];
 	[encoder encodeObject:self.productFilterSet forKey:@"productFilterSet"];
@@ -247,7 +247,7 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 {
 	if ((self = [super init])) {
 		self.searchTerm = [decoder decodeObjectForKey:@"searchTerm"];
-		self.productCategoryId = [decoder decodeObjectForKey:@"productCategoryId"];
+		self.productCategoryID = [decoder decodeObjectForKey:@"productCategoryID"];
 		self.priceDropDate = [decoder decodeObjectForKey:@"priceDropDate"];
 		self.sort = [decoder decodeIntegerForKey:@"sort"];
 		self.productFilterSet = [decoder decodeObjectForKey:@"productFilterSet"];
@@ -262,7 +262,7 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 {
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
 	copy.searchTerm = self.searchTerm;
-	copy.productCategoryId = self.productCategoryId;
+	copy.productCategoryID = self.productCategoryID;
 	copy.priceDropDate = self.priceDropDate;
 	copy.sort = self.sort;
 	copy.productFilterSet = [self.productFilterSet copy];

@@ -29,7 +29,7 @@
 @interface PSSProductCategory : NSObject <NSCoding, NSCopying, PSSRemoteObject>
 
 /** The unique identifier of the receiver. See `PSSCategoryTree` to understand it's position in the hierarchy. */
-@property (nonatomic, copy, readonly) NSString *categoryId;
+@property (nonatomic, copy, readonly) NSString *categoryID;
 
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;

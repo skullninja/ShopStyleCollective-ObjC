@@ -28,7 +28,7 @@ static NSString * const kOriginalImageURLKey = @"Original";
 
 @interface PSSProductImage ()
 
-@property (nonatomic, copy, readwrite) NSString *imageId;
+@property (nonatomic, copy, readwrite) NSString *imageID;
 @property (nonatomic, copy, readwrite) NSURL *URL;
 @property (nonatomic, strong) NSMutableDictionary *imageURLsBySizeName;
 
@@ -102,7 +102,7 @@ CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size)
 
 - (NSString *)description
 {
-	return [[super description] stringByAppendingFormat:@" %@: %@", self.imageId, self.URL.absoluteString];
+	return [[super description] stringByAppendingFormat:@" %@: %@", self.imageID, self.URL.absoluteString];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -112,7 +112,7 @@ CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size)
 
 - (NSUInteger)hash
 {
-	return self.imageId.hash;
+	return self.imageID.hash;
 }
 
 - (BOOL)isEqual:(id)object
@@ -123,26 +123,7 @@ CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size)
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.imageId isEqualToString:[(PSSProductImage *)object imageId]]);
-}
-
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)encoder
-{
-	[encoder encodeObject:self.imageURLsBySizeName forKey:@"imageURLsBySizeName"];
-	[encoder encodeObject:self.URL forKey:@"URL"];
-	[encoder encodeObject:self.imageId forKey:@"imageId"];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-	if ((self = [super init])) {
-		self.imageURLsBySizeName = [decoder decodeObjectForKey:@"imageURLsBySizeName"];
-		self.URL = [decoder decodeObjectForKey:@"URL"];
-		self.imageId = [decoder decodeObjectForKey:@"imageId"];
-	}
-	return self;
+	return ([self.imageID isEqualToString:[(PSSProductImage *)object imageID]]);
 }
 
 #pragma mark - PSSRemoteObject
@@ -163,7 +144,7 @@ CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size)
 		id value = [aDictionary valueForKey:key];
 		if ([key isEqualToString:@"id"]) {
 			if ([value isKindOfClass:[NSString class]]) {
-				self.imageId = [value description];
+				self.imageID = [value description];
 			}
 		} else if ([key isEqualToString:@"sizes"]) {
 			if ([value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
@@ -198,12 +179,31 @@ CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size)
 	return imageURL;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[encoder encodeObject:self.imageURLsBySizeName forKey:@"imageURLsBySizeName"];
+	[encoder encodeObject:self.URL forKey:@"URL"];
+	[encoder encodeObject:self.imageID forKey:@"imageID"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	if ((self = [super init])) {
+		self.imageURLsBySizeName = [decoder decodeObjectForKey:@"imageURLsBySizeName"];
+		self.URL = [decoder decodeObjectForKey:@"URL"];
+		self.imageID = [decoder decodeObjectForKey:@"imageID"];
+	}
+	return self;
+}
+
 #pragma mark - NSCopying
 
 - (id)copyWithZone:(NSZone *)zone
 {
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
-	copy.imageId = self.imageId;
+	copy.imageID = self.imageID;
 	copy.URL = self.URL;
 	copy.imageURLsBySizeName = [self.imageURLsBySizeName copy];
 	return copy;

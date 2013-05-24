@@ -26,7 +26,7 @@
 
 @interface PSSRetailer ()
 
-@property (nonatomic, copy, readwrite) NSNumber *retailerId;
+@property (nonatomic, copy, readwrite) NSNumber *retailerID;
 @property (nonatomic, copy, readwrite) NSString *name;
 @property (nonatomic, copy, readwrite) NSURL *browseURL;
 @property (nonatomic, assign, readwrite) BOOL deeplinkSupport;
@@ -39,14 +39,14 @@
 
 - (PSSProductFilter *)productFilter
 {
-	return [PSSProductFilter filterWithType:PSSProductFilterTypeRetailer filterId:self.retailerId];
+	return [PSSProductFilter filterWithType:PSSProductFilterTypeRetailer filterID:self.retailerID];
 }
 
 #pragma mark - NSObject
 
 - (NSString *)description
 {
-	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.retailerId];
+	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.retailerID];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -56,7 +56,7 @@
 
 - (NSUInteger)hash
 {
-	return self.retailerId.hash;
+	return self.retailerID.hash;
 }
 
 - (BOOL)isEqual:(id)object
@@ -67,28 +67,7 @@
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.retailerId isEqualToNumber:[(PSSRetailer *)object retailerId]]);
-}
-
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)encoder
-{
-	[encoder encodeObject:self.name forKey:@"name"];
-	[encoder encodeObject:self.retailerId forKey:@"retailerId"];
-	[encoder encodeObject:self.browseURL forKey:@"browseURL"];
-	[encoder encodeObject:[NSNumber numberWithBool:self.deeplinkSupport] forKey:@"deeplinkSupport"];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-	if ((self = [super init])) {
-		self.name = [decoder decodeObjectForKey:@"name"];
-		self.retailerId = [decoder decodeObjectForKey:@"retailerId"];
-		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
-		self.deeplinkSupport = [(NSNumber *)[decoder decodeObjectForKey:@"deeplinkSupport"] boolValue];
-	}
-	return self;
+	return ([self.retailerID isEqualToNumber:[(PSSRetailer *)object retailerID]]);
 }
 
 #pragma mark - PSSRemoteObject
@@ -109,7 +88,7 @@
 		id value = [aDictionary valueForKey:key];
 		if ([key isEqualToString:@"id"]) {
 			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
-				self.retailerId = [NSNumber numberWithInteger:[[value description] integerValue]];
+				self.retailerID = [NSNumber numberWithInteger:[[value description] integerValue]];
 			}
 		} else if ([key isEqualToString:@"url"]) {
 			if ([value isKindOfClass:[NSString class]]) {
@@ -121,12 +100,33 @@
 	}
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[encoder encodeObject:self.name forKey:@"name"];
+	[encoder encodeObject:self.retailerID forKey:@"retailerID"];
+	[encoder encodeObject:self.browseURL forKey:@"browseURL"];
+	[encoder encodeObject:[NSNumber numberWithBool:self.deeplinkSupport] forKey:@"deeplinkSupport"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	if ((self = [super init])) {
+		self.name = [decoder decodeObjectForKey:@"name"];
+		self.retailerID = [decoder decodeObjectForKey:@"retailerID"];
+		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
+		self.deeplinkSupport = [(NSNumber *)[decoder decodeObjectForKey:@"deeplinkSupport"] boolValue];
+	}
+	return self;
+}
+
 #pragma mark - NSCopying
 
 - (id)copyWithZone:(NSZone *)zone
 {
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
-	copy.retailerId = self.retailerId;
+	copy.retailerID = self.retailerID;
 	copy.name = self.name;
 	copy.browseURL = self.browseURL;
 	copy.deeplinkSupport = self.deeplinkSupport;

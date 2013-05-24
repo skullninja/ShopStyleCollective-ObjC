@@ -26,7 +26,7 @@
 
 @interface PSSColor ()
 
-@property (nonatomic, copy, readwrite) NSNumber *colorId;
+@property (nonatomic, copy, readwrite) NSNumber *colorID;
 @property (nonatomic, copy, readwrite) NSString *name;
 @property (nonatomic, copy, readwrite) NSURL *browseURL;
 
@@ -38,14 +38,14 @@
 
 - (PSSProductFilter *)productFilter
 {
-	return [PSSProductFilter filterWithType:PSSProductFilterTypeColor filterId:self.colorId];
+	return [PSSProductFilter filterWithType:PSSProductFilterTypeColor filterID:self.colorID];
 }
 
 #pragma mark - NSObject
 
 - (NSString *)description
 {
-	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.colorId];
+	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.colorID];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -55,7 +55,7 @@
 
 - (NSUInteger)hash
 {
-	return self.colorId.hash;
+	return self.colorID.hash;
 }
 
 - (BOOL)isEqual:(id)object
@@ -66,26 +66,7 @@
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.colorId isEqualToNumber:[(PSSColor *)object colorId]]);
-}
-
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)encoder
-{
-	[encoder encodeObject:self.name forKey:@"name"];
-	[encoder encodeObject:self.colorId forKey:@"colorId"];
-	[encoder encodeObject:self.browseURL forKey:@"browseURL"];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-	if ((self = [super init])) {
-		self.name = [decoder decodeObjectForKey:@"name"];
-		self.colorId = [decoder decodeObjectForKey:@"colorId"];
-		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
-	}
-	return self;
+	return ([self.colorID isEqualToNumber:[(PSSColor *)object colorID]]);
 }
 
 #pragma mark - PSSRemoteObject
@@ -106,7 +87,7 @@
 		id value = [aDictionary valueForKey:key];
 		if ([key isEqualToString:@"id"]) {
 			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
-				self.colorId = [NSNumber numberWithInteger:[[value description] integerValue]];
+				self.colorID = [NSNumber numberWithInteger:[[value description] integerValue]];
 			}
 		} else if ([key isEqualToString:@"url"]) {
 			if ([value isKindOfClass:[NSString class]]) {
@@ -118,12 +99,31 @@
 	}
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[encoder encodeObject:self.name forKey:@"name"];
+	[encoder encodeObject:self.colorID forKey:@"colorID"];
+	[encoder encodeObject:self.browseURL forKey:@"browseURL"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	if ((self = [super init])) {
+		self.name = [decoder decodeObjectForKey:@"name"];
+		self.colorID = [decoder decodeObjectForKey:@"colorID"];
+		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
+	}
+	return self;
+}
+
 #pragma mark - NSCopying
 
 - (id)copyWithZone:(NSZone *)zone
 {
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
-	copy.colorId = self.colorId;
+	copy.colorID = self.colorID;
 	copy.name = self.name;
 	copy.browseURL = self.browseURL;
 	return copy;

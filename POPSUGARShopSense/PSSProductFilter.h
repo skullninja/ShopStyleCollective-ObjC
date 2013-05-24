@@ -64,9 +64,9 @@ extern NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterTy
 /** The identifier in the receiver's `type`. 
  
  You must combine with `type` to uniquely identify the receiver. */
-@property (nonatomic, copy, readonly) NSNumber *filterId;
+@property (nonatomic, copy, readonly) NSNumber *filterID;
 
-/** The filter type of the receiver. Combine with `filterId` to uniquely identify the receiver.  
+/** The filter type of the receiver. Combine with `filterID` to uniquely identify the receiver.
  
  The currently supported types are:
  
@@ -115,14 +115,14 @@ extern NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterTy
  *  ---------------------------------------------------------------------------------------
  */
 
-/** Creating a `PSSProductFilter` requires the type and filterId. */
-- (id)initWithType:(PSSProductFilterType)type filterId:(NSNumber *)filterId;
+/** Creating a `PSSProductFilter` requires the type and filterID. */
+- (id)initWithType:(PSSProductFilterType)type filterID:(NSNumber *)filterID;
 
-/** A convenience method as an alternative to alloc and `initWithType:filterId:`
+/** A convenience method as an alternative to alloc and `initWithType:filterID:`
  
- @see initWithType:filterId:
+ @see initWithType:filterID:
  */
-+ (instancetype)filterWithType:(PSSProductFilterType)type filterId:(NSNumber *)filterId;
++ (instancetype)filterWithType:(PSSProductFilterType)type filterID:(NSNumber *)filterID;
 
 /**---------------------------------------------------------------------------------------
  * @name Converting to URL Parameters

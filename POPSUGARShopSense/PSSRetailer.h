@@ -31,7 +31,7 @@
 @interface PSSRetailer : NSObject <NSCoding, NSCopying, PSSRemoteObject>
 
 /** The unique identifier of the receiver. */
-@property (nonatomic, copy, readonly) NSNumber *retailerId;
+@property (nonatomic, copy, readonly) NSNumber *retailerID;
 
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;

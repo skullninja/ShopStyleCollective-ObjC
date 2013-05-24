@@ -26,7 +26,7 @@
 
 @interface PSSBrand ()
 
-@property (nonatomic, copy, readwrite) NSNumber *brandId;
+@property (nonatomic, copy, readwrite) NSNumber *brandID;
 @property (nonatomic, copy, readwrite) NSString *name;
 @property (nonatomic, copy, readwrite) NSURL *browseURL;
 
@@ -38,14 +38,14 @@
 
 - (PSSProductFilter *)productFilter
 {
-	return [PSSProductFilter filterWithType:PSSProductFilterTypeBrand filterId:self.brandId];
+	return [PSSProductFilter filterWithType:PSSProductFilterTypeBrand filterID:self.brandID];
 }
 
 #pragma mark - NSObject
 
 - (NSString *)description
 {
-	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.brandId];
+	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.brandID];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -55,7 +55,7 @@
 
 - (NSUInteger)hash
 {
-	return self.brandId.hash;
+	return self.brandID.hash;
 }
 
 - (BOOL)isEqual:(id)object
@@ -66,26 +66,7 @@
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.brandId isEqualToNumber:[(PSSBrand *)object brandId]]);
-}
-
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)encoder
-{
-	[encoder encodeObject:self.name forKey:@"name"];
-	[encoder encodeObject:self.brandId forKey:@"brandId"];
-	[encoder encodeObject:self.browseURL forKey:@"browseURL"];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-	if ((self = [super init])) {
-		self.name = [decoder decodeObjectForKey:@"name"];
-		self.brandId = [decoder decodeObjectForKey:@"brandId"];
-		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
-	}
-	return self;
+	return ([self.brandID isEqualToNumber:[(PSSBrand *)object brandID]]);
 }
 
 #pragma mark - PSSRemoteObject
@@ -106,7 +87,7 @@
 		id value = [aDictionary valueForKey:key];
 		if ([key isEqualToString:@"id"]) {
 			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
-				self.brandId = [NSNumber numberWithInteger:[[value description] integerValue]];
+				self.brandID = [NSNumber numberWithInteger:[[value description] integerValue]];
 			}
 		} else if ([key isEqualToString:@"url"]) {
 			if ([value isKindOfClass:[NSString class]]) {
@@ -118,12 +99,31 @@
 	}
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[encoder encodeObject:self.name forKey:@"name"];
+	[encoder encodeObject:self.brandID forKey:@"brandID"];
+	[encoder encodeObject:self.browseURL forKey:@"browseURL"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	if ((self = [super init])) {
+		self.name = [decoder decodeObjectForKey:@"name"];
+		self.brandID = [decoder decodeObjectForKey:@"brandID"];
+		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
+	}
+	return self;
+}
+
 #pragma mark - NSCopying
 
 - (id)copyWithZone:(NSZone *)zone
 {
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
-	copy.brandId = self.brandId;
+	copy.brandID = self.brandID;
 	copy.name = self.name;
 	copy.browseURL = self.browseURL;
 	return copy;

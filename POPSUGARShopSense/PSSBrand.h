@@ -31,7 +31,7 @@
 @interface PSSBrand : NSObject <NSCoding, NSCopying, PSSRemoteObject>
 
 /** The unique identifier of the receiver. */
-@property (nonatomic, copy, readonly) NSNumber *brandId;
+@property (nonatomic, copy, readonly) NSNumber *brandID;
 
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;

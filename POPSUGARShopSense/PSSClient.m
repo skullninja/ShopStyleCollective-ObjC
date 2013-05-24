@@ -110,7 +110,7 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 - (NSString *)description
 {
 	NSString *superString = [super description];
-	return [superString stringByReplacingCharactersInRange:NSMakeRange(superString.length - 1, 1) withString:[NSString stringWithFormat:@", partnerId: %@, currentLocal: %@>", self.partnerId, self.currentLocale.localeIdentifier]];
+	return [superString stringByReplacingCharactersInRange:NSMakeRange(superString.length - 1, 1) withString:[NSString stringWithFormat:@", partnerID: %@, currentLocal: %@>", self.partnerID, self.currentLocale.localeIdentifier]];
 }
 
 #pragma mark - Locales
@@ -196,22 +196,22 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 	}
 }
 
-#pragma mark - partnerId
+#pragma mark - partnerID
 
-- (NSString *)partnerId
+- (NSString *)partnerID
 {
-	if (_partnerId == nil) {
+	if (_partnerID == nil) {
 		NSBundle* bundle = [NSBundle mainBundle];
-        _partnerId = [bundle objectForInfoDictionaryKey:kPListPartnerIDKey];
+        _partnerID = [bundle objectForInfoDictionaryKey:kPListPartnerIDKey];
 	}
-	return _partnerId;
+	return _partnerID;
 }
 
 #pragma mark - Base API Request
 
 - (void)makeRequestForEntityAtPath:(NSString *)entityPath parameters:(NSDictionary *)parameters success:(void (^)(AFHTTPRequestOperation *operation, NSDictionary *responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-	if (self.partnerId == nil) {
+	if (self.partnerID == nil) {
 		[[NSException exceptionWithName:PSSInvalidPartnerException
 								 reason:[NSString stringWithFormat:@"%@: No Partner ID provided; either set partnerID or add a string valued key with the appropriate id named %@ to the bundle *.plist", NSStringFromClass([self class]), kPListPartnerIDKey]
 							   userInfo:nil]
@@ -220,7 +220,7 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 	
 	NSMutableDictionary *mutableParameters = [[NSMutableDictionary alloc] init];
 	[mutableParameters addEntriesFromDictionary:parameters];
-	[mutableParameters setValue:self.partnerId forKey:@"pid"];
+	[mutableParameters setValue:self.partnerID forKey:@"pid"];
 	[mutableParameters setValue:@"true" forKey:@"suppressResponseCode"];
 	if ([self.currentLocale isEqual:[[self class] defaultLocale]] == NO && [[self class] siteIdentifierForLocale:self.currentLocale] != nil) {
 		[mutableParameters setValue:[[self class] siteIdentifierForLocale:self.currentLocale] forKey:@"site"];
@@ -270,10 +270,10 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 
 #pragma mark - Getting Products
 
-- (void)getProductByID:(NSNumber *)productId success:(void (^)(PSSProduct *product))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (void)getProductByID:(NSNumber *)productID success:(void (^)(PSSProduct *product))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-	NSParameterAssert(productId != nil);
-	NSString *entityPath = [NSString stringWithFormat:@"products/%d",productId.integerValue];
+	NSParameterAssert(productID != nil);
+	NSString *entityPath = [NSString stringWithFormat:@"products/%d",productID.integerValue];
 	[self makeRequestForEntityAtPath:entityPath parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
 		if (success) {
 			PSSProduct *product = (PSSProduct *)[self remoteObjectForEntityNamed:@"product" fromRepresentation:responseObject];
@@ -334,11 +334,11 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 		return nil;
 	}
 	id value = [representation objectForKey:@"id"];
-	NSNumber *filterId = nil;
+	NSNumber *filterID = nil;
 	if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
-		filterId = [NSNumber numberWithInteger:[[value description] integerValue]];
+		filterID = [NSNumber numberWithInteger:[[value description] integerValue]];
 	}
-	if (filterId == nil) {
+	if (filterID == nil) {
 		return nil;
 	}
 	
@@ -359,7 +359,7 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 		PSSDLog(@"Unknown Histogram Response Key: %@", key);
 		return nil;
 	}
-	PSSProductFilter *filter = [PSSProductFilter filterWithType:filterType filterId:filterId];
+	PSSProductFilter *filter = [PSSProductFilter filterWithType:filterType filterID:filterID];
 	filter.browseURLString = [representation objectForKey:@"url"];
 	filter.name = [representation objectForKey:@"name"];
 	filter.productCount = [representation objectForKey:@"count"];
@@ -500,7 +500,7 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 
 #pragma mark - Categories
 
-- (void)categoryTreeFromCategoryId:(NSString *)categoryIdOrNil depth:(NSNumber *)depthOrNil success:(void (^)(PSSCategoryTree *categoryTree))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (void)categoryTreeFromCategoryID:(NSString *)categoryIDOrNil depth:(NSNumber *)depthOrNil success:(void (^)(PSSCategoryTree *categoryTree))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	if (depthOrNil != nil && depthOrNil.integerValue <= 0) {
 		if (success) {
@@ -509,8 +509,8 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 		return;
 	}
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-	if (categoryIdOrNil != nil && categoryIdOrNil.length > 0) {
-		[params setValue:categoryIdOrNil forKey:@"cat"];
+	if (categoryIDOrNil != nil && categoryIDOrNil.length > 0) {
+		[params setValue:categoryIDOrNil forKey:@"cat"];
 	}
 	if (depthOrNil != nil) {
 		[params setValue:depthOrNil forKey:@"depth"];
@@ -523,17 +523,17 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 		if ([[responseObject objectForKey:@"categories"] isKindOfClass:[NSArray class]] && [[responseObject objectForKey:@"metadata"] isKindOfClass:[NSDictionary class]]) {
 			NSArray *categoriesRepresentation = [responseObject objectForKey:@"categories"];
 			NSArray *categories = [self remoteObjectsForEntityNamed:@"category" fromRepresentations:categoriesRepresentation];
-			NSString *rootId = nil;
+			NSString *rootID = nil;
 			NSDictionary *metadata = [responseObject objectForKey:@"metadata"];
 			if ([[metadata objectForKey:@"root"] isKindOfClass:[NSDictionary class]]) {
 				NSDictionary *rootCat = [metadata objectForKey:@"root"];
 				if ([rootCat objectForKey:@"id"]) {
-					rootId = [rootCat objectForKey:@"id"];
+					rootID = [rootCat objectForKey:@"id"];
 				}
 			}
-			if (categories.count > 0 && rootId.length > 0) {
+			if (categories.count > 0 && rootID.length > 0) {
 				if (success) {
-					PSSCategoryTree *categoryTree = [[PSSCategoryTree alloc] initWithRootId:rootId categories:categories];
+					PSSCategoryTree *categoryTree = [[PSSCategoryTree alloc] initWithRootID:rootID categories:categories];
 					success(categoryTree);
 				}
 			} else {
@@ -601,7 +601,7 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 	
 	[self sharedInit];
 	
-    self.partnerId = [aDecoder decodeObjectForKey:@"partnerId"];
+    self.partnerID = [aDecoder decodeObjectForKey:@"partnerID"];
     self.currentLocale = [aDecoder decodeObjectForKey:@"currentLocale"];
 	
     return self;
@@ -609,7 +609,7 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
 	[super encodeWithCoder:aCoder];
-    [aCoder encodeObject:self.partnerId forKey:@"partnerId"];
+    [aCoder encodeObject:self.partnerID forKey:@"partnerID"];
     [aCoder encodeObject:self.currentLocale forKey:@"currentLocale"];
 }
 
@@ -618,7 +618,7 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 - (id)copyWithZone:(NSZone *)zone {
     PSSClient *client = [super copyWithZone:zone];
 	client.currentLocale = self.currentLocale;
-	client.partnerId = self.partnerId;
+	client.partnerID = self.partnerID;
     return client;
 }
 

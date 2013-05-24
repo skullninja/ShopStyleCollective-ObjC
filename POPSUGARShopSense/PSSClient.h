@@ -44,10 +44,10 @@ typedef enum {
  
  ## Usage:
  1. Get the client by calling the sharedClient class method.
- 2. Set the partnerId parameter with your API_KEY you were assigned when signing up for ShopSense
+ 2. Set the partnerID parameter with your API_KEY you were assigned when signing up for ShopSense
  3. Call any of the methods to get data.
  
- @warning before calling any methods don't forget to set partnerId!
+ @warning before calling any methods don't forget to set partnerID!
  */
 
 @interface PSSClient : AFHTTPClient <NSCopying, NSCoding>
@@ -65,7 +65,7 @@ typedef enum {
 
 /** Unique API_KEY string that is assigned to the caller. This parameter must be present before making any requests.  
  Your Partner ID can be found on the https://shopsense.shopstyle.com/ API page. */
-@property (nonatomic, copy) NSString *partnerId;
+@property (nonatomic, copy) NSString *partnerID;
 
 /**---------------------------------------------------------------------------------------
  * @name International Support
@@ -97,11 +97,11 @@ typedef enum {
 
 /** Returns a single product object matching a supplied product identifier.
  
- @param productId The product identifier.
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: a `PSSProduct` object matching the productId or nil.
+ @param productID The product identifier.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: a `PSSProduct` object matching the productID or nil.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)getProductByID:(NSNumber *)productId success:(void (^)(PSSProduct *product))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)getProductByID:(NSNumber *)productID success:(void (^)(PSSProduct *product))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /** Returns an array of products that match a query specified by the parameters below.
  
@@ -169,12 +169,12 @@ typedef enum {
 
 /** Returns a tree of the categories available. 
  
- @param categoryIdOrNil The identifier of the category to use as the starting point. By default, the global root of the category tree is used.
+ @param categoryIDOrNil The identifier of the category to use as the starting point. By default, the global root of the category tree is used.
  @param depthOrNil The number of levels from the root to include in the response. By default all the levels are included.
  @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: a `PSSCategoryTree` object.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)categoryTreeFromCategoryId:(NSString *)categoryIdOrNil depth:(NSNumber *)depthOrNil success:(void (^)(PSSCategoryTree *categoryTree))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)categoryTreeFromCategoryID:(NSString *)categoryIDOrNil depth:(NSNumber *)depthOrNil success:(void (^)(PSSCategoryTree *categoryTree))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 @end
 

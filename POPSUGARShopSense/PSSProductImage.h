@@ -40,7 +40,7 @@ extern CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size);
 @interface PSSProductImage : NSObject <NSCoding, NSCopying, PSSRemoteObject>
 
 /** The unique identifier of the receiver. */
-@property (nonatomic, copy, readonly) NSString *imageId;
+@property (nonatomic, copy, readonly) NSString *imageID;
 
 /** The absolute URL to fetch the original image data. */
 @property (nonatomic, copy, readonly) NSURL *URL;

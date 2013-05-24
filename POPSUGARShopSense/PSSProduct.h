@@ -38,7 +38,7 @@
  */
 
 /** The unique identifier of the receiver. */
-@property (nonatomic, copy, readonly) NSNumber *productId;
+@property (nonatomic, copy, readonly) NSNumber *productID;
 
 /** A name to display for the receiver. This often includes the brand's name as well. */
 @property (nonatomic, copy, readonly) NSString *name;

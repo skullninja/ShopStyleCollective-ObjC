@@ -26,7 +26,7 @@
 
 @interface PSSProductCategory ()
 
-@property (nonatomic, copy, readwrite) NSString *categoryId;
+@property (nonatomic, copy, readwrite) NSString *categoryID;
 @property (nonatomic, copy, readwrite) NSString *name;
 
 @end
@@ -37,7 +37,7 @@
 
 - (NSString *)description
 {
-	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.categoryId];
+	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.categoryID];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -47,7 +47,7 @@
 
 - (NSUInteger)hash
 {
-	return self.categoryId.hash;
+	return self.categoryID.hash;
 }
 
 - (BOOL)isEqual:(id)object
@@ -58,21 +58,21 @@
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.categoryId isEqualToString:[(PSSProductCategory *)object categoryId]]);
+	return ([self.categoryID isEqualToString:[(PSSProductCategory *)object categoryID]]);
 }
 
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-	[encoder encodeObject:self.categoryId forKey:@"categoryId"];
+	[encoder encodeObject:self.categoryID forKey:@"categoryID"];
 	[encoder encodeObject:self.name forKey:@"name"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [super init])) {
-		self.categoryId = [decoder decodeObjectForKey:@"categoryId"];
+		self.categoryID = [decoder decodeObjectForKey:@"categoryID"];
 		self.name = [decoder decodeObjectForKey:@"name"];
 	}
 	return self;
@@ -95,7 +95,7 @@
 	for (NSString *key in aDictionary) {
 		id value = [aDictionary valueForKey:key];
 		if ([key isEqualToString:@"id"]) {
-			self.categoryId = [value description];
+			self.categoryID = [value description];
 		} else {
 			[self setValue:value forKey:key];
 		}
@@ -107,7 +107,7 @@
 - (id)copyWithZone:(NSZone *)zone
 {
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
-	copy.categoryId = self.categoryId;
+	copy.categoryID = self.categoryID;
 	copy.name = self.name;
 	return copy;
 }

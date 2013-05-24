@@ -30,7 +30,7 @@
 
 @interface PSSProduct ()
 
-@property (nonatomic, copy, readwrite) NSNumber *productId;
+@property (nonatomic, copy, readwrite) NSNumber *productID;
 @property (nonatomic, copy, readwrite) NSString *name;
 @property (nonatomic, copy, readwrite) NSString *descriptionHTML;
 @property (nonatomic, copy, readwrite) NSURL *buyURL;
@@ -121,7 +121,7 @@
 
 - (NSString *)description
 {
-	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.productId];
+	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.productID];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -131,7 +131,7 @@
 
 - (NSUInteger)hash
 {
-	return self.productId.hash;
+	return self.productID.hash;
 }
 
 - (BOOL)isEqual:(id)object
@@ -142,7 +142,7 @@
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.productId isEqualToNumber:[(PSSProduct *)object productId]]);
+	return ([self.productID isEqualToNumber:[(PSSProduct *)object productID]]);
 }
 
 #pragma mark - PSSRemoteObject
@@ -178,7 +178,7 @@
 			self.localeIdentifier = [value description];
 		} else if ([key isEqualToString:@"id"]) {
 			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
-				self.productId = [NSNumber numberWithInteger:[[value description] integerValue]];
+				self.productID = [NSNumber numberWithInteger:[[value description] integerValue]];
 			}
 		} else if ([key isEqualToString:@"brand"]) {
 			if ([value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
@@ -278,7 +278,7 @@
 	[encoder encodeObject:self.name forKey:@"name"];
 	[encoder encodeObject:self.regularPrice forKey:@"price"];
 	[encoder encodeObject:self.regularPriceLabel forKey:@"regularPriceLabel"];
-	[encoder encodeObject:self.productId forKey:@"productId"];
+	[encoder encodeObject:self.productID forKey:@"productID"];
 	[encoder encodeObject:self.retailer forKey:@"retailer"];
 	[encoder encodeObject:self.salePrice forKey:@"salePrice"];
 	[encoder encodeObject:self.salePriceLabel forKey:@"salePriceLabel"];
@@ -316,7 +316,7 @@
 		self.name = [decoder decodeObjectForKey:@"name"];
 		self.regularPrice = [decoder decodeObjectForKey:@"regularPrice"];
 		self.regularPriceLabel = [decoder decodeObjectForKey:@"regularPriceLabel"];
-		self.productId = [decoder decodeObjectForKey:@"productId"];
+		self.productID = [decoder decodeObjectForKey:@"productID"];
 		self.retailer = [decoder decodeObjectForKey:@"retailer"];
 		self.salePrice = [decoder decodeObjectForKey:@"salePrice"];
 		self.salePriceLabel = [decoder decodeObjectForKey:@"salePriceLabel"];
@@ -341,7 +341,7 @@
 - (id)copyWithZone:(NSZone *)zone
 {
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
-	copy.productId = self.productId;
+	copy.productID = self.productID;
 	copy.name = self.name;
 	copy.descriptionHTML = self.descriptionHTML;
 	copy.buyURL = self.buyURL;
