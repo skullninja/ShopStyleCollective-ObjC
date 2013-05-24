@@ -108,20 +108,20 @@ typedef enum {
  @param searchTerm Text search term, as a user would enter in a "Search:" field.
  @param offset The index of the first product to return, or 0 (zero) if not specified. A client can use this to implement paging through large result sets.
  @param limit The maximum number of results to return, or 100 if not specified. The maximum value is 100. Combine with the offset parameter to implement paging.
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes two arguments: the total count of products that match the provided criteria and an array of `PSSProduct` objects within the offset and limit parameters.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes three arguments: the total count of products that match the provided criteria, available histogram filter options for products that match the provided criteria and an array of `PSSProduct` objects within the offset and limit parameters.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)searchProductsWithTerm:(NSString *)searchTerm offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)searchProductsWithTerm:(NSString *)searchTerm offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, PSSHistogramFilterOptions availableFilterOptions, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /** Returns an array of products that match a query specified by the parameters below.
  
  @param queryOrNil A `PSSProductQuery` to define which products to return.
  @param offset The index of the first product to return, or 0 (zero) if not specified. A client can use this to implement paging through large result sets.
  @param limit The maximum number of results to return, or 100 if not specified. The maximum value is 100. Combine with the offset parameter to implement paging.
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes two arguments: the total count of products that match the provided criteria and an array of `PSSProduct` objects within the offset and limit parameters.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes three arguments: the total count of products that match the provided criteria , available histogram filter options for products that match the provided criteria and an array of `PSSProduct` objects within the offset and limit parameters.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)searchProductsWithQuery:(PSSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)searchProductsWithQuery:(PSSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, PSSHistogramFilterOptions availableFilterOptions, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /** This method returns a list of filters and product counts that describe the results of a given product query. The query is specified using the parameters below.
  

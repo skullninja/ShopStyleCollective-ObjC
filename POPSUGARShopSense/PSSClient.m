@@ -282,13 +282,18 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 	} failure:failure];
 }
 
-- (void)searchProductsWithTerm:(NSString *)searchTerm offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (void)searchProductsWithTerm:(NSString *)searchTerm offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, PSSHistogramFilterOptions availableFilterOptions, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSParameterAssert(searchTerm != nil && searchTerm.length > 0);
 	[self searchProductsWithQuery:[PSSProductQuery productQueryWithSearchTerm:searchTerm] offset:offset limit:limit success:success failure:failure];
 }
 
-- (void)searchProductsWithQuery:(PSSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
++ (PSSHistogramFilterOptions)standardFilterOptions
+{
+	return (PSSHistogramFilterBrand | PSSHistogramFilterDiscount | PSSHistogramFilterRetailer | PSSHistogramFilterPrice);
+}
+
+- (void)searchProductsWithQuery:(PSSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, PSSHistogramFilterOptions availableFilterOptions, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSString *entityPath = @"products";
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
@@ -317,7 +322,14 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 				if ([[metadata objectForKey:@"total"] isKindOfClass:[NSNumber class]]) {
 					totalCount = [[metadata objectForKey:@"total"] integerValue];
 				}
-				success(totalCount,products);
+				PSSHistogramFilterOptions filterOptions = [[self class] standardFilterOptions];
+				if ([[metadata objectForKey:@"showColorFilter"] isKindOfClass:[NSNumber class]] && [[metadata objectForKey:@"showColorFilter"] boolValue]) {
+					filterOptions |= PSSHistogramFilterColor;
+				}
+				if ([[metadata objectForKey:@"showSizeFilter"] isKindOfClass:[NSNumber class]] && [[metadata objectForKey:@"showSizeFilter"] boolValue]) {
+					filterOptions |= PSSHistogramFilterSize;
+				}
+				success(totalCount, filterOptions, products);
 			}
 			
 		} else {

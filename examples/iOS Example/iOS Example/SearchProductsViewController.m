@@ -41,7 +41,7 @@
 	PSSProductQuery *productQuery = [[PSSProductQuery alloc] init];
 	productQuery.searchTerm = @"red dress";
 	__weak typeof(self) weakSelf = self;
-	[[PSSClient sharedClient] searchProductsWithQuery:productQuery offset:nil limit:nil success:^(NSUInteger totalCount, NSArray *products) {
+	[[PSSClient sharedClient] searchProductsWithQuery:productQuery offset:nil limit:nil success:^(NSUInteger totalCount, PSSHistogramFilterOptions availableFilterOptions, NSArray *products) {
 		weakSelf.products = products;
 		[weakSelf.tableView reloadData];
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
