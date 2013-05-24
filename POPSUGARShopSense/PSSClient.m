@@ -333,6 +333,14 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 	if ([representation objectForKey:@"id"] == nil) {
 		return nil;
 	}
+	id value = [representation objectForKey:@"id"];
+	NSNumber *filterId = nil;
+	if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+		filterId = [NSNumber numberWithInteger:[[value description] integerValue]];
+	}
+	if (filterId == nil) {
+		return nil;
+	}
 	
 	PSSProductFilterType filterType;
 	if ([key isEqualToString:@"brandHistogram"]) {
@@ -351,7 +359,7 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 		PSSDLog(@"Unknown Histogram Response Key: %@", key);
 		return nil;
 	}
-	PSSProductFilter *filter = [PSSProductFilter filterWithType:filterType filterId:[representation objectForKey:@"id"]];
+	PSSProductFilter *filter = [PSSProductFilter filterWithType:filterType filterId:filterId];
 	filter.browseURLString = [representation objectForKey:@"url"];
 	filter.name = [representation objectForKey:@"name"];
 	filter.productCount = [representation objectForKey:@"count"];
