@@ -140,10 +140,7 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	}
 	
 	if (self.productFilterSet.count > 0) {
-		NSArray *allFilters = [self productFilters];
-		for (PSSProductFilter *filter in allFilters) {
-			[dictionary setObject:filter.queryParameterRepresentation forKey:@"fl"];
-		}
+		[dictionary setObject:[[self productFilters] valueForKey:@"queryParameterRepresentation"] forKey:@"fl"];
 	}
 	
 	if (self.priceDropDate) {

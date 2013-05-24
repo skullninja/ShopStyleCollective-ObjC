@@ -227,6 +227,17 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 	}
 	
 	NSMutableURLRequest *request = [self requestWithMethod:@"GET" path:entityPath parameters:mutableParameters];
+	// ShopSense does not support the [] notation when using multiple parameters
+	NSString *urlString = request.URL.absoluteString;
+	for (NSString *key in mutableParameters.allKeys) {
+		urlString = [urlString stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@[]=", key] withString:[key stringByAppendingString:@"="]];
+		urlString = [urlString stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@%%5B%%5D=", key] withString:[key stringByAppendingString:@"="]];
+	}
+	NSURL *newURL = [NSURL URLWithString:urlString];
+	if (newURL != nil) {
+		request.URL = newURL;
+	}
+	
 	[request setValue:@"gzip, deflate" forHTTPHeaderField:@"Accept-Encoding"];
 	AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		if ([responseObject isKindOfClass:[NSDictionary class]]) {
