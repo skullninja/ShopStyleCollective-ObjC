@@ -27,7 +27,7 @@ typedef enum {
 	PSSProductFilterTypeBrand = 1,
 	PSSProductFilterTypeRetailer = 2,
 	PSSProductFilterTypePrice = 3,
-	PSSProductFilterTypeSale = 4,
+	PSSProductFilterTypeDiscount = 4,
 	PSSProductFilterTypeSize = 5,
 	PSSProductFilterTypeColor = 6
 } PSSProductFilterType;
@@ -44,7 +44,7 @@ extern NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterTy
 		 PSSProductFilterTypeBrand = 1,
 		 PSSProductFilterTypeRetailer = 2,
 		 PSSProductFilterTypePrice = 3,
-		 PSSProductFilterTypeSale = 4,
+		 PSSProductFilterTypeDiscount = 4,
 		 PSSProductFilterTypeSize = 5,
 		 PSSProductFilterTypeColor = 6
 	 } PSSProductFilterType;
@@ -79,8 +79,8 @@ extern NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterTy
  `PSSProductFilterTypePrice`
  Filter by price range.
  
- `PSSProductFilterTypeSale`
- Filter by sale amount.
+ `PSSProductFilterTypeDiscount`
+ Filter by discount amount.
  
  `PSSProductFilterTypeSize`
  Filter by size.

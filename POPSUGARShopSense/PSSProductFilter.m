@@ -40,8 +40,8 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 			return @"Retailer";
 		case PSSProductFilterTypePrice:
 			return @"Price";
-		case PSSProductFilterTypeSale:
-			return @"Sale";
+		case PSSProductFilterTypeDiscount:
+			return @"Discount";
 		case PSSProductFilterTypeSize:
 			return @"Size";
 		case PSSProductFilterTypeColor:
@@ -80,7 +80,7 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 	// b - brand
 	// r - retailer
 	// p - price
-	// d - sale
+	// d - discount
 	// s - size
 	// c - color
 	NSString *prefix = @"";
@@ -94,7 +94,7 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 		case PSSProductFilterTypePrice:
 			prefix = @"p";
 			break;
-		case PSSProductFilterTypeSale:
+		case PSSProductFilterTypeDiscount:
 			prefix = @"d";
 			break;
 		case PSSProductFilterTypeSize:

@@ -344,7 +344,7 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 	} else if ([key isEqualToString:@"priceHistogram"]) {
 		filterType = PSSProductFilterTypePrice;
 	} else if ([key isEqualToString:@"discountHistogram"]) {
-		filterType = PSSProductFilterTypeSale;
+		filterType = PSSProductFilterTypeDiscount;
 	} else if ([key isEqualToString:@"sizeHistogram"]) {
 		filterType = PSSProductFilterTypeSize;
 	} else {
