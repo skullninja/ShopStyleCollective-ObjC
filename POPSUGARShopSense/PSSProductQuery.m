@@ -212,13 +212,13 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	if (![productQuery.productFilterSet isEqualToSet:self.productFilterSet]) {
 		return NO;
 	}
-	if (![productQuery.searchTerm isEqualToString:self.searchTerm]) {
+	if ((productQuery.searchTerm != nil || self.searchTerm != nil) && ![productQuery.searchTerm isEqualToString:self.searchTerm]) {
 		return NO;
 	}
-	if (![productQuery.productCategoryID isEqualToString:self.productCategoryID]) {
+	if ((productQuery.productCategoryID != nil || self.productCategoryID != nil) && ![productQuery.productCategoryID isEqualToString:self.productCategoryID]) {
 		return NO;
 	}
-	if (![productQuery.priceDropDate isEqualToDate:self.priceDropDate]) {
+	if ((productQuery.priceDropDate != nil || self.priceDropDate != nil) && ![productQuery.priceDropDate isEqualToDate:self.priceDropDate]) {
 		return NO;
 	}
 	if (productQuery.sort != self.sort) {
