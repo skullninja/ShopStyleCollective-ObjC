@@ -216,6 +216,8 @@
 			}
 		} else if ([key isEqualToString:@"maxPriceLabel"]) {
 			self.maxRegularPriceLabel = [value description];
+		} else if ([key isEqualToString:@"type"] || [key isEqualToString:@"images"]) {
+			// not needed
 		} else {
 			[self setValue:value forKey:key];
 		}
