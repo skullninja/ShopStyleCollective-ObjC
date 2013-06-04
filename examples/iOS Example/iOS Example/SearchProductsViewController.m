@@ -73,7 +73,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
 	}
-	PSSProduct *thisProduct = [self.products objectAtIndex:indexPath.row];
+	PSSProduct *thisProduct = self.products[indexPath.row];
 	cell.textLabel.text = thisProduct.name;
 	cell.textLabel.numberOfLines = 0;
 	if (thisProduct.salePriceLabel) {

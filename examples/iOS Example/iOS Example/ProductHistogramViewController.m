@@ -69,7 +69,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
 	}
-	PSSProductFilter *thisFilter = [self.filters objectAtIndex:indexPath.row];
+	PSSProductFilter *thisFilter = self.filters[indexPath.row];
 	cell.textLabel.text = thisFilter.name;
 	cell.detailTextLabel.text = thisFilter.productCount.stringValue;
 	return cell;

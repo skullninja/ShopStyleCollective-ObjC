@@ -66,7 +66,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 	}
-	PSSRetailer *thisRetailer = [self.retailers objectAtIndex:indexPath.row];
+	PSSRetailer *thisRetailer = self.retailers[indexPath.row];
 	cell.textLabel.text = thisRetailer.name;
 	return cell;
 }

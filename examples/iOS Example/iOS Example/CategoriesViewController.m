@@ -77,7 +77,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 	}
-	PSSCategory *thisCategory = [self.categories objectAtIndex:indexPath.row];
+	PSSCategory *thisCategory = self.categories[indexPath.row];
 	cell.textLabel.text = thisCategory.name;
 	if (thisCategory.childCategories.count > 0) {
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -93,7 +93,7 @@
 {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	
-	PSSCategory *thisCategory = [self.categories objectAtIndex:indexPath.row];
+	PSSCategory *thisCategory = self.categories[indexPath.row];
 	if (thisCategory.childCategories.count > 0) {
 		CategoriesViewController *detailVC = [[CategoriesViewController alloc] initWithCategories:thisCategory.childCategories];
 		detailVC.title = thisCategory.name;

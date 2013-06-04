@@ -44,7 +44,7 @@
 	[super viewDidLoad];
 	self.title = @"POPSUGAR ShopSense";
 	self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:NULL];
-	self.menuItems = [[NSArray alloc] initWithObjects:@"Search", @"Brand Histogram", @"Brands", @"Retailers", @"Colors", @"Categories", nil];
+	self.menuItems = @[ @"Search", @"Brand Histogram", @"Brands", @"Retailers", @"Colors", @"Categories" ];
 }
 
 #pragma mark - Table View

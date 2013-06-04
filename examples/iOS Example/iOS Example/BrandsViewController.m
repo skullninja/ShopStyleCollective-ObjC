@@ -66,7 +66,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 	}
-	PSSBrand *thisBrand = [self.brands objectAtIndex:indexPath.row];
+	PSSBrand *thisBrand = self.brands[indexPath.row];
 	cell.textLabel.text = thisBrand.name;
 	return cell;
 }

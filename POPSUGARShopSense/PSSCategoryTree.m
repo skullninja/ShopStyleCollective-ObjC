@@ -47,14 +47,14 @@
 		NSMutableDictionary *mutableCategoryIDMap = [[NSMutableDictionary alloc] initWithCapacity:categories.count];
 		NSMutableArray *mutableRootCategories = [[NSMutableArray alloc] init];
 		for (PSSCategory *category in categories) {
-			[mutableCategoryIDMap setObject:category forKey:category.categoryID];
+			mutableCategoryIDMap[category.categoryID] = category;
 			if ([category.parentCategoryID isEqualToString:rootCategoryID]) {
 				[mutableRootCategories addObject:category];
 			}
 		}
 		for (PSSCategory *category in categories) {
 			if (category.parentCategoryID != nil && ![category.parentCategoryID isEqualToString:rootCategoryID]) {
-				PSSCategory *parent = [mutableCategoryIDMap objectForKey:category.parentCategoryID];
+				PSSCategory *parent = mutableCategoryIDMap[category.parentCategoryID];
 				if (parent != nil) {
 					[parent.mutableChildCategorySet addObject:category];
 				}
@@ -73,7 +73,7 @@
 
 - (PSSCategory *)categoryWithID:(NSString *)categoryID
 {
-	return [self.categoryIDMap objectForKey:categoryID];
+	return self.categoryIDMap[categoryID];
 }
 
 #pragma mark - NSObject

@@ -133,33 +133,33 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
 	
 	if (self.searchTerm && self.searchTerm.length > 0) {
-		[dictionary setObject:self.searchTerm forKey:@"fts"];
+		dictionary[@"fts"] = self.searchTerm;
 	}
 	if (self.productCategoryID && self.productCategoryID.length > 0) {
-		[dictionary setObject:self.productCategoryID forKey:@"cat"];
+		dictionary[@"cat"] = self.productCategoryID;
 	}
 	
 	if (self.productFilterSet.count > 0) {
-		[dictionary setObject:[[self productFilters] valueForKey:@"queryParameterRepresentation"] forKey:@"fl"];
+		dictionary[@"fl"] = [[self productFilters] valueForKey:@"queryParameterRepresentation"];
 	}
 	
 	if (self.priceDropDate) {
 		NSNumber *numberRep = [NSNumber numberWithDouble:[self.priceDropDate timeIntervalSince1970]];
-		[dictionary setObject:numberRep forKey:@"pdd"];
+		dictionary[@"pdd"] = numberRep;
 	}
 	
 	switch (self.sort) {
 		case PSSProductQuerySortPriceLoHi:
-			[dictionary setObject:@"PriceLoHi" forKey:@"sort"];
+			dictionary[@"sort"] = @"PriceLoHi";
 			break;
 		case PSSProductQuerySortPriceHiLo:
-			[dictionary setObject:@"PriceHiLo" forKey:@"sort"];
+			dictionary[@"sort"] = @"PriceHiLo";
 			break;
 		case PSSProductQuerySortRecency:
-			[dictionary setObject:@"Recency" forKey:@"sort"];
+			dictionary[@"sort"] = @"Recency";
 			break;
 		case PSSProductQuerySortPopular:
-			[dictionary setObject:@"Popular" forKey:@"sort"];
+			dictionary[@"sort"] = @"Popular";
 			break;
 		case PSSProductQuerySortDefault:
 			break;
@@ -168,7 +168,7 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	}
 	
 	if (self.showInternationalProducts) {
-		[dictionary setObject:@"all" forKey:@"locales"];
+		dictionary[@"locales"] = @"all";
 	}
 	
 	return dictionary;

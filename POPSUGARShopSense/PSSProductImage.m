@@ -84,18 +84,18 @@ CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size)
 
 - (NSURL *)imageURLWithSize:(PSSProductImageSize)size
 {
-	return [self.imageURLsBySizeName objectForKey:NSStringFromPSSProductImageSizeName(size)];
+	return self.imageURLsBySizeName[NSStringFromPSSProductImageSizeName(size)];
 }
 
 #pragma mark - Product Image Helpers
 
 - (NSArray *)orderedImageSizeNames
 {
-	return [NSArray arrayWithObjects:NSStringFromPSSProductImageSizeName(PSSProductImageSizeSmall),
-			NSStringFromPSSProductImageSizeName(PSSProductImageSizeIPhoneSmall),
-			NSStringFromPSSProductImageSizeName(PSSProductImageSizeMedium),
-			NSStringFromPSSProductImageSizeName(PSSProductImageSizeLarge),
-			NSStringFromPSSProductImageSizeName(PSSProductImageSizeIPhone), nil];
+	return @[ NSStringFromPSSProductImageSizeName(PSSProductImageSizeSmall),
+		   NSStringFromPSSProductImageSizeName(PSSProductImageSizeIPhoneSmall),
+		   NSStringFromPSSProductImageSizeName(PSSProductImageSizeMedium),
+		   NSStringFromPSSProductImageSizeName(PSSProductImageSizeLarge),
+		   NSStringFromPSSProductImageSizeName(PSSProductImageSizeIPhone) ];
 }
 
 #pragma mark - NSObject
@@ -172,7 +172,7 @@ CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size)
 - (NSURL *)imageURLFromRepresentation:(NSDictionary *)representation
 {
 	NSURL *imageURL = nil;
-	id imageURLString = [representation objectForKey:@"url"];
+	id imageURLString = representation[@"url"];
 	if ([imageURLString isKindOfClass:[NSString class]]) {
 		imageURL = [NSURL URLWithString:imageURLString];
 	}

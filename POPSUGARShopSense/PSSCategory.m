@@ -70,8 +70,8 @@ static NSString * const kParentCategoryIDKey = @"parentId";
 - (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary
 {
 	NSMutableDictionary *copyDictionary = [aDictionary mutableCopy];
-	if ([copyDictionary objectForKey:kParentCategoryIDKey] != nil) {
-		self.parentCategoryID = [copyDictionary objectForKey:kParentCategoryIDKey];
+	if (copyDictionary[kParentCategoryIDKey] != nil) {
+		self.parentCategoryID = copyDictionary[kParentCategoryIDKey];
 		[copyDictionary removeObjectForKey:kParentCategoryIDKey];
 	}
 	[super setPropertiesWithDictionary:copyDictionary];

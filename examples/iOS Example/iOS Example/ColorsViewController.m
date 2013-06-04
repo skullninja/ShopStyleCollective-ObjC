@@ -66,7 +66,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 	}
-	PSSColor *thisColor = (PSSColor *)[self.colors objectAtIndex:indexPath.row];
+	PSSColor *thisColor = self.colors[indexPath.row];
 	cell.textLabel.text = thisColor.name;
 	return cell;
 }

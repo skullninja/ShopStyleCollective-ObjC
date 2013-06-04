@@ -24,6 +24,8 @@
 #import "PSSClient.h"
 #import "AFJSONRequestOperation.h"
 #import "POPSUGARShopSense.h"
+#import <time.h>
+#import <xlocale.h>
 
 NSString * const PSSInvalidPartnerException = @"com.shopstyle.shopsense:InvalidPartnerException";
 NSString * const PSSInvalidLocaleException = @"com.shopstyle.shopsense:InvalidLocaleException";
@@ -49,8 +51,6 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 @interface PSSClient ()
 
 @property (nonatomic, copy, readwrite) NSLocale *currentLocale;
-
-- (void)makeRequestForEntityAtPath:(NSString *)entityPath parameters:(NSDictionary *)parameters success:(void (^)(AFHTTPRequestOperation *operation, NSDictionary *response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 @end
 
@@ -83,7 +83,7 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 	return _sharedClient;
 }
 
-#pragma mark - AFHTTPClient
+#pragma mark - AFHTTPClient Setup Overrides
 
 - (id)initWithBaseURL:(NSURL *)url
 {
@@ -91,19 +91,17 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 	if (!self) {
 		return nil;
 	}
-	
 	[self sharedInit];
-	
 	return self;
 }
 
 - (void)sharedInit
 {
 	[self registerHTTPOperationClass:[AFJSONRequestOperation class]];
-	
-	// Accept HTTP Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
 	[self setDefaultHeader:@"Accept" value:@"application/json"];
-	
+	self.parameterEncoding = AFJSONParameterEncoding;
+	[self setDefaultHeader:@"Accept-Encoding" value:@"gzip, deflate"];
+	[self setDefaultHeader:@"ShopSense-Client" value:NSStringFromClass([self class])];
 	_currentLocale = [[self class] defaultLocale];
 }
 
@@ -122,7 +120,13 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 
 + (NSArray *)supportedLocales
 {
-	return [NSArray arrayWithObjects:[[NSLocale alloc] initWithLocaleIdentifier:kUSLocaleIdentifier], [[NSLocale alloc] initWithLocaleIdentifier:kUKLocaleIdentifier], [[NSLocale alloc] initWithLocaleIdentifier:kFRLocaleIdentifier], [[NSLocale alloc] initWithLocaleIdentifier:kDELocaleIdentifier], [[NSLocale alloc] initWithLocaleIdentifier:kJPLocaleIdentifier], [[NSLocale alloc] initWithLocaleIdentifier:kAULocaleIdentifier], [[NSLocale alloc] initWithLocaleIdentifier:kCALocaleIdentifier], nil];
+	return @[ [[NSLocale alloc] initWithLocaleIdentifier:kUSLocaleIdentifier],
+		   [[NSLocale alloc] initWithLocaleIdentifier:kUKLocaleIdentifier],
+		   [[NSLocale alloc] initWithLocaleIdentifier:kFRLocaleIdentifier],
+		   [[NSLocale alloc] initWithLocaleIdentifier:kDELocaleIdentifier],
+		   [[NSLocale alloc] initWithLocaleIdentifier:kJPLocaleIdentifier],
+		   [[NSLocale alloc] initWithLocaleIdentifier:kAULocaleIdentifier],
+		   [[NSLocale alloc] initWithLocaleIdentifier:kCALocaleIdentifier] ];
 }
 
 + (BOOL)isSupportedLocale:(NSLocale *)locale
@@ -141,7 +145,6 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 	if (locale == nil) {
 		return [self defaultLocale];
 	}
-	
 	if ([self isSupportedLocale:locale]) {
 		return locale;
 	}
@@ -184,11 +187,11 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 
 - (void)setLocale:(NSLocale *)newLocale cancelAllOperations:(BOOL)cancelAllOperations
 {
+	NSParameterAssert(newLocale != nil);
 	if ([[self class] isSupportedLocale:newLocale] == NO) {
 		[[NSException exceptionWithName:PSSInvalidLocaleException
 								 reason:@"Locale must be one of supportedLocales."
-							   userInfo:nil]
-		 raise];
+							   userInfo:@{ @"invalidLocale": [newLocale description] }] raise];
 	}
 	self.currentLocale = newLocale;
 	if (cancelAllOperations) {
@@ -207,65 +210,99 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 	return _partnerID;
 }
 
-#pragma mark - Base API Request
+#pragma mark - AFHTTPClient Request/Operation Overrides
 
-- (void)makeRequestForEntityAtPath:(NSString *)entityPath parameters:(NSDictionary *)parameters success:(void (^)(AFHTTPRequestOperation *operation, NSDictionary *responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (NSMutableDictionary *)dictionaryWithStandardRequestURLParameters
+{
+	NSMutableDictionary *mutableParameters = [[NSMutableDictionary alloc] init];
+	mutableParameters[@"pid"] = self.partnerID;
+	if ([self.currentLocale isEqual:[[self class] defaultLocale]] == NO && [[self class] siteIdentifierForLocale:self.currentLocale] != nil) {
+		mutableParameters[@"site"] = [[self class] siteIdentifierForLocale:self.currentLocale];
+	}
+	return mutableParameters;
+}
+
+- (NSString *)RFC1123StringFromDate:(NSDate *)date
+{
+	time_t timeInterval = (time_t)[date timeIntervalSince1970];
+	struct tm timeinfo;
+	gmtime_r(&timeInterval, &timeinfo);
+	char buffer[32];
+	size_t ret = strftime_l(buffer, sizeof(buffer), "%a, %d %b %Y %H:%M:%S GMT", &timeinfo, NULL);
+	if (ret) {
+		return @(buffer);
+	} else {
+		return nil;
+	}
+}
+
+- (NSMutableURLRequest *)requestWithMethod:(NSString *)method path:(NSString *)path parameters:(NSDictionary *)parameters
 {
 	if (self.partnerID == nil) {
 		[[NSException exceptionWithName:PSSInvalidPartnerException
 								 reason:[NSString stringWithFormat:@"%@: No Partner ID provided; either set partnerID or add a string valued key with the appropriate id named %@ to the bundle *.plist", NSStringFromClass([self class]), kPListPartnerIDKey]
-							   userInfo:nil]
-		 raise];
+							   userInfo:nil] raise];
 	}
 	
-	NSMutableDictionary *mutableParameters = [[NSMutableDictionary alloc] init];
-	[mutableParameters addEntriesFromDictionary:parameters];
-	[mutableParameters setValue:self.partnerID forKey:@"pid"];
-	[mutableParameters setValue:@"true" forKey:@"suppressResponseCode"];
-	if ([self.currentLocale isEqual:[[self class] defaultLocale]] == NO && [[self class] siteIdentifierForLocale:self.currentLocale] != nil) {
-		[mutableParameters setValue:[[self class] siteIdentifierForLocale:self.currentLocale] forKey:@"site"];
-	}
+	NSMutableURLRequest *request = [super requestWithMethod:method path:path parameters:parameters];
 	
-	NSMutableURLRequest *request = [self requestWithMethod:@"GET" path:entityPath parameters:mutableParameters];
-	// ShopSense does not support the [] notation when using multiple parameters
+	// Add our URL standard URL params regardless of method
 	NSString *urlString = request.URL.absoluteString;
-	for (NSString *key in mutableParameters.allKeys) {
-		urlString = [urlString stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@[]=", key] withString:[key stringByAppendingString:@"="]];
-		urlString = [urlString stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@%%5B%%5D=", key] withString:[key stringByAppendingString:@"="]];
+	urlString = [urlString stringByAppendingFormat:[urlString rangeOfString:@"?"].location == NSNotFound ? @"?%@" : @"&%@", AFQueryStringFromParametersWithEncoding([self dictionaryWithStandardRequestURLParameters], self.stringEncoding)];
+	
+	// ShopSense does not support the `[]` notation when using multiple same-named URL parameters. This only applies to GET, HEAD and DELETE
+	// e.g. AFNetworking will convert multiple `fl=` parameters to `fl[]=` which will be rejected by the server.
+	if (([method isEqualToString:@"GET"] || [method isEqualToString:@"HEAD"] || [method isEqualToString:@"DELETE"]) && parameters.count > 0) {
+		for (NSString *key in parameters.allKeys) {
+			if ([parameters[key] isKindOfClass:[NSArray class]]) {
+				urlString = [urlString stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@[]=", key] withString:[key stringByAppendingString:@"="]];
+				urlString = [urlString stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@%%5B%%5D=", key] withString:[key stringByAppendingString:@"="]];
+			}
+		}
 	}
+	
 	NSURL *newURL = [NSURL URLWithString:urlString];
 	if (newURL != nil) {
 		request.URL = newURL;
 	}
 	
-	[request setValue:@"gzip, deflate" forHTTPHeaderField:@"Accept-Encoding"];
-	AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+	[request setValue:[self RFC1123StringFromDate:[NSDate date]] forHTTPHeaderField:@"Date"];
+	
+	return request;
+}
+
+- (AFHTTPRequestOperation *)HTTPRequestOperationWithRequest:(NSURLRequest *)urlRequest success:(void (^)(AFHTTPRequestOperation *, id))success failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure
+{
+	return [super HTTPRequestOperationWithRequest:urlRequest success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		if ([responseObject isKindOfClass:[NSDictionary class]]) {
-			if ([responseObject objectForKey:@"errorCode"] != nil || [responseObject objectForKey:@"errorName"] != nil || [responseObject objectForKey:@"errorMessage"] != nil) {
+			NSError *apiError = [self errorFromResponseErrorRepresentation:(NSDictionary *)responseObject];
+			if (apiError != nil) {
 				if (failure) {
-					NSNumber *errorCode = [responseObject objectForKey:@"errorCode"] ?: [NSNumber numberWithInt:500];
-					NSString *errorName = [responseObject objectForKey:@"errorName"] ?: @"";
-					NSString *errorMessage = [responseObject objectForKey:@"errorMessage"] ?: @"";
-					NSString *errorDesc = [NSString stringWithFormat:@"%@ %@", errorName, errorMessage];
-					NSError *badResponse = [NSError errorWithDomain:NSStringFromClass([self class]) code:[errorCode integerValue] userInfo:@{NSLocalizedDescriptionKey : errorDesc}];
-					failure(operation, badResponse);
+					failure(operation, apiError);
 				}
 			} else if (success) {
 				success(operation, responseObject);
 			}
 		} else {
 			if (failure) {
-				failure(operation, [self errorForBadResponse]);
+				failure(operation, [self errorWithBadResponseString:operation.responseString]);
 			}
 		}
-		
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 		if (failure) {
-			failure(operation, error);
+			NSError *ssError = nil;
+			if (operation.responseString != nil && operation.responseString.length > 0 && operation.responseData != nil) {
+				NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+				if (responseDictionary != nil && [responseDictionary isKindOfClass:[NSDictionary class]]) {
+					ssError = [self errorFromResponseErrorRepresentation:(NSDictionary *)responseDictionary];
+				}
+			}
+			if (ssError == nil) {
+				ssError = error;
+			}
+			failure(operation, ssError);
 		}
 	}];
-	
-	[self enqueueHTTPRequestOperation:operation];
 }
 
 #pragma mark - Getting Products
@@ -273,8 +310,8 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 - (void)getProductByID:(NSNumber *)productID success:(void (^)(PSSProduct *product))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSParameterAssert(productID != nil);
-	NSString *entityPath = [NSString stringWithFormat:@"products/%d",productID.integerValue];
-	[self makeRequestForEntityAtPath:entityPath parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	NSString *path = [NSString stringWithFormat:@"products/%d",productID.integerValue];
+	[self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
 		if (success) {
 			PSSProduct *product = (PSSProduct *)[self remoteObjectForEntityNamed:@"product" fromRepresentation:responseObject];
 			success(product);
@@ -295,7 +332,6 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 
 - (void)searchProductsWithQuery:(PSSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, PSSHistogramFilterOptions availableFilterOptions, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-	NSString *entityPath = @"products";
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
 	if (offset != nil) {
 		[params setValue:offset forKey:@"offset"];
@@ -310,23 +346,23 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 	if (params.count == 0) {
 		params = nil;
 	}
-	[self makeRequestForEntityAtPath:entityPath parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	[self getPath:@"products" parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
 		
-		if ([[responseObject objectForKey:@"metadata"] isKindOfClass:[NSDictionary class]] && [[responseObject objectForKey:@"products"] isKindOfClass:[NSArray class]]) {
+		if ([responseObject[@"metadata"] isKindOfClass:[NSDictionary class]] && [responseObject[@"products"] isKindOfClass:[NSArray class]]) {
 			
 			if (success) {
-				NSArray *productsRepresentation = [responseObject objectForKey:@"products"];
+				NSArray *productsRepresentation = responseObject[@"products"];
 				NSArray *products = [self remoteObjectsForEntityNamed:@"product" fromRepresentations:productsRepresentation];
 				NSUInteger totalCount = products.count;
-				NSDictionary *metadata = [responseObject objectForKey:@"metadata"];
-				if ([[metadata objectForKey:@"total"] isKindOfClass:[NSNumber class]]) {
-					totalCount = [[metadata objectForKey:@"total"] integerValue];
+				NSDictionary *metadata = responseObject[@"metadata"];
+				if ([metadata[@"total"] isKindOfClass:[NSNumber class]]) {
+					totalCount = [metadata[@"total"] integerValue];
 				}
 				PSSHistogramFilterOptions filterOptions = [[self class] standardFilterOptions];
-				if ([[metadata objectForKey:@"showColorFilter"] isKindOfClass:[NSNumber class]] && [[metadata objectForKey:@"showColorFilter"] boolValue]) {
+				if ([metadata[@"showColorFilter"] isKindOfClass:[NSNumber class]] && [metadata[@"showColorFilter"] boolValue]) {
 					filterOptions |= PSSHistogramFilterColor;
 				}
-				if ([[metadata objectForKey:@"showSizeFilter"] isKindOfClass:[NSNumber class]] && [[metadata objectForKey:@"showSizeFilter"] boolValue]) {
+				if ([metadata[@"showSizeFilter"] isKindOfClass:[NSNumber class]] && [metadata[@"showSizeFilter"] boolValue]) {
 					filterOptions |= PSSHistogramFilterSize;
 				}
 				success(totalCount, filterOptions, products);
@@ -334,7 +370,7 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 			
 		} else {
 			if (failure) {
-				failure(operation, [self errorForBadResponse]);
+				failure(operation, [self errorWithInvalidRepresentation:responseObject]);
 			}
 		}
 	} failure:failure];
@@ -342,10 +378,10 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 
 - (PSSProductFilter *)productFilterForHistogramResponseKey:(NSString *)key represention:(NSDictionary *)representation
 {
-	if ([representation objectForKey:@"id"] == nil) {
+	if (representation[@"id"] == nil) {
 		return nil;
 	}
-	id value = [representation objectForKey:@"id"];
+	id value = representation[@"id"];
 	NSNumber *filterID = nil;
 	if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
 		filterID = [NSNumber numberWithInteger:[[value description] integerValue]];
@@ -372,9 +408,9 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 		return nil;
 	}
 	PSSProductFilter *filter = [PSSProductFilter filterWithType:filterType filterID:filterID];
-	filter.browseURLString = [representation objectForKey:@"url"];
-	filter.name = [representation objectForKey:@"name"];
-	filter.productCount = [representation objectForKey:@"count"];
+	filter.browseURLString = representation[@"url"];
+	filter.name = representation[@"name"];
+	filter.productCount = representation[@"count"];
 	return filter;
 }
 
@@ -417,12 +453,11 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 		NSDictionary *queryParams = [queryOrNil queryParameterRepresentation];
 		[params addEntriesFromDictionary:queryParams];
 	}
-	NSString *entityPath = @"products/histogram";
-	[self makeRequestForEntityAtPath:entityPath parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	[self getPath:@"products/histogram" parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
 		NSMutableDictionary *histograms = [NSMutableDictionary dictionary];
 		for (NSString *filterResponseKey in filterResponseKeys) {
-			if ([[responseObject objectForKey:filterResponseKey] isKindOfClass:[NSArray class]]) {
-				NSArray *filtersRepresentation = [responseObject objectForKey:filterResponseKey];
+			if ([responseObject[filterResponseKey] isKindOfClass:[NSArray class]]) {
+				NSArray *filtersRepresentation = responseObject[filterResponseKey];
 				NSMutableArray *filters = [NSMutableArray arrayWithCapacity:[filtersRepresentation count]];
 				for (id filterRep in filtersRepresentation) {
 					if ([filterRep isKindOfClass:[NSDictionary class]]) {
@@ -444,7 +479,7 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 			}
 		} else {
 			if (failure) {
-				failure(operation, [self errorForBadResponse]);
+				failure(operation, [self errorWithInvalidRepresentation:responseObject]);
 			}
 		}
 	} failure:failure];
@@ -454,17 +489,16 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 
 - (void)getBrandsSuccess:(void (^)(NSArray *brands))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-	NSString *entityPath = @"brands";
-	[self makeRequestForEntityAtPath:entityPath parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
-		if ([[responseObject objectForKey:@"brands"] isKindOfClass:[NSArray class]]) {
+	[self getPath:@"brands" parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+		if ([responseObject[@"brands"] isKindOfClass:[NSArray class]]) {
 			if (success) {
-				NSArray *brandsRepresentation = [responseObject objectForKey:@"brands"];
+				NSArray *brandsRepresentation = responseObject[@"brands"];
 				NSArray *brands = [self remoteObjectsForEntityNamed:@"brand" fromRepresentations:brandsRepresentation];
 				success(brands);
 			}
 		} else {
 			if (failure) {
-				failure(operation, [self errorForBadResponse]);
+				failure(operation, [self errorWithInvalidRepresentation:responseObject]);
 			}
 		}
 	} failure:failure];
@@ -474,17 +508,16 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 
 - (void)getRetailersSuccess:(void (^)(NSArray *retailers))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-	NSString *entityPath = @"retailers";
-	[self makeRequestForEntityAtPath:entityPath parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
-		if ([[responseObject objectForKey:@"retailers"] isKindOfClass:[NSArray class]]) {
+	[self getPath:@"retailers" parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+		if ([responseObject[@"retailers"] isKindOfClass:[NSArray class]]) {
 			if (success) {
-				NSArray *retailersRepresentation = [responseObject objectForKey:@"retailers"];
+				NSArray *retailersRepresentation = responseObject[@"retailers"];
 				NSArray *retailers = [self remoteObjectsForEntityNamed:@"retailer" fromRepresentations:retailersRepresentation];
 				success(retailers);
 			}
 		} else {
 			if (failure) {
-				failure(operation, [self errorForBadResponse]);
+				failure(operation, [self errorWithInvalidRepresentation:responseObject]);
 			}
 		}
 	} failure:failure];
@@ -494,17 +527,16 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 
 - (void)getColorsSuccess:(void (^)(NSArray *colors))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-	NSString *entityPath = @"colors";
-	[self makeRequestForEntityAtPath:entityPath parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
-		if ([[responseObject objectForKey:@"colors"] isKindOfClass:[NSArray class]]) {
+	[self getPath:@"colors" parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+		if ([responseObject[@"colors"] isKindOfClass:[NSArray class]]) {
 			if (success) {
-				NSArray *colorsRepresentation = [responseObject objectForKey:@"colors"];
+				NSArray *colorsRepresentation = responseObject[@"colors"];
 				NSArray *colors = [self remoteObjectsForEntityNamed:@"color" fromRepresentations:colorsRepresentation];
 				success(colors);
 			}
 		} else {
 			if (failure) {
-				failure(operation, [self errorForBadResponse]);
+				failure(operation, [self errorWithInvalidRepresentation:responseObject]);
 			}
 		}
 	} failure:failure];
@@ -530,17 +562,16 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 	if (params.count == 0) {
 		params = nil;
 	}
-	NSString *entityPath = @"categories";
-	[self makeRequestForEntityAtPath:entityPath parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
-		if ([[responseObject objectForKey:@"categories"] isKindOfClass:[NSArray class]] && [[responseObject objectForKey:@"metadata"] isKindOfClass:[NSDictionary class]]) {
-			NSArray *categoriesRepresentation = [responseObject objectForKey:@"categories"];
+	[self getPath:@"categories" parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+		if ([responseObject[@"categories"] isKindOfClass:[NSArray class]] && [responseObject[@"metadata"] isKindOfClass:[NSDictionary class]]) {
+			NSArray *categoriesRepresentation = responseObject[@"categories"];
 			NSArray *categories = [self remoteObjectsForEntityNamed:@"category" fromRepresentations:categoriesRepresentation];
 			NSString *rootID = nil;
-			NSDictionary *metadata = [responseObject objectForKey:@"metadata"];
-			if ([[metadata objectForKey:@"root"] isKindOfClass:[NSDictionary class]]) {
-				NSDictionary *rootCat = [metadata objectForKey:@"root"];
-				if ([rootCat objectForKey:@"id"]) {
-					rootID = [rootCat objectForKey:@"id"];
+			NSDictionary *metadata = responseObject[@"metadata"];
+			if ([metadata[@"root"] isKindOfClass:[NSDictionary class]]) {
+				NSDictionary *rootCat = metadata[@"root"];
+				if (rootCat[@"id"]) {
+					rootID = rootCat[@"id"];
 				}
 			}
 			if (categories.count > 0 && rootID.length > 0) {
@@ -550,22 +581,65 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 				}
 			} else {
 				if (failure) {
-					failure(operation, [self errorForBadResponse]);
+					failure(operation, [self errorWithInvalidRepresentation:responseObject]);
 				}
 			}
 		} else {
 			if (failure) {
-				failure(operation, [self errorForBadResponse]);
+				failure(operation, [self errorWithInvalidRepresentation:responseObject]);
 			}
 		}
 	} failure:failure];
 }
 
-#pragma mark - Standard Errors
+#pragma mark - Errors
 
-- (NSError *)errorForBadResponse
+- (NSError *)errorWithBadResponseString:(NSString *)responseString
 {
-	return [NSError errorWithDomain:NSStringFromClass([self class]) code:500 userInfo:@{NSLocalizedDescriptionKey : @"Malformed Response From Server"}];
+	return [NSError errorWithDomain:NSStringFromClass([self class]) code:500 userInfo:@{ NSLocalizedDescriptionKey: @"Malformed Response From Server", @"responseString": responseString }];
+}
+
+- (NSError *)errorNamed:(NSString *)errorName
+{
+	// Placeholder to map server errors to something local.
+	return nil;
+}
+
+- (NSError *)errorFromResponseErrorRepresentation:(NSDictionary *)representation
+{
+	if (representation.count >= 3 && [representation objectForKey:@"errorCode"] != nil && [representation objectForKey:@"errorMessage"] != nil && [representation objectForKey:@"errorName"] != nil) {
+		NSString *errorName = [representation objectForKey:@"errorName"];
+		NSError *namedError = [self errorNamed:errorName];
+		if (namedError != nil) {
+			return namedError;
+		}
+		NSString *errorMessage = [representation objectForKey:@"errorMessage"];
+		if (errorMessage == nil || errorMessage.length < errorName.length) {
+			errorMessage = errorName;
+		}
+		NSInteger errorCode = [[[representation objectForKey:@"errorCode"] description] integerValue];
+		if (errorCode == 0) {
+			errorCode = 500;
+		}
+		NSDictionary *userDict = @{ NSLocalizedDescriptionKey: errorMessage,
+							  NSLocalizedFailureReasonErrorKey: errorName,
+							  @"responseObject": [representation description] };
+		return [NSError errorWithDomain:NSStringFromClass([self class]) code:errorCode userInfo:userDict];
+	}
+	return nil;
+}
+
+- (NSError *)errorWithInvalidRepresentation:(NSDictionary *)representation
+{
+	// make sure the representation isn't an error object, if it is return that.
+	NSError *error = [self errorFromResponseErrorRepresentation:representation];
+	if (error != nil) {
+		return error;
+	}
+	NSDictionary *userDict = @{ NSLocalizedDescriptionKey: @"Invalid Representation",
+							 NSLocalizedFailureReasonErrorKey: @"Invalid Representation",
+							 @"responseObject": [representation description] };
+	return [NSError errorWithDomain:NSStringFromClass([self class]) code:500 userInfo:userDict];
 }
 
 #pragma mark - PSSRemoteObject Conversion
