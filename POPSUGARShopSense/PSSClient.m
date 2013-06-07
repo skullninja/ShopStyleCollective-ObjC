@@ -65,22 +65,30 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 
 #pragma mark - Shared Client
 
+static id _sharedClient = nil;
+static dispatch_once_t once_token = 0;
+
 + (instancetype)sharedClient
 {
-	static PSSClient *_sharedClient = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		NSURL *baseURL = [self defaultBaseURL];
+	dispatch_once(&once_token, ^{
+		if (_sharedClient == nil) {
+			NSURL *baseURL = [self defaultBaseURL];
 #ifdef _POPSUGARShopSense_BASE_URL_
-		NSURL *definedBaseURL = [NSURL URLWithString:_POPSUGARShopSense_BASE_URL_];
-		if (definedBaseURL != nil) {
-			baseURL = definedBaseURL;
-		}
+			NSURL *definedBaseURL = [NSURL URLWithString:_POPSUGARShopSense_BASE_URL_];
+			if (definedBaseURL != nil) {
+				baseURL = definedBaseURL;
+			}
 #endif
-		_sharedClient = [[PSSClient alloc] initWithBaseURL:baseURL];
+			_sharedClient = [[[self class] alloc] initWithBaseURL:baseURL];
+		}
 	});
-	
 	return _sharedClient;
+}
+
++ (void)setSharedInstance:(PSSClient *)client
+{
+	once_token = 0; // resets the once_token so dispatch_once will run again
+	_sharedClient = client;
 }
 
 #pragma mark - AFHTTPClient Setup Overrides
@@ -679,7 +687,8 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 
 #pragma mark - NSCoding
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
 	self = [super initWithCoder:aDecoder];
     if (!self) {
         return nil;
@@ -693,7 +702,8 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
     return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)aCoder {
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
 	[super encodeWithCoder:aCoder];
     [aCoder encodeObject:self.partnerID forKey:@"partnerID"];
     [aCoder encodeObject:self.currentLocale forKey:@"currentLocale"];
@@ -701,7 +711,8 @@ static NSString * const kCASiteIdentifier = @"www.shopstyle.ca";
 
 #pragma mark - NSCopying
 
-- (id)copyWithZone:(NSZone *)zone {
+- (id)copyWithZone:(NSZone *)zone
+{
 	typeof(self) copy = [super copyWithZone:zone];
 	copy.currentLocale = self.currentLocale;
 	copy.partnerID = self.partnerID;
