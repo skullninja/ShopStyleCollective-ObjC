@@ -133,7 +133,7 @@ CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size)
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSSProductImage *instance = [[PSSProductImage alloc] init];
+	PSSProductImage *instance = [[[self class] alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }
@@ -190,7 +190,7 @@ CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size)
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
-	if ((self = [super init])) {
+	if ((self = [self init])) {
 		self.imageURLsBySizeName = [decoder decodeObjectForKey:@"imageURLsBySizeName"];
 		self.URL = [decoder decodeObjectForKey:@"URL"];
 		self.imageID = [decoder decodeObjectForKey:@"imageID"];

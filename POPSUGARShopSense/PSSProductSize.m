@@ -67,7 +67,7 @@
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSSProductSize *instance = [[PSSProductSize alloc] init];
+	PSSProductSize *instance = [[[self class] alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }
@@ -89,7 +89,7 @@
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
-	if ((self = [super init])) {
+	if ((self = [self init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
 	}
 	return self;

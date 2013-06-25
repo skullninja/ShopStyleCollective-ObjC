@@ -76,7 +76,7 @@
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSSColor *instance = [[PSSColor alloc] init];
+	PSSColor *instance = [[[self class] alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }
@@ -110,7 +110,7 @@
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
-	if ((self = [super init])) {
+	if ((self = [self init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
 		self.colorID = [decoder decodeObjectForKey:@"colorID"];
 		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];

@@ -152,7 +152,7 @@
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSSProduct *instance = [[PSSProduct alloc] init];
+	PSSProduct *instance = [[[self class] alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }
@@ -300,7 +300,7 @@
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
-	if ((self = [super init])) {
+	if ((self = [self init])) {
 		self.brand = [decoder decodeObjectForKey:@"brand"];
 		self.categories = [decoder decodeObjectForKey:@"categories"];
 		self.buyURL = [decoder decodeObjectForKey:@"buyURL"];

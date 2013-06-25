@@ -29,6 +29,9 @@
 
 NSString * const PSSInvalidPartnerException = @"com.shopstyle.shopsense:InvalidPartnerException";
 NSString * const PSSInvalidLocaleException = @"com.shopstyle.shopsense:InvalidLocaleException";
+NSString * const PSSMalformedResponseErrorDomain = @"com.shopstyle.shopsense:MalformedResponseError";
+NSString * const PSSInvalidRepresentationErrorDomain = @"com.shopstyle.shopsense:InvalidRepresentationError";
+NSString * const PSSServerResponseErrorDomain = @"com.shopstyle.shopsense:ServerResponseError";
 
 static NSString * const kShopSenseBaseURLString = @"http://api.shopstyle.com/api/v2/";
 static NSString * const kPListPartnerIDKey = @"ShopSensePartnerID";
@@ -85,7 +88,7 @@ static dispatch_once_t once_token = 0;
 	return _sharedClient;
 }
 
-+ (void)setSharedInstance:(PSSClient *)client
++ (void)setSharedClient:(PSSClient *)client
 {
 	once_token = 0; // resets the once_token so dispatch_once will run again
 	_sharedClient = client;
@@ -584,7 +587,7 @@ static dispatch_once_t once_token = 0;
 			}
 			if (categories.count > 0 && rootID.length > 0) {
 				if (success) {
-					PSSCategoryTree *categoryTree = [[PSSCategoryTree alloc] initWithRootID:rootID categories:categories];
+					PSSCategoryTree *categoryTree = [self categoryTreeFromCategories:categories rootCategoryID:rootID];
 					success(categoryTree);
 				}
 			} else {
@@ -600,11 +603,23 @@ static dispatch_once_t once_token = 0;
 	} failure:failure];
 }
 
+- (PSSCategoryTree *)categoryTreeFromCategories:(NSArray *)categories rootCategoryID:(NSString *)rootID
+{
+	if (categories.count > 0 && rootID.length > 0) {
+		PSSCategoryTree *categoryTree = [[PSSCategoryTree alloc] initWithRootID:rootID categories:categories];
+		return categoryTree;
+	}
+	return nil;
+}
+
 #pragma mark - Errors
 
 - (NSError *)errorWithBadResponseString:(NSString *)responseString
 {
-	return [NSError errorWithDomain:NSStringFromClass([self class]) code:500 userInfo:@{ NSLocalizedDescriptionKey: @"Malformed Response From Server", @"responseString": responseString }];
+	NSDictionary *userDict = @{ NSLocalizedDescriptionKey: @"Malformed Response From Server",
+							 NSLocalizedFailureReasonErrorKey: @"Malformed Response From Server",
+							 @"responseString": responseString };
+	return [NSError errorWithDomain:PSSMalformedResponseErrorDomain code:500 userInfo:userDict];
 }
 
 - (NSError *)errorNamed:(NSString *)errorName
@@ -632,7 +647,7 @@ static dispatch_once_t once_token = 0;
 		NSDictionary *userDict = @{ NSLocalizedDescriptionKey: errorMessage,
 							  NSLocalizedFailureReasonErrorKey: errorName,
 							  @"responseObject": [representation description] };
-		return [NSError errorWithDomain:NSStringFromClass([self class]) code:errorCode userInfo:userDict];
+		return [NSError errorWithDomain:PSSServerResponseErrorDomain code:errorCode userInfo:userDict];
 	}
 	return nil;
 }
@@ -647,7 +662,7 @@ static dispatch_once_t once_token = 0;
 	NSDictionary *userDict = @{ NSLocalizedDescriptionKey: @"Invalid Representation",
 							 NSLocalizedFailureReasonErrorKey: @"Invalid Representation",
 							 @"responseObject": [representation description] };
-	return [NSError errorWithDomain:NSStringFromClass([self class]) code:500 userInfo:userDict];
+	return [NSError errorWithDomain:PSSInvalidRepresentationErrorDomain code:500 userInfo:userDict];
 }
 
 #pragma mark - PSSRemoteObject Conversion
@@ -671,6 +686,9 @@ static dispatch_once_t once_token = 0;
 
 - (id<PSSRemoteObject>)remoteObjectForEntityNamed:(NSString *)entityName fromRepresentation:(NSDictionary *)representation
 {
+	if (representation.count == 0) {
+		return nil;
+	}
 	if ([entityName isEqualToString:@"brand"]) {
 		return [PSSBrand instanceFromRemoteRepresentation:representation];
 	} else if ([entityName isEqualToString:@"category"]) {

@@ -29,6 +29,10 @@
 @class PSSCategoryTree;
 
 extern NSString * const PSSInvalidPartnerException;
+extern NSString * const PSSInvalidLocaleException;
+extern NSString * const PSSMalformedResponseErrorDomain;
+extern NSString * const PSSInvalidRepresentationErrorDomain;
+extern NSString * const PSSServerResponseErrorDomain;
 
 typedef enum {
     PSSHistogramFilterNone		= 0,

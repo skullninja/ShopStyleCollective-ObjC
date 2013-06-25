@@ -245,7 +245,7 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
-	if ((self = [super init])) {
+	if ((self = [self init])) {
 		self.searchTerm = [decoder decodeObjectForKey:@"searchTerm"];
 		self.productCategoryID = [decoder decodeObjectForKey:@"productCategoryID"];
 		self.priceDropDate = [decoder decodeObjectForKey:@"priceDropDate"];

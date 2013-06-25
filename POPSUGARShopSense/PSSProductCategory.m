@@ -61,23 +61,6 @@
 	return ([self.categoryID isEqualToString:[(PSSProductCategory *)object categoryID]]);
 }
 
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)encoder
-{
-	[encoder encodeObject:self.categoryID forKey:@"categoryID"];
-	[encoder encodeObject:self.name forKey:@"name"];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-	if ((self = [super init])) {
-		self.categoryID = [decoder decodeObjectForKey:@"categoryID"];
-		self.name = [decoder decodeObjectForKey:@"name"];
-	}
-	return self;
-}
-
 #pragma mark - PSSRemoteObject
 
 + (instancetype)instanceFromRemoteRepresentation:(NSDictionary *)representation
@@ -85,7 +68,7 @@
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSSProductCategory *instance = [[PSSProductCategory alloc] init];
+	PSSProductCategory *instance = [[[self class] alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }
@@ -100,6 +83,23 @@
 			[self setValue:value forKey:key];
 		}
 	}
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[encoder encodeObject:self.categoryID forKey:@"categoryID"];
+	[encoder encodeObject:self.name forKey:@"name"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	if ((self = [self init])) {
+		self.categoryID = [decoder decodeObjectForKey:@"categoryID"];
+		self.name = [decoder decodeObjectForKey:@"name"];
+	}
+	return self;
 }
 
 #pragma mark - NSCopying

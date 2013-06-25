@@ -146,7 +146,7 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
-	if ((self = [super init])) {
+	if ((self = [self init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
 		self.filterID = [decoder decodeObjectForKey:@"filterID"];
 		self.browseURLString = [decoder decodeObjectForKey:@"browseURLString"];

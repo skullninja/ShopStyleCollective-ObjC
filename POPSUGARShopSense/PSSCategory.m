@@ -62,7 +62,7 @@ static NSString * const kParentCategoryIDKey = @"parentId";
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSSCategory *instance = [[PSSCategory alloc] init];
+	PSSCategory *instance = [[[self class] alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }

@@ -77,7 +77,7 @@
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSSRetailer *instance = [[PSSRetailer alloc] init];
+	PSSRetailer *instance = [[[self class] alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }
@@ -112,7 +112,7 @@
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
-	if ((self = [super init])) {
+	if ((self = [self init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
 		self.retailerID = [decoder decodeObjectForKey:@"retailerID"];
 		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];

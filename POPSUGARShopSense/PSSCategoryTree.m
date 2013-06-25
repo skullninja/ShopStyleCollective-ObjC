@@ -42,7 +42,7 @@
 
 - (id)initWithRootID:(NSString *)rootCategoryID categories:(NSArray *)categories
 {
-	self = [super init];
+	self = [self init];
 	if (self) {
 		NSMutableDictionary *mutableCategoryIDMap = [[NSMutableDictionary alloc] initWithCapacity:categories.count];
 		NSMutableArray *mutableRootCategories = [[NSMutableArray alloc] init];
@@ -109,7 +109,7 @@
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
-	if ((self = [super init])) {
+	if ((self = [self init])) {
 		self.categoryIDMap = [decoder decodeObjectForKey:@"categoryIDMap"];
 		self.rootCategories = [decoder decodeObjectForKey:@"rootCategories"];
 	}

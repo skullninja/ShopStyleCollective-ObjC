@@ -76,7 +76,7 @@
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSSBrand *instance = [[PSSBrand alloc] init];
+	PSSBrand *instance = [[[self class] alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }
@@ -110,7 +110,7 @@
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
-	if ((self = [super init])) {
+	if ((self = [self init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
 		self.brandID = [decoder decodeObjectForKey:@"brandID"];
 		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
