@@ -34,17 +34,7 @@ extern NSString * const PSSMalformedResponseErrorDomain;
 extern NSString * const PSSInvalidRepresentationErrorDomain;
 extern NSString * const PSSServerResponseErrorDomain;
 
-typedef enum {
-    PSSHistogramFilterNone		= 0,
-    PSSHistogramFilterBrand		= 1 << 0,
-    PSSHistogramFilterRetailer	= 1 << 1,
-    PSSHistogramFilterPrice		= 1 << 2,
-    PSSHistogramFilterDiscount	= 1 << 3,
-    PSSHistogramFilterSize		= 1 << 4,
-    PSSHistogramFilterColor		= 1 << 5
-} PSSHistogramFilterOptions;
-
-/** A singleton subclass of AFHTTPClient that wraps the ShopSense API web services and converts the response into native Objective-C objects.  
+/** A singleton subclass of AFHTTPClient that wraps the ShopSense API web services and converts the response into native Objective-C objects.
  
  ## Usage:
  1. Get the client by calling the sharedClient class method.
@@ -67,7 +57,7 @@ typedef enum {
 /** Returns the shared client object. */
 + (instancetype)sharedClient;
 
-/** Unique API_KEY string that is assigned to the caller. This parameter must be present before making any requests.  
+/** Unique API_KEY string that is assigned to the caller. This parameter must be present before making any requests.
  Your Partner ID can be found on the https://shopsense.shopstyle.com/ API page. */
 @property (nonatomic, copy) NSString *partnerID;
 
@@ -112,38 +102,30 @@ typedef enum {
  @param searchTerm Text search term, as a user would enter in a "Search:" field.
  @param offset The index of the first product to return, or 0 (zero) if not specified. A client can use this to implement paging through large result sets.
  @param limit The maximum number of results to return, or 100 if not specified. The maximum value is 100. Combine with the offset parameter to implement paging.
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes three arguments: the total count of products that match the provided criteria, available histogram filter options for products that match the provided criteria and an array of `PSSProduct` objects within the offset and limit parameters.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes three arguments: the total count of products that match the provided criteria, available filter types for products that match the provided criteria and an array of `PSSProduct` objects within the offset and limit parameters.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)searchProductsWithTerm:(NSString *)searchTerm offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, PSSHistogramFilterOptions availableFilterOptions, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)searchProductsWithTerm:(NSString *)searchTerm offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *availableFilterTypes, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /** Returns an array of products that match a query specified by the parameters below.
  
  @param queryOrNil A `PSSProductQuery` to define which products to return.
  @param offset The index of the first product to return, or 0 (zero) if not specified. A client can use this to implement paging through large result sets.
  @param limit The maximum number of results to return, or 100 if not specified. The maximum value is 100. Combine with the offset parameter to implement paging.
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes three arguments: the total count of products that match the provided criteria , available histogram filter options for products that match the provided criteria and an array of `PSSProduct` objects within the offset and limit parameters.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes three arguments: the total count of products that match the provided criteria , available filter types for products that match the provided criteria and an array of `PSSProduct` objects within the offset and limit parameters.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)searchProductsWithQuery:(PSSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, PSSHistogramFilterOptions availableFilterOptions, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)searchProductsWithQuery:(PSSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *availableFilterTypes, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
-/** This method returns a list of filters and product counts that describe the results of a given product query. The query is specified using the parameters below.
- 
- Possible values for filter options are:  
- PSSHistogramFilterBrand  
- PSSHistogramFilterRetailer  
- PSSHistogramFilterPrice  
- PSSHistogramFilterDiscount  
- PSSHistogramFilterSize  
- PSSHistogramFilterColor  
+/** This method returns a list of filters and product counts that describe the results of a given product query. The query is specified using the parameters below. See `PSSProductFilter` for possible filter types.
  
  @param queryOrNil A `PSSProductQuery` to define which products are used in the calculation.
- @param filterType The type of filter to return on success. 
+ @param filterTypes The type of filters to return on success.
  @param floorOrNil The minimum count of products required for an entry to be included in the histogram.
  @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: an array of `PSSProductFilter` objects.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil filterOptions:(PSSHistogramFilterOptions)filterOptions floor:(NSNumber *)floorOrNil success:(void (^)(NSDictionary *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil filterTypes:(NSArray *)filterTypes floor:(NSNumber *)floorOrNil success:(void (^)(NSDictionary *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /**---------------------------------------------------------------------------------------
  * @name Getting Lookup Values
@@ -171,7 +153,7 @@ typedef enum {
  */
 - (void)getColorsSuccess:(void (^)(NSArray *colors))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
-/** Returns a tree of the categories available. 
+/** Returns a tree of the categories available.
  
  @param categoryIDOrNil The identifier of the category to use as the starting point. By default, the global root of the category tree is used.
  @param depthOrNil The number of levels from the root to include in the response. By default all the levels are included.
@@ -186,7 +168,7 @@ typedef enum {
 
 @protocol PSSRemoteObject <NSObject>
 
-/** Creates an instance of the receiver from a remote representation of the object. 
+/** Creates an instance of the receiver from a remote representation of the object.
  
  @param representation A dictionary representation of an object from a ShopSense API.
  */

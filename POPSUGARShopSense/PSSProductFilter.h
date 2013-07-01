@@ -23,35 +23,17 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum {
-	PSSProductFilterTypeBrand = 1,
-	PSSProductFilterTypeRetailer = 2,
-	PSSProductFilterTypePrice = 3,
-	PSSProductFilterTypeDiscount = 4,
-	PSSProductFilterTypeSize = 5,
-	PSSProductFilterTypeColor = 6
-} PSSProductFilterType;
-
-extern NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType);
+extern NSString * const PSSProductFilterTypeBrand;
+extern NSString * const PSSProductFilterTypeRetailer;
+extern NSString * const PSSProductFilterTypePrice;
+extern NSString * const PSSProductFilterTypeDiscount;
+extern NSString * const PSSProductFilterTypeSize;
+extern NSString * const PSSProductFilterTypeColor;
 
 /** A filter used to refine a product query or understand a product histogram.
  
  Filters are created with a filter type and identifier unique to that filter type.
  
- Filter types are defined as:
- 
-	 typedef enum {
-		 PSSProductFilterTypeBrand = 1,
-		 PSSProductFilterTypeRetailer = 2,
-		 PSSProductFilterTypePrice = 3,
-		 PSSProductFilterTypeDiscount = 4,
-		 PSSProductFilterTypeSize = 5,
-		 PSSProductFilterTypeColor = 6
-	 } PSSProductFilterType;
- 
- You can convert a filter type to a string with:
- 
- `NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType);`
  */
 
 @interface PSSProductFilter : NSObject <NSCoding, NSCopying>
@@ -61,7 +43,7 @@ extern NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterTy
  *  ---------------------------------------------------------------------------------------
  */
 
-/** The identifier in the receiver's `type`. 
+/** The identifier in the receiver's `type`.
  
  You must combine with `type` to uniquely identify the receiver. */
 @property (nonatomic, copy, readonly) NSNumber *filterID;
@@ -84,15 +66,12 @@ extern NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterTy
  
  `PSSProductFilterTypeSize`
  Filter by size.
-
+ 
  `PSSProductFilterTypeColor`
  Filter by color.
  
- A filter type can be converted to it's string representation using:
- 
- `NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType);`
  */
-@property (nonatomic, assign, readonly) PSSProductFilterType type;
+@property (nonatomic, copy, readonly) NSString *type;
 
 /** A name to display for the receiver. */
 @property (nonatomic, copy) NSString *name;
@@ -115,14 +94,14 @@ extern NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterTy
  *  ---------------------------------------------------------------------------------------
  */
 
-/** Creating a `PSSProductFilter` requires the type and filterID. */
-- (id)initWithType:(PSSProductFilterType)type filterID:(NSNumber *)filterID;
+/** Creating a `PSSProductFilter` requires a type and filterID. */
+- (instancetype)initWithType:(NSString *)type filterID:(NSNumber *)filterID;
 
 /** A convenience method as an alternative to alloc and `initWithType:filterID:`
  
  @see initWithType:filterID:
  */
-+ (instancetype)filterWithType:(PSSProductFilterType)type filterID:(NSNumber *)filterID;
++ (instancetype)filterWithType:(NSString *)type filterID:(NSNumber *)filterID;
 
 /**---------------------------------------------------------------------------------------
  * @name Converting to URL Parameters

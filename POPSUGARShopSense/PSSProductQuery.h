@@ -35,7 +35,7 @@ typedef enum {
 extern NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort);
 
 /**
- The ShopSense API is made up of several methods to return product data, including an array of products 
+ The ShopSense API is made up of several methods to return product data, including an array of products
  and a product histogram. A `PSSProductFilter` can be used to further refine the results from these requests.
  */
 
@@ -57,22 +57,22 @@ extern NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort);
  *  ---------------------------------------------------------------------------------------
  */
 
-/** Text search term, as a user would enter in a "Search:" field.  
+/** Text search term, as a user would enter in a "Search:" field.
  
  This is also known as `fts` on the ShopSense API documentation. */
 @property (nonatomic, copy) NSString *searchTerm;
 
-/** A product category identifier. Only products within the category will be returned. This should be a `PSSProductCategory categoryID`.  
+/** A product category identifier. Only products within the category will be returned. This should be a `PSSProductCategory categoryID`.
  
-  This is also known as `cat` on the ShopSense API documentation. */
+ This is also known as `cat` on the ShopSense API documentation. */
 @property (nonatomic, copy) NSString *productCategoryID;
 
-/** A price drop date, if present, limits the results to products whose price has dropped since the given date.  
+/** A price drop date, if present, limits the results to products whose price has dropped since the given date.
  
  This is also known as `pdd` on the ShopSense API documentation.  */
 @property (nonatomic, copy) NSDate *priceDropDate;
 
-/** The sort algorithm to use. 
+/** The sort algorithm to use.
  
  Possible values are:
  
@@ -91,7 +91,7 @@ extern NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort);
  `PSSProductQuerySortPopular`
  Sort by the popularity of the products.
  
- This is also known as `sort` on the ShopSense API documentation. 
+ This is also known as `sort` on the ShopSense API documentation.
  
  A sort can be converted to it's string representation using:
  
@@ -111,7 +111,7 @@ extern NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort);
 
 /** All filters that are part of the receiver.
  
- These are also known as `fl` parameters on the ShopSense API documentation. 
+ These are also known as `fl` parameters on the ShopSense API documentation.
  
  @return An array of all `PSSProductFilter` objects.
  */
@@ -120,10 +120,10 @@ extern NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort);
 /** All filters that are part of the receiver matching filterType.
  
  @param filterType The type of filters to return.
- @return An array of all `PSSProductFilter` objects of a specific `PSSProductFilterType` that are part of the receiver. */
-- (NSArray *)productFiltersOfType:(PSSProductFilterType)filterType;
+ @return An array of all `PSSProductFilter` objects of a specific filter type that are part of the receiver. See `PSSProductFilter` for a list of the avaiable filter types. */
+- (NSArray *)productFiltersOfType:(NSString *)filterType;
 
-/** Add a `PSSProductFilter` object to the receiver. 
+/** Add a `PSSProductFilter` object to the receiver.
  
  If the filter exists it will not be added again.
  
@@ -148,11 +148,11 @@ extern NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort);
 /** Clears all `PSSProductFilter` objects that are part of the receiver. */
 - (void)clearProductFilters;
 
-/** Clears all `PSSProductFilter` objects of a specific `PSSProductFilterType` that are part of the receiver.
+/** Clears all `PSSProductFilter` objects of a specific filter type that are part of the receiver. See `PSSProductFilter` for a list of the avaiable filter types.
  
  @param filterType The type of filters to remove.
  */
-- (void)clearProductFiltersOfType:(PSSProductFilterType)filterType;
+- (void)clearProductFiltersOfType:(NSString *)filterType;
 
 /**---------------------------------------------------------------------------------------
  * @name Converting to URL Parameters

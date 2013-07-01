@@ -23,58 +23,44 @@
 
 #import "PSSProductFilter.h"
 
+NSString * const PSSProductFilterTypeBrand = @"Brand";
+NSString * const PSSProductFilterTypeRetailer = @"Retailer";
+NSString * const PSSProductFilterTypePrice = @"Price";
+NSString * const PSSProductFilterTypeDiscount = @"Discount";
+NSString * const PSSProductFilterTypeSize = @"Size";
+NSString * const PSSProductFilterTypeColor = @"Color";
+
 @interface PSSProductFilter ()
 
-@property (nonatomic, assign, readwrite) PSSProductFilterType type;
+@property (nonatomic, copy, readwrite) NSString *type;
 @property (nonatomic, copy, readwrite) NSNumber *filterID;
 
 @end
-
-NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
-{
-	// FIXME: Localize
-	switch (filterType) {
-		case PSSProductFilterTypeBrand:
-			return @"Brand";
-		case PSSProductFilterTypeRetailer:
-			return @"Retailer";
-		case PSSProductFilterTypePrice:
-			return @"Price";
-		case PSSProductFilterTypeDiscount:
-			return @"Discount";
-		case PSSProductFilterTypeSize:
-			return @"Size";
-		case PSSProductFilterTypeColor:
-			return @"Color";
-		default:
-			return nil;
-	}
-}
 
 @implementation PSSProductFilter
 
 #pragma mark - Init
 
-+ (instancetype)filterWithType:(PSSProductFilterType)type filterID:(NSNumber *)filterID
++ (instancetype)filterWithType:(NSString *)type filterID:(NSNumber *)filterID
 {
 	PSSProductFilter *filter = [[PSSProductFilter alloc] initWithType:type filterID:filterID];
 	return filter;
 }
 
-- (id)initWithType:(PSSProductFilterType)type filterID:(NSNumber *)filterID
+- (instancetype)initWithType:(NSString *)type filterID:(NSNumber *)filterID
 {
 	NSParameterAssert(filterID != nil);
 	self = [super init];
 	if (self) {
 		_filterID = [filterID copy];
-		_type = type;
+		_type = [type copy];
 	}
 	return self;
 }
 
 #pragma mark - Conversion to URL Query Parameters
 
-- (NSString *)queryParameterRepresentation
+- (NSString *)typePrefixForQueryParameterRepresentation
 {
 	// Filter prefixes are:
 	// b - brand
@@ -84,30 +70,24 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 	// s - size
 	// c - color
 	NSString *prefix = @"";
-	switch (self.type) {
-		case PSSProductFilterTypeBrand:
-			prefix = @"b";
-			break;
-		case PSSProductFilterTypeRetailer:
-			prefix = @"r";
-			break;
-		case PSSProductFilterTypePrice:
-			prefix = @"p";
-			break;
-		case PSSProductFilterTypeDiscount:
-			prefix = @"d";
-			break;
-		case PSSProductFilterTypeSize:
-			prefix = @"s";
-			break;
-		case PSSProductFilterTypeColor:
-			prefix = @"c";
-			break;
-			
-		default:
-			break;
+	if ([self.type isEqualToString:PSSProductFilterTypeBrand]) {
+		prefix = @"b";
+	} else if ([self.type isEqualToString:PSSProductFilterTypeRetailer]) {
+		prefix = @"r";
+	} else if ([self.type isEqualToString:PSSProductFilterTypePrice]) {
+		prefix = @"p";
+	} else if ([self.type isEqualToString:PSSProductFilterTypeDiscount]) {
+		prefix = @"d";
+	} else if ([self.type isEqualToString:PSSProductFilterTypeSize]) {
+		prefix = @"s";
+	} else if ([self.type isEqualToString:PSSProductFilterTypeColor]) {
+		prefix = @"c";
 	}
-	return [prefix stringByAppendingFormat:@"%d", self.filterID.integerValue];
+	return prefix;
+}
+- (NSString *)queryParameterRepresentation
+{
+	return [[self typePrefixForQueryParameterRepresentation] stringByAppendingString: self.filterID.stringValue];
 }
 
 #pragma mark - NSObject
@@ -119,7 +99,11 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 
 - (NSUInteger)hash
 {
-	return ((self.filterID.hash << sizeof(PSSProductFilterType)) ^ self.type);
+	// a very simple hash
+	NSUInteger hash = 0;
+	hash ^= self.type.hash;
+	hash ^= self.filterID.hash;
+	return hash;
 }
 
 - (BOOL)isEqual:(id)object
@@ -130,7 +114,7 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.filterID isEqualToNumber:[(PSSProductFilter *)object filterID]] && self.type == [(PSSProductFilter *)object type]);
+	return ([self.filterID isEqualToNumber:[(PSSProductFilter *)object filterID]] && [self.type isEqualToString:[(PSSProductFilter *)object type]]);
 }
 
 #pragma mark - NSCoding
@@ -140,7 +124,7 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 	[encoder encodeObject:self.name forKey:@"name"];
 	[encoder encodeObject:self.filterID forKey:@"filterID"];
 	[encoder encodeObject:self.browseURLString forKey:@"browseURLString"];
-	[encoder encodeInteger:self.type forKey:@"type"];
+	[encoder encodeObject:self.type forKey:@"type"];
 	[encoder encodeObject:self.productCount forKey:@"productCount"];
 }
 
@@ -150,7 +134,7 @@ NSString * NSStringFromPSSProductFilterType(PSSProductFilterType filterType)
 		self.name = [decoder decodeObjectForKey:@"name"];
 		self.filterID = [decoder decodeObjectForKey:@"filterID"];
 		self.browseURLString = [decoder decodeObjectForKey:@"browseURLString"];
-		self.type = [decoder decodeIntegerForKey:@"type"];
+		self.type = [decoder decodeObjectForKey:@"type"];
 		self.productCount = [decoder decodeObjectForKey:@"productCount"];
 	}
 	return self;

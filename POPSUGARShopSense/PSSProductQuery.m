@@ -27,8 +27,6 @@
 
 @property (nonatomic, strong) NSMutableSet *productFilterSet;
 
-- (NSSet *)productFilterSetOfType:(PSSProductFilterType)filterType;
-
 @end
 
 NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
@@ -100,10 +98,10 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	return self.productFilterSet.allObjects;
 }
 
-- (NSSet *)productFilterSetOfType:(PSSProductFilterType)filterType
+- (NSSet *)productFilterSetOfType:(NSString *)filterType
 {
 	NSSet *filteredSet = [self.productFilterSet objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-		if ([(PSSProductFilter *)obj type] == filterType) {
+		if ([[(PSSProductFilter *)obj type] isEqualToString:filterType]) {
 			return YES;
 		}
 		return NO;
@@ -111,7 +109,7 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	return filteredSet;
 }
 
-- (NSArray *)productFiltersOfType:(PSSProductFilterType)filterType
+- (NSArray *)productFiltersOfType:(NSString *)filterType
 {
 	return [[self productFilterSetOfType:filterType] allObjects];
 }
@@ -121,7 +119,7 @@ NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort)
 	[self.productFilterSet removeAllObjects];
 }
 
-- (void)clearProductFiltersOfType:(PSSProductFilterType)filterType
+- (void)clearProductFiltersOfType:(NSString *)filterType
 {
 	[self.productFilterSet minusSet:[self productFilterSetOfType:filterType]];
 }
