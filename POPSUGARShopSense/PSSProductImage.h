@@ -24,16 +24,13 @@
 #import <Foundation/Foundation.h>
 #import "PSSClient.h"
 
-typedef enum {
-	PSSProductImageSizeSmall = 1,
-	PSSProductImageSizeIPhoneSmall = 2,
-	PSSProductImageSizeMedium = 3,
-	PSSProductImageSizeLarge = 4,
-	PSSProductImageSizeIPhone = 5
-} PSSProductImageSize;
+extern NSString * const PSSProductImageSizeSmall;
+extern NSString * const PSSProductImageSizeIPhoneSmall;
+extern NSString * const PSSProductImageSizeMedium;
+extern NSString * const PSSProductImageSizeLarge;
+extern NSString * const PSSProductImageSizeIPhone;
 
-extern NSString * NSStringFromPSSProductImageSize(PSSProductImageSize size);
-extern CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size);
+extern CGSize CGSizeFromPSSProductImageSize(NSString *size);
 
 /** An image of a `PSSProduct` */
 
@@ -45,7 +42,7 @@ extern CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size);
 /** The absolute URL to fetch the original image data. */
 @property (nonatomic, copy, readonly) NSURL *URL;
 
-/** The absolute URL to fetch the resized image data. 
+/** The absolute URL to fetch the resized image data.
  
  Images are cut into different sizes. Possible sizes are:
  
@@ -59,17 +56,13 @@ extern CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size);
  
  PSSProductImageSizeNamedIPhone = "IPhone" image with a maximum size (288,360)
  
- You can get a string representation of the size with:
- 
- `NSString * NSStringFromPSSProductImageSize(PSSProductImageSize size)`
- 
  You can get the bounding CGSize of a size with:
  
- `CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size);`
+ `CGSize CGSizeFromPSSProductImageSize(NSString *size);`
  
  The original image is resized to fit within this size
  without changing the aspect ratio. Therefor the actual width may be less than this number.
  */
-- (NSURL *)imageURLWithSize:(PSSProductImageSize)size;
+- (NSURL *)imageURLWithSize:(NSString *)size;
 
 @end

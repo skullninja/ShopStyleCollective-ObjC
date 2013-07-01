@@ -26,6 +26,12 @@
 
 static NSString * const kOriginalImageURLKey = @"Original";
 
+NSString * const PSSProductImageSizeSmall = @"Small";
+NSString * const PSSProductImageSizeIPhoneSmall = @"IPhoneSmall";
+NSString * const PSSProductImageSizeMedium = @"Medium";
+NSString * const PSSProductImageSizeLarge = @"Large";
+NSString * const PSSProductImageSizeIPhone = @"IPhone";
+
 @interface PSSProductImage ()
 
 @property (nonatomic, copy, readwrite) NSString *imageID;
@@ -34,40 +40,20 @@ static NSString * const kOriginalImageURLKey = @"Original";
 
 @end
 
-NSString * NSStringFromPSSProductImageSizeName(PSSProductImageSize size)
+CGSize CGSizeFromPSSProductImageSize(NSString *size)
 {
-	switch (size) {
-		case PSSProductImageSizeSmall:
-			return @"Small";
-		case PSSProductImageSizeIPhoneSmall:
-			return @"IPhoneSmall";
-		case PSSProductImageSizeMedium:
-			return @"Medium";
-		case PSSProductImageSizeLarge:
-			return @"Large";
-		case PSSProductImageSizeIPhone:
-			return @"IPhone";
-		default:
-			return nil;
+	if ([size isEqualToString:PSSProductImageSizeSmall]) {
+		return CGSizeMake(32, 40);
+	} else if ([size isEqualToString:PSSProductImageSizeIPhoneSmall]) {
+		return CGSizeMake(100, 125);
+	} else if ([size isEqualToString:PSSProductImageSizeMedium]) {
+		return CGSizeMake(112, 140);
+	} else if ([size isEqualToString:PSSProductImageSizeLarge]) {
+		return CGSizeMake(164, 205);
+	} else if ([size isEqualToString:PSSProductImageSizeIPhone]) {
+		return CGSizeMake(288, 360);
 	}
-}
-
-CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size)
-{
-	switch (size) {
-		case PSSProductImageSizeSmall:
-			return CGSizeMake(32, 40);
-		case PSSProductImageSizeIPhoneSmall:
-			return CGSizeMake(100, 125);
-		case PSSProductImageSizeMedium:
-			return CGSizeMake(112, 140);
-		case PSSProductImageSizeLarge:
-			return CGSizeMake(164, 205);
-		case PSSProductImageSizeIPhone:
-			return CGSizeMake(288, 360);
-		default:
-			return CGSizeZero;
-	}
+	return CGSizeZero;
 }
 
 @implementation PSSProductImage
@@ -82,20 +68,20 @@ CGSize CGSizeFromPSSProductImageSize(PSSProductImageSize size)
 	return _imageURLsBySizeName;
 }
 
-- (NSURL *)imageURLWithSize:(PSSProductImageSize)size
+- (NSURL *)imageURLWithSize:(NSString *)size
 {
-	return self.imageURLsBySizeName[NSStringFromPSSProductImageSizeName(size)];
+	return self.imageURLsBySizeName[size];
 }
 
 #pragma mark - Product Image Helpers
 
 - (NSArray *)orderedImageSizeNames
 {
-	return @[ NSStringFromPSSProductImageSizeName(PSSProductImageSizeSmall),
-		   NSStringFromPSSProductImageSizeName(PSSProductImageSizeIPhoneSmall),
-		   NSStringFromPSSProductImageSizeName(PSSProductImageSizeMedium),
-		   NSStringFromPSSProductImageSizeName(PSSProductImageSizeLarge),
-		   NSStringFromPSSProductImageSizeName(PSSProductImageSizeIPhone) ];
+	return @[ PSSProductImageSizeSmall,
+		   PSSProductImageSizeIPhoneSmall,
+		   PSSProductImageSizeMedium,
+		   PSSProductImageSizeLarge,
+		   PSSProductImageSizeIPhone ];
 }
 
 #pragma mark - NSObject

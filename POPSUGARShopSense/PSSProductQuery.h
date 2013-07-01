@@ -24,15 +24,11 @@
 #import <Foundation/Foundation.h>
 #import "PSSProductFilter.h"
 
-typedef enum {
-	PSSProductQuerySortDefault = 0,
-	PSSProductQuerySortPriceLoHi,
-	PSSProductQuerySortPriceHiLo,
-	PSSProductQuerySortRecency,
-	PSSProductQuerySortPopular
-} PSSProductQuerySort;
-
-extern NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort);
+extern NSString * const PSSProductQuerySortPriceLoHi;
+extern NSString * const PSSProductQuerySortPriceHiLo;
+extern NSString * const PSSProductQuerySortRecency;
+extern NSString * const PSSProductQuerySortPopular;
+extern NSString * const PSSProductQuerySortDefault;
 
 /**
  The ShopSense API is made up of several methods to return product data, including an array of products
@@ -92,12 +88,8 @@ extern NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort);
  Sort by the popularity of the products.
  
  This is also known as `sort` on the ShopSense API documentation.
- 
- A sort can be converted to it's string representation using:
- 
- `NSString * NSStringFromPSSProductQuerySort(PSSProductQuerySort sort);`
  */
-@property (nonatomic, assign) PSSProductQuerySort sort;
+@property (nonatomic, copy) NSString *sort;
 
 /** YES to include products from outside the -[PSSClient currentLocale] in the response to requests using the receiver. Default is NO.
  

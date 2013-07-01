@@ -50,12 +50,30 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 - (instancetype)initWithType:(NSString *)type filterID:(NSNumber *)filterID
 {
 	NSParameterAssert(filterID != nil);
+	NSParameterAssert(type != nil);
+	NSAssert([[self class] isValidType:type], @"You must choose a type from the supplied constants.");
 	self = [super init];
 	if (self) {
 		_filterID = [filterID copy];
 		_type = [type copy];
 	}
 	return self;
+}
+
+#pragma mark - type
+
++ (BOOL)isValidType:(NSString *)type
+{
+	return ([type isEqualToString:PSSProductFilterTypeBrand] || [type isEqualToString:PSSProductFilterTypeRetailer] || [type isEqualToString:PSSProductFilterTypePrice] || [type isEqualToString:PSSProductFilterTypeDiscount] || [type isEqualToString:PSSProductFilterTypeSize] || [type isEqualToString:PSSProductFilterTypeColor]);
+}
+
+- (void)setType:(NSString *)type
+{
+	NSParameterAssert(type != nil);
+	NSAssert([[self class] isValidType:type], @"You must choose a type from the supplied constants.");
+	if (![type isEqualToString:self.type]) {
+		_type = [type copy];
+	}
 }
 
 #pragma mark - Conversion to URL Query Parameters
@@ -85,6 +103,7 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 	}
 	return prefix;
 }
+
 - (NSString *)queryParameterRepresentation
 {
 	return [[self typePrefixForQueryParameterRepresentation] stringByAppendingString: self.filterID.stringValue];
