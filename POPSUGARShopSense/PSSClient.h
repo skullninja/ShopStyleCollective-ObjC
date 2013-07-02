@@ -122,10 +122,10 @@ extern NSString * const PSSServerResponseErrorDomain;
  @param queryOrNil A `PSSProductQuery` to define which products are used in the calculation.
  @param filterTypes The type of filters to return on success.
  @param floorOrNil The minimum count of products required for an entry to be included in the histogram.
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes one argument: an array of `PSSProductFilter` objects.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes two arguments: the total count of products that match the provided criteria and an array of `PSSProductFilter` objects.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil filterTypes:(NSArray *)filterTypes floor:(NSNumber *)floorOrNil success:(void (^)(NSDictionary *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil filterTypes:(NSArray *)filterTypes floor:(NSNumber *)floorOrNil success:(void (^)(NSUInteger totalCount, NSDictionary *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /**---------------------------------------------------------------------------------------
  * @name Getting Lookup Values

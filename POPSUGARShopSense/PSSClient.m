@@ -422,7 +422,7 @@ static dispatch_once_t once_token = 0;
 	return @{ PSSProductFilterTypeBrand: @"brandHistogram", PSSProductFilterTypeRetailer: @"retailerHistogram", PSSProductFilterTypePrice: @"priceHistogram", PSSProductFilterTypeDiscount: @"discountHistogram", PSSProductFilterTypeSize: @"sizeHistogram", PSSProductFilterTypeColor: @"colorHistogram" };
 }
 
-- (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil filterTypes:(NSArray *)filterTypes floor:(NSNumber *)floorOrNil success:(void (^)(NSDictionary *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil filterTypes:(NSArray *)filterTypes floor:(NSNumber *)floorOrNil success:(void (^)(NSUInteger totalCount, NSDictionary *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
 	NSMutableArray *filterResponseKeys = [NSMutableArray array];
@@ -445,6 +445,13 @@ static dispatch_once_t once_token = 0;
 		[params addEntriesFromDictionary:queryParams];
 	}
 	[self getPath:@"products/histogram" parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+		NSUInteger totalCount = 0;
+		if ([responseObject[@"metadata"] isKindOfClass:[NSDictionary class]]) {
+			NSDictionary *metadata = responseObject[@"metadata"];
+			if ([metadata[@"total"] isKindOfClass:[NSNumber class]]) {
+				totalCount = [metadata[@"total"] integerValue];
+			}
+		}
 		NSMutableDictionary *histograms = [NSMutableDictionary dictionary];
 		for (NSString *filterResponseKey in filterResponseKeys) {
 			if ([responseObject[filterResponseKey] isKindOfClass:[NSArray class]]) {
@@ -466,7 +473,7 @@ static dispatch_once_t once_token = 0;
 		}
 		if (histograms.count > 0) {
 			if (success) {
-				success(histograms);
+				success(totalCount, histograms);
 			}
 		} else {
 			if (failure) {
