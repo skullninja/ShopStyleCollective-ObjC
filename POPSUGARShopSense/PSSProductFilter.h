@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "PSSClient.h"
 
 extern NSString * const PSSProductFilterTypeBrand;
 extern NSString * const PSSProductFilterTypeRetailer;
@@ -36,7 +37,7 @@ extern NSString * const PSSProductFilterTypeColor;
  
  */
 
-@interface PSSProductFilter : NSObject <NSCoding, NSCopying>
+@interface PSSProductFilter : NSObject <NSCoding, NSCopying, PSSRemoteObject>
 
 /**---------------------------------------------------------------------------------------
  * @name Filter Parameters
@@ -82,7 +83,7 @@ extern NSString * const PSSProductFilterTypeColor;
  */
 
 /** A shopstyle.com URL that shows more products like the receiver. */
-@property (nonatomic, copy) NSString *browseURLString;
+@property (nonatomic, copy) NSURL *browseURL;
 
 /** A count of the products that would be found if the receiver was used to further filter the result set.
  

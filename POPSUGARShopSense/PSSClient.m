@@ -322,7 +322,7 @@ static dispatch_once_t once_token = 0;
 {
 	NSParameterAssert(productID != nil);
 	NSString *path = [NSString stringWithFormat:@"products/%d",productID.integerValue];
-	[self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	[self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		if (success) {
 			PSSProduct *product = (PSSProduct *)[self remoteObjectForEntityNamed:@"product" fromRepresentation:responseObject];
 			success(product);
@@ -357,7 +357,7 @@ static dispatch_once_t once_token = 0;
 	if (params.count == 0) {
 		params = nil;
 	}
-	[self getPath:@"products" parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	[self getPath:@"products" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		
 		if ([responseObject[@"metadata"] isKindOfClass:[NSDictionary class]] && [responseObject[@"products"] isKindOfClass:[NSArray class]]) {
 			
@@ -387,36 +387,6 @@ static dispatch_once_t once_token = 0;
 	} failure:failure];
 }
 
-- (PSSProductFilter *)productFilterForHistogramResponseKey:(NSString *)key represention:(NSDictionary *)representation
-{
-	if (representation[@"id"] == nil) {
-		return nil;
-	}
-	id value = representation[@"id"];
-	NSNumber *filterID = nil;
-	if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
-		filterID = [NSNumber numberWithInteger:[[value description] integerValue]];
-	}
-	if (filterID == nil) {
-		return nil;
-	}
-	
-	NSString *filterType = nil;
-	NSDictionary *map = [self histogramResponseKeyToFilterTypeMap];
-	NSArray *possibleFilterTypes = [map allKeysForObject:key];
-	if (possibleFilterTypes.count == 0) {
-		PSSDLog(@"Unknown Histogram Response Key: %@", key);
-		return nil;
-	}
-	filterType = [possibleFilterTypes lastObject];
-	
-	PSSProductFilter *filter = [PSSProductFilter filterWithType:filterType filterID:filterID];
-	filter.browseURLString = representation[@"url"];
-	filter.name = representation[@"name"];
-	filter.productCount = representation[@"count"];
-	return filter;
-}
-
 - (NSDictionary *)histogramResponseKeyToFilterTypeMap
 {
 	return @{ PSSProductFilterTypeBrand: @"brandHistogram", PSSProductFilterTypeRetailer: @"retailerHistogram", PSSProductFilterTypePrice: @"priceHistogram", PSSProductFilterTypeDiscount: @"discountHistogram", PSSProductFilterTypeSize: @"sizeHistogram", PSSProductFilterTypeColor: @"colorHistogram" };
@@ -444,7 +414,7 @@ static dispatch_once_t once_token = 0;
 		NSDictionary *queryParams = [queryOrNil queryParameterRepresentation];
 		[params addEntriesFromDictionary:queryParams];
 	}
-	[self getPath:@"products/histogram" parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	[self getPath:@"products/histogram" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		NSUInteger totalCount = 0;
 		if ([responseObject[@"metadata"] isKindOfClass:[NSDictionary class]]) {
 			NSDictionary *metadata = responseObject[@"metadata"];
@@ -456,18 +426,25 @@ static dispatch_once_t once_token = 0;
 		for (NSString *filterResponseKey in filterResponseKeys) {
 			if ([responseObject[filterResponseKey] isKindOfClass:[NSArray class]]) {
 				NSArray *filtersRepresentation = responseObject[filterResponseKey];
-				NSMutableArray *filters = [NSMutableArray arrayWithCapacity:[filtersRepresentation count]];
-				for (id filterRep in filtersRepresentation) {
-					if ([filterRep isKindOfClass:[NSDictionary class]]) {
-						PSSProductFilter *filter = [self productFilterForHistogramResponseKey:filterResponseKey represention:filterRep];
-						if (filter != nil) {
-							[filters addObject:filter];
+				NSString *filterType = nil;
+				NSDictionary *map = [self histogramResponseKeyToFilterTypeMap];
+				NSArray *possibleFilterTypes = [map allKeysForObject:filterResponseKey];
+				if (possibleFilterTypes.count == 0) {
+					PSSDLog(@"Unknown Histogram Response Key: %@", filterResponseKey);
+				} else {
+					filterType = [possibleFilterTypes lastObject];
+					NSMutableArray *filters = [NSMutableArray arrayWithCapacity:[filtersRepresentation count]];
+					for (id possibleFilterRep in filtersRepresentation) {
+						if ([possibleFilterRep isKindOfClass:[NSDictionary class]]) {
+							NSMutableDictionary *filterRep = [possibleFilterRep mutableCopy];
+							filterRep[@"type"] = filterType;
+							id remoteObject = [self remoteObjectForEntityNamed:@"productFilter" fromRepresentation:filterRep];
+							if (remoteObject != nil) {
+								[filters addObject:remoteObject];
+							}
 						}
 					}
-				}
-				if (filters.count > 0) {
-					NSString *key = [(PSSProductFilter *)[filters lastObject] type];
-					histograms[key] = filters;
+					histograms[filterType] = filters;
 				}
 			}
 		}
@@ -487,7 +464,7 @@ static dispatch_once_t once_token = 0;
 
 - (void)getBrandsSuccess:(void (^)(NSArray *brands))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-	[self getPath:@"brands" parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	[self getPath:@"brands" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		if ([responseObject[@"brands"] isKindOfClass:[NSArray class]]) {
 			if (success) {
 				NSArray *brandsRepresentation = responseObject[@"brands"];
@@ -506,7 +483,7 @@ static dispatch_once_t once_token = 0;
 
 - (void)getRetailersSuccess:(void (^)(NSArray *retailers))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-	[self getPath:@"retailers" parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	[self getPath:@"retailers" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		if ([responseObject[@"retailers"] isKindOfClass:[NSArray class]]) {
 			if (success) {
 				NSArray *retailersRepresentation = responseObject[@"retailers"];
@@ -525,7 +502,7 @@ static dispatch_once_t once_token = 0;
 
 - (void)getColorsSuccess:(void (^)(NSArray *colors))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-	[self getPath:@"colors" parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	[self getPath:@"colors" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		if ([responseObject[@"colors"] isKindOfClass:[NSArray class]]) {
 			if (success) {
 				NSArray *colorsRepresentation = responseObject[@"colors"];
@@ -560,7 +537,7 @@ static dispatch_once_t once_token = 0;
 	if (params.count == 0) {
 		params = nil;
 	}
-	[self getPath:@"categories" parameters:params success:^(AFHTTPRequestOperation *operation, NSDictionary *responseObject) {
+	[self getPath:@"categories" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		if ([responseObject[@"categories"] isKindOfClass:[NSArray class]] && [responseObject[@"metadata"] isKindOfClass:[NSDictionary class]]) {
 			NSArray *categoriesRepresentation = responseObject[@"categories"];
 			NSArray *categories = [self remoteObjectsForEntityNamed:@"category" fromRepresentations:categoriesRepresentation];
@@ -686,6 +663,8 @@ static dispatch_once_t once_token = 0;
 		return [PSSProduct instanceFromRemoteRepresentation:representation];
 	} else if ([entityName isEqualToString:@"retailer"]) {
 		return [PSSRetailer instanceFromRemoteRepresentation:representation];
+	} else if ([entityName isEqualToString:@"productFilter"]) {
+		return [PSSProductFilter instanceFromRemoteRepresentation:representation];
 	}
 	return nil;
 }

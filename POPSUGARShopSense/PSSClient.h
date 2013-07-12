@@ -22,11 +22,11 @@
 // THE SOFTWARE.
 
 #import "AFHTTPClient.h"
-#import "PSSProductFilter.h"
 
 @class PSSProduct;
 @class PSSProductQuery;
 @class PSSCategoryTree;
+@class PSSProductFilter;
 
 extern NSString * const PSSInvalidPartnerException;
 extern NSString * const PSSInvalidLocaleException;

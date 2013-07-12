@@ -41,14 +41,14 @@ NSString * const PSSProductQuerySortDefault = @"Relevance";
 
 + (instancetype)productQueryWithSearchTerm:(NSString *)searchTearm
 {
-	PSSProductQuery *instance = [[PSSProductQuery alloc] init];
+	PSSProductQuery *instance = [[[self class] alloc] init];
 	instance.searchTerm = searchTearm;
 	return instance;
 }
 
 + (instancetype)productQueryWithCategoryID:(NSString *)productCategoryID
 {
-	PSSProductQuery *instance = [[PSSProductQuery alloc] init];
+	PSSProductQuery *instance = [[[self class] alloc] init];
 	instance.productCategoryID = productCategoryID;
 	return instance;
 }

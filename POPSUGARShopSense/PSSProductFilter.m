@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 #import "PSSProductFilter.h"
+#import "POPSUGARShopSense.h"
 
 NSString * const PSSProductFilterTypeBrand = @"Brand";
 NSString * const PSSProductFilterTypeRetailer = @"Retailer";
@@ -43,8 +44,7 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 
 + (instancetype)filterWithType:(NSString *)type filterID:(NSNumber *)filterID
 {
-	PSSProductFilter *filter = [[PSSProductFilter alloc] initWithType:type filterID:filterID];
-	return filter;
+	return [[[self class] alloc] initWithType:type filterID:filterID];
 }
 
 - (instancetype)initWithType:(NSString *)type filterID:(NSNumber *)filterID
@@ -116,6 +116,11 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 	return [[super description] stringByAppendingFormat:@" %@", [self queryParameterRepresentation]];
 }
 
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key
+{
+	PSSDLog(@"Warning: Undefined Key Named '%@'", key);
+}
+
 - (NSUInteger)hash
 {
 	// a very simple hash
@@ -136,13 +141,60 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 	return ([self.filterID isEqualToNumber:[(PSSProductFilter *)object filterID]] && [self.type isEqualToString:[(PSSProductFilter *)object type]]);
 }
 
+#pragma mark - PSSRemoteObject
+
++ (instancetype)instanceFromRemoteRepresentation:(NSDictionary *)representation
+{
+	if (representation.count == 0) {
+		return nil;
+	}
+	if (representation[@"id"] == nil || representation[@"type"] == nil) {
+		return nil;
+	}
+	id value = representation[@"id"];
+	NSNumber *filterID = nil;
+	if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+		filterID = [NSNumber numberWithInteger:[[value description] integerValue]];
+	}
+	if (filterID == nil) {
+		return nil;
+	}
+	NSString *type = representation[@"type"];
+	if (![[self class] isValidType:type]) {
+		return nil;
+	}
+	PSSProductFilter *instance = [[[self class] alloc] initWithType:type filterID:filterID];
+	NSMutableDictionary *cleanRep = [representation mutableCopy];
+	[cleanRep removeObjectsForKeys:@[ @"id", @"type" ]];
+	[instance setPropertiesWithDictionary:cleanRep];
+	return instance;
+}
+
+- (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary
+{
+	for (NSString *key in aDictionary) {
+		id value = [aDictionary valueForKey:key];
+		if ([key isEqualToString:@"url"]) {
+			if ([value isKindOfClass:[NSString class]]) {
+				self.browseURL = [NSURL URLWithString:value];
+			}
+		} else if ([key isEqualToString:@"count"]) {
+			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+				self.productCount = [NSNumber numberWithInteger:[[value description] integerValue]];
+			}
+		} else {
+			[self setValue:value forKey:key];
+		}
+	}
+}
+
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
 	[encoder encodeObject:self.name forKey:@"name"];
 	[encoder encodeObject:self.filterID forKey:@"filterID"];
-	[encoder encodeObject:self.browseURLString forKey:@"browseURLString"];
+	[encoder encodeObject:self.browseURL forKey:@"browseURL"];
 	[encoder encodeObject:self.type forKey:@"type"];
 	[encoder encodeObject:self.productCount forKey:@"productCount"];
 }
@@ -152,7 +204,7 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 	if ((self = [self init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
 		self.filterID = [decoder decodeObjectForKey:@"filterID"];
-		self.browseURLString = [decoder decodeObjectForKey:@"browseURLString"];
+		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
 		self.type = [decoder decodeObjectForKey:@"type"];
 		self.productCount = [decoder decodeObjectForKey:@"productCount"];
 	}
@@ -167,7 +219,7 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 	copy.filterID = self.filterID;
 	copy.type = self.type;
 	copy.name = self.name;
-	copy.browseURLString = self.browseURLString;
+	copy.browseURL = self.browseURL;
 	copy.productCount = self.productCount;
 	return copy;
 }
