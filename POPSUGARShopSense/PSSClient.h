@@ -28,11 +28,20 @@
 @class PSSCategoryTree;
 @class PSSProductFilter;
 
+// Exceptions and Error Domains
 extern NSString * const PSSInvalidPartnerException;
 extern NSString * const PSSInvalidLocaleException;
 extern NSString * const PSSMalformedResponseErrorDomain;
 extern NSString * const PSSInvalidRepresentationErrorDomain;
 extern NSString * const PSSServerResponseErrorDomain;
+
+// Histogram Types
+extern NSString * const PSSProductHistogramTypeBrand;
+extern NSString * const PSSProductHistogramTypeRetailer;
+extern NSString * const PSSProductHistogramTypePrice;
+extern NSString * const PSSProductHistogramTypeDiscount;
+extern NSString * const PSSProductHistogramTypeSize;
+extern NSString * const PSSProductHistogramTypeColor;
 
 /** A singleton subclass of AFHTTPClient that wraps the ShopSense API web services and converts the response into native Objective-C objects.
  
@@ -102,30 +111,50 @@ extern NSString * const PSSServerResponseErrorDomain;
  @param searchTerm Text search term, as a user would enter in a "Search:" field.
  @param offset The index of the first product to return, or 0 (zero) if not specified. A client can use this to implement paging through large result sets.
  @param limit The maximum number of results to return, or 100 if not specified. The maximum value is 100. Combine with the offset parameter to implement paging.
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes three arguments: the total count of products that match the provided criteria, available filter types for products that match the provided criteria and an array of `PSSProduct` objects within the offset and limit parameters.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes three arguments: the total count of products that match the provided criteria, available histogram types for products that match the provided criteria and an array of `PSSProduct` objects within the offset and limit parameters.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)searchProductsWithTerm:(NSString *)searchTerm offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *availableFilterTypes, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)searchProductsWithTerm:(NSString *)searchTerm offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *availableHistogramTypes, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /** Returns an array of products that match a query specified by the parameters below.
  
  @param queryOrNil A `PSSProductQuery` to define which products to return.
  @param offset The index of the first product to return, or 0 (zero) if not specified. A client can use this to implement paging through large result sets.
  @param limit The maximum number of results to return, or 100 if not specified. The maximum value is 100. Combine with the offset parameter to implement paging.
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes three arguments: the total count of products that match the provided criteria , available filter types for products that match the provided criteria and an array of `PSSProduct` objects within the offset and limit parameters.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes three arguments: the total count of products that match the provided criteria , available histogram types for products that match the provided criteria and an array of `PSSProduct` objects within the offset and limit parameters.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)searchProductsWithQuery:(PSSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *availableFilterTypes, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)searchProductsWithQuery:(PSSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *availableHistogramTypes, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
-/** This method returns a list of filters and product counts that describe the results of a given product query. The query is specified using the parameters below. See `PSSProductFilter` for possible filter types.
+/** This method returns a collection of filters with product counts that describe the results of a given product query. The query is specified using the parameters below. 
+ 
+ Possible histogram types are:
+ 
+ `PSSProductHistogramTypeBrand`
+ Histogram of brand filters.
+ 
+ `PSSProductHistogramTypeRetailer`
+ Histogram of retailer filters.
+ 
+ `PSSProductHistogramTypePrice`
+ Histogram of price range filters.
+ 
+ `PSSProductHistogramTypeDiscount`
+ Histogram of discount amount filters.
+ 
+ `PSSProductHistogramTypeSize`
+ Histogram of size filters.
+ 
+ `PSSProductHistogramTypeColor`
+ Histogram of color filters.
  
  @param queryOrNil A `PSSProductQuery` to define which products are used in the calculation.
  @param filterTypes The type of filters to return on success.
  @param floorOrNil The minimum count of products required for an entry to be included in the histogram.
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes two arguments: the total count of products that match the provided criteria and a dictionary of arrays of `PSSProductFilter` objects matching the filterTypes parameter. (If results are found) This dictionary is keyed by filter type. See `PSSProductFilter` for possible filter types.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes two arguments: the total count of products that match the provided criteria and a dictionary of arrays of `PSSProductFilter` objects matching the histogramTypes parameter. (If results are found) This dictionary is keyed by histogram type.
  @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
  */
-- (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil filterTypes:(NSArray *)filterTypes floor:(NSNumber *)floorOrNil success:(void (^)(NSUInteger totalCount, NSDictionary *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil histogramTypes:(NSArray *)histogramTypes floor:(NSNumber *)floorOrNil success:(void (^)(NSUInteger totalCount, NSDictionary *histograms))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /**---------------------------------------------------------------------------------------
  * @name Getting Lookup Values

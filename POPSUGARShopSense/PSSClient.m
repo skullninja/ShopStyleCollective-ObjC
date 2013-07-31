@@ -27,11 +27,20 @@
 #import <time.h>
 #import <xlocale.h>
 
+// Exceptions and Error Domains
 NSString * const PSSInvalidPartnerException = @"com.shopstyle.shopsense:InvalidPartnerException";
 NSString * const PSSInvalidLocaleException = @"com.shopstyle.shopsense:InvalidLocaleException";
 NSString * const PSSMalformedResponseErrorDomain = @"com.shopstyle.shopsense:MalformedResponseError";
 NSString * const PSSInvalidRepresentationErrorDomain = @"com.shopstyle.shopsense:InvalidRepresentationError";
 NSString * const PSSServerResponseErrorDomain = @"com.shopstyle.shopsense:ServerResponseError";
+
+// Histogram Types
+NSString * const PSSProductHistogramTypeBrand = @"Brand";
+NSString * const PSSProductHistogramTypeRetailer = @"Retailer";
+NSString * const PSSProductHistogramTypePrice = @"Price";
+NSString * const PSSProductHistogramTypeDiscount = @"Discount";
+NSString * const PSSProductHistogramTypeSize = @"Size";
+NSString * const PSSProductHistogramTypeColor = @"Color";
 
 static NSString * const kShopSenseBaseURLString = @"http://api.shopstyle.com/api/v2/";
 static NSString * const kPListPartnerIDKey = @"ShopSensePartnerID";
@@ -330,7 +339,7 @@ static dispatch_once_t once_token = 0;
 	} failure:failure];
 }
 
-- (void)searchProductsWithTerm:(NSString *)searchTerm offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *availableFilterTypes, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (void)searchProductsWithTerm:(NSString *)searchTerm offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *availableHistogramTypes, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSParameterAssert(searchTerm != nil && searchTerm.length > 0);
 	[self searchProductsWithQuery:[PSSProductQuery productQueryWithSearchTerm:searchTerm] offset:offset limit:limit success:success failure:failure];
@@ -338,10 +347,10 @@ static dispatch_once_t once_token = 0;
 
 + (NSMutableArray *)standardFilterTypes
 {
-	return [@[ PSSProductFilterTypeBrand, PSSProductFilterTypeRetailer, PSSProductFilterTypeDiscount, PSSProductFilterTypePrice] mutableCopy];
+	return [@[ PSSProductHistogramTypeBrand, PSSProductFilterTypeRetailer, PSSProductFilterTypeDiscount, PSSProductFilterTypePrice ] mutableCopy];
 }
 
-- (void)searchProductsWithQuery:(PSSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *availableFilterTypes, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (void)searchProductsWithQuery:(PSSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *availableHistogramTypes, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
 	if (offset != nil) {
@@ -369,14 +378,14 @@ static dispatch_once_t once_token = 0;
 				if ([metadata[@"total"] isKindOfClass:[NSNumber class]]) {
 					totalCount = [metadata[@"total"] integerValue];
 				}
-				NSMutableArray *availablefilterTypes = [[self class] standardFilterTypes];
+				NSMutableArray *availableHistogramTypes = [[self class] standardFilterTypes];
 				if ([metadata[@"showColorFilter"] isKindOfClass:[NSNumber class]] && [metadata[@"showColorFilter"] boolValue]) {
-					[availablefilterTypes addObject:PSSProductFilterTypeColor];
+					[availableHistogramTypes addObject:PSSProductHistogramTypeColor];
 				}
 				if ([metadata[@"showSizeFilter"] isKindOfClass:[NSNumber class]] && [metadata[@"showSizeFilter"] boolValue]) {
-					[availablefilterTypes addObject:PSSProductFilterTypeSize];
+					[availableHistogramTypes addObject:PSSProductHistogramTypeSize];
 				}
-				success(totalCount, availablefilterTypes, products);
+				success(totalCount, availableHistogramTypes, products);
 			}
 			
 		} else {
@@ -389,23 +398,29 @@ static dispatch_once_t once_token = 0;
 
 - (NSDictionary *)histogramResponseKeyToFilterTypeMap
 {
-	return @{ PSSProductFilterTypeBrand: @"brandHistogram", PSSProductFilterTypeRetailer: @"retailerHistogram", PSSProductFilterTypePrice: @"priceHistogram", PSSProductFilterTypeDiscount: @"discountHistogram", PSSProductFilterTypeSize: @"sizeHistogram", PSSProductFilterTypeColor: @"colorHistogram" };
+	return @{ @"brandHistogram": PSSProductFilterTypeBrand, @"retailerHistogram": PSSProductFilterTypeRetailer, @"priceHistogram": PSSProductFilterTypePrice, @"discountHistogram": PSSProductFilterTypeDiscount, @"sizeHistogram": PSSProductFilterTypeSize, @"colorHistogram": PSSProductFilterTypeColor };
 }
 
-- (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil filterTypes:(NSArray *)filterTypes floor:(NSNumber *)floorOrNil success:(void (^)(NSUInteger totalCount, NSDictionary *filters))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+- (NSDictionary *)histogramResponseKeyToHistogramTypeMap
+{
+	return @{ @"brandHistogram": PSSProductHistogramTypeBrand, @"retailerHistogram": PSSProductHistogramTypeRetailer, @"priceHistogram": PSSProductHistogramTypePrice, @"discountHistogram": PSSProductHistogramTypeDiscount, @"sizeHistogram": PSSProductHistogramTypeSize, @"colorHistogram":PSSProductHistogramTypeColor };
+}
+
+- (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil histogramTypes:(NSArray *)histogramTypes floor:(NSNumber *)floorOrNil success:(void (^)(NSUInteger totalCount, NSDictionary *histograms))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-	NSMutableArray *filterResponseKeys = [NSMutableArray array];
-	NSMutableArray *filterParameters = [NSMutableArray array];
-	NSDictionary *map = [self histogramResponseKeyToFilterTypeMap];
-	for (NSString *filterType in filterTypes) {
-		if (map[filterType] != nil) {
-			[filterParameters addObject:filterType];
-			[filterResponseKeys addObject:map[filterType]];
+	NSMutableArray *histogramResponseKeys = [NSMutableArray array];
+	NSMutableArray *histogramTypeParameters = [NSMutableArray array];
+	NSDictionary *histogramResponseMap = [self histogramResponseKeyToHistogramTypeMap];
+	for (NSString *histogramType in histogramTypes) {
+		NSArray *possibleResponseKeys = [histogramResponseMap allKeysForObject:histogramType];
+		if (possibleResponseKeys.count > 0) {
+			[histogramTypeParameters addObject:histogramType];
+			[histogramResponseKeys addObjectsFromArray:possibleResponseKeys];
 		}
 	}
-	NSAssert(filterParameters.count > 0, @"You must provide at least on filter option to get a histogram");
-	[params setValue:[filterParameters componentsJoinedByString:@","] forKey:@"filters"];
+	NSAssert(histogramTypeParameters.count > 0, @"You must provide at least one histogram type to get a histogram");
+	[params setValue:[histogramTypeParameters componentsJoinedByString:@","] forKey:@"filters"];
 	
 	if (floorOrNil != nil) {
 		[params setValue:floorOrNil forKey:@"floor"];
@@ -423,18 +438,18 @@ static dispatch_once_t once_token = 0;
 			}
 		}
 		NSMutableDictionary *histograms = [NSMutableDictionary dictionary];
-		for (NSString *filterResponseKey in filterResponseKeys) {
-			if ([responseObject[filterResponseKey] isKindOfClass:[NSArray class]]) {
-				NSArray *filtersRepresentation = responseObject[filterResponseKey];
-				NSString *filterType = nil;
-				NSDictionary *map = [self histogramResponseKeyToFilterTypeMap];
-				NSArray *possibleFilterTypes = [map allKeysForObject:filterResponseKey];
-				if (possibleFilterTypes.count == 0) {
+		for (NSString *histogramResponseKey in histogramResponseKeys) {
+			if ([responseObject[histogramResponseKey] isKindOfClass:[NSArray class]]) {
+				NSArray *filtersRepresentations = responseObject[histogramResponseKey];
+				NSDictionary *filterTypeMap = [self histogramResponseKeyToFilterTypeMap];
+				NSString *filterType = filterTypeMap[histogramResponseKey];
+				NSDictionary *histogramTypeMap = [self histogramResponseKeyToHistogramTypeMap];
+				NSString *histogramType = histogramTypeMap[histogramResponseKey];
+				if (filterType == nil || histogramType == nil) {
 					PSSDLog(@"Unknown Histogram Response Key: %@", filterResponseKey);
 				} else {
-					filterType = [possibleFilterTypes lastObject];
-					NSMutableArray *filters = [NSMutableArray arrayWithCapacity:[filtersRepresentation count]];
-					for (id possibleFilterRep in filtersRepresentation) {
+					NSMutableArray *filters = [NSMutableArray arrayWithCapacity:[filtersRepresentations count]];
+					for (id possibleFilterRep in filtersRepresentations) {
 						if ([possibleFilterRep isKindOfClass:[NSDictionary class]]) {
 							NSMutableDictionary *filterRep = [possibleFilterRep mutableCopy];
 							filterRep[@"type"] = filterType;
@@ -444,7 +459,7 @@ static dispatch_once_t once_token = 0;
 							}
 						}
 					}
-					histograms[filterType] = filters;
+					histograms[histogramType] = filters;
 				}
 			}
 		}
