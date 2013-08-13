@@ -154,7 +154,7 @@ static dispatch_once_t once_token = 0;
 	if (locale == nil) {
 		return NO;
 	}
-	if ([[self supportedLocales] indexOfObject:locale] != NSNotFound) {
+	if ([[[self supportedLocales] valueForKey:@"localeIdentifier" ] indexOfObject:locale.localeIdentifier] != NSNotFound) {
 		return YES;
 	}
 	return NO;
