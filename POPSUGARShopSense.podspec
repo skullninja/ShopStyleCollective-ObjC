@@ -14,5 +14,19 @@ Pod::Spec.new do |s|
 
   s.requires_arc = true
   
-  s.dependency 'AFNetworking', '>= 1.0.0'
+  s.dependency 'AFNetworking', '~> 1.0'
+  s.prefix_header_contents = <<-EOS
+#ifdef __OBJC__
+  #import <Security/Security.h>
+
+  #if __IPHONE_OS_VERSION_MIN_REQUIRED
+    #import <SystemConfiguration/SystemConfiguration.h>
+    #import <MobileCoreServices/MobileCoreServices.h>
+  #else
+    #import <SystemConfiguration/SystemConfiguration.h>
+    #import <CoreServices/CoreServices.h>
+  #endif
+#endif /* __OBJC__*/
+EOS
+
 end
