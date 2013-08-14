@@ -154,6 +154,7 @@ static dispatch_once_t once_token = 0;
 	if (locale == nil) {
 		return NO;
 	}
+	// we needed to test localeIdentifier because the incoming locale could be a different class such as NSCFLocale
 	if ([[[self supportedLocales] valueForKey:@"localeIdentifier" ] indexOfObject:locale.localeIdentifier] != NSNotFound) {
 		return YES;
 	}
@@ -165,8 +166,12 @@ static dispatch_once_t once_token = 0;
 	if (locale == nil) {
 		return [self defaultLocale];
 	}
-	if ([self isSupportedLocale:locale]) {
-		return locale;
+	
+	// It's best to loop over our supported locales and return one of those here because the incoming locale could actually be a different class such as NSCFLocale
+	for (NSLocale *supportedLocale in [self supportedLocales]) {
+		if ([supportedLocale.localeIdentifier isEqualToString:locale.localeIdentifier]) {
+			return supportedLocale;
+		}
 	}
 	
 	// we prefer the default locale if the language matches
