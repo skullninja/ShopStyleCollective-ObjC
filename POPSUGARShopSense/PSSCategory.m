@@ -36,6 +36,7 @@ static NSString * const kParentCategoryIDKey = @"parentId";
 
 @property (nonatomic, strong) NSMutableOrderedSet *mutableChildCategorySet;
 @property (nonatomic, copy, readwrite) NSString *parentCategoryID;
+@property (nonatomic, copy, readwrite) NSString *shortName;
 
 @end
 
@@ -53,6 +54,16 @@ static NSString * const kParentCategoryIDKey = @"parentId";
 	}
 	_mutableChildCategorySet = [[NSMutableOrderedSet alloc] init];
 	return _mutableChildCategorySet;
+}
+
+#pragma mark - Short Name
+
+- (NSString *)shortName
+{
+	if (_shortName) {
+		return _shortName;
+	}
+	return self.name;
 }
 
 #pragma mark - PSSRemoteObject
@@ -84,6 +95,7 @@ static NSString * const kParentCategoryIDKey = @"parentId";
 	[super encodeWithCoder:encoder];
 	[encoder encodeObject:self.parentCategoryID forKey:@"parentCategoryID"];
 	[encoder encodeObject:self.mutableChildCategorySet forKey:@"mutableChildCategorySet"];
+	[encoder encodeObject:self.shortName forKey:@"shortName"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -91,6 +103,7 @@ static NSString * const kParentCategoryIDKey = @"parentId";
 	if ((self = [super initWithCoder:decoder])) {
 		self.parentCategoryID = [decoder decodeObjectForKey:@"parentCategoryID"];
 		self.mutableChildCategorySet = [decoder decodeObjectForKey:@"mutableChildCategorySet"];
+		self.shortName = [decoder decodeObjectForKey:@"shortName"];
 	}
 	return self;
 }
@@ -102,6 +115,7 @@ static NSString * const kParentCategoryIDKey = @"parentId";
 	typeof(self) copy = [super copyWithZone:zone];
 	copy.parentCategoryID = self.parentCategoryID;
 	copy.mutableChildCategorySet = [self.mutableChildCategorySet mutableCopyWithZone:zone];
+	copy.shortName = self.shortName;
 	return copy;
 }
 

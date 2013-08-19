@@ -31,4 +31,7 @@
 /** The child categories of the receiver if any exists. */
 @property (nonatomic, strong, readonly) NSArray *childCategories;
 
+/** A short version of the receiver's name. If none exists name will be returned. */
+@property (nonatomic, copy, readonly) NSString *shortName;
+
 @end

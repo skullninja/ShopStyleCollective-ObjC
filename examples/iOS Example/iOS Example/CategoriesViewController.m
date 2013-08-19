@@ -78,7 +78,7 @@
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 	}
 	PSSCategory *thisCategory = self.categories[indexPath.row];
-	cell.textLabel.text = thisCategory.name;
+	cell.textLabel.text = thisCategory.shortName;
 	if (thisCategory.childCategories.count > 0) {
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	} else {
