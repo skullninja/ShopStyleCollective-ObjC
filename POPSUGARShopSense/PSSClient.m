@@ -357,6 +357,15 @@ static dispatch_once_t once_token = 0;
 
 - (void)searchProductsWithQuery:(PSSProductQuery *)queryOrNil offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *availableHistogramTypes, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
+	NSDictionary *params = nil;
+	if (queryOrNil != nil) {
+		params = [queryOrNil queryParameterRepresentation];
+	}
+	[self getProductsWithQueryParams:params offset:offset limit:limit success:success failure:failure];
+}
+
+- (void)getProductsWithQueryParams:(NSDictionary *)queryParams offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *availableHistogramTypes, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
 	if (offset != nil) {
 		[params setValue:offset forKey:@"offset"];
@@ -364,8 +373,7 @@ static dispatch_once_t once_token = 0;
 	if (limit != nil) {
 		[params setValue:limit forKey:@"limit"];
 	}
-	if (queryOrNil != nil) {
-		NSDictionary *queryParams = [queryOrNil queryParameterRepresentation];
+	if (queryParams != nil) {
 		[params addEntriesFromDictionary:queryParams];
 	}
 	if (params.count == 0) {
