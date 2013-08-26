@@ -34,7 +34,7 @@
 @interface PSSCategoryTree ()
 
 @property (nonatomic, strong) NSMutableDictionary *categoryIDMap;
-@property (nonatomic, strong, readwrite) NSArray *rootCategories;
+@property (nonatomic, strong, readwrite) PSSCategory *rootCategory;
 
 @end
 
@@ -45,15 +45,14 @@
 	self = [self init];
 	if (self) {
 		NSMutableDictionary *mutableCategoryIDMap = [[NSMutableDictionary alloc] initWithCapacity:categories.count];
-		NSMutableArray *mutableRootCategories = [[NSMutableArray alloc] init];
 		for (PSSCategory *category in categories) {
 			mutableCategoryIDMap[category.categoryID] = category;
-			if ([category.parentCategoryID isEqualToString:rootCategoryID]) {
-				[mutableRootCategories addObject:category];
+			if ([category.categoryID isEqualToString:rootCategoryID]) {
+				_rootCategory = category;
 			}
 		}
 		for (PSSCategory *category in categories) {
-			if (category.parentCategoryID != nil && ![category.parentCategoryID isEqualToString:rootCategoryID]) {
+			if (category.parentCategoryID != nil) {
 				PSSCategory *parent = mutableCategoryIDMap[category.parentCategoryID];
 				if (parent != nil) {
 					[parent.mutableChildCategorySet addObject:category];
@@ -61,7 +60,6 @@
 			}
 		}
 		_categoryIDMap = mutableCategoryIDMap;
-		_rootCategories = mutableRootCategories;
 	}
 	return self;
 }
@@ -80,7 +78,7 @@
 
 - (NSString *)description
 {
-	return [[super description] stringByAppendingFormat:@" %@", self.rootCategories.description];
+	return [[super description] stringByAppendingFormat:@" Root:%@", self.rootCategory.categoryID];
 }
 
 - (NSUInteger)hash
@@ -104,14 +102,14 @@
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
 	[encoder encodeObject:self.categoryIDMap forKey:@"categoryIDMap"];
-	[encoder encodeObject:self.rootCategories forKey:@"rootCategories"];
+	[encoder encodeObject:self.rootCategory forKey:@"rootCategory"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [self init])) {
 		self.categoryIDMap = [decoder decodeObjectForKey:@"categoryIDMap"];
-		self.rootCategories = [decoder decodeObjectForKey:@"rootCategories"];
+		self.rootCategory = [decoder decodeObjectForKey:@"rootCategory"];
 	}
 	return self;
 }
@@ -122,7 +120,7 @@
 {
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
 	copy.categoryIDMap = [self.categoryIDMap mutableCopyWithZone:zone];
-	copy.rootCategories = [self.rootCategories copyWithZone:zone];
+	copy.rootCategory = [self.rootCategory copyWithZone:zone];
 	return copy;
 }
 

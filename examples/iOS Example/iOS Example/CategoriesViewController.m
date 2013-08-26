@@ -49,7 +49,7 @@
 		
 		__weak typeof(self) weakSelf = self;
 		[[PSSClient sharedClient] categoryTreeFromCategoryID:nil depth:nil success:^(PSSCategoryTree *categoryTree) {
-			weakSelf.categories = [categoryTree rootCategories];
+			weakSelf.categories = categoryTree.rootCategory.childCategories;
 			[weakSelf.tableView reloadData];
 		} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 			NSLog(@"Request failed with error: %@", error);

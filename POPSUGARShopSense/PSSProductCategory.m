@@ -70,6 +70,9 @@
 	}
 	PSSProductCategory *instance = [[[self class] alloc] init];
 	[instance setPropertiesWithDictionary:representation];
+	if (instance.categoryID == nil) {
+		return nil;
+	}
 	return instance;
 }
 

@@ -568,18 +568,16 @@ static dispatch_once_t once_token = 0;
 	[self getPath:@"categories" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		if ([responseObject[@"categories"] isKindOfClass:[NSArray class]] && [responseObject[@"metadata"] isKindOfClass:[NSDictionary class]]) {
 			NSArray *categoriesRepresentation = responseObject[@"categories"];
-			NSArray *categories = [self remoteObjectsForEntityNamed:@"category" fromRepresentations:categoriesRepresentation];
-			NSString *rootID = nil;
+			NSMutableArray *categories = [self remoteObjectsForEntityNamed:@"category" fromRepresentations:categoriesRepresentation];
+			PSSCategory *rootCat = nil;
 			NSDictionary *metadata = responseObject[@"metadata"];
 			if ([metadata[@"root"] isKindOfClass:[NSDictionary class]]) {
-				NSDictionary *rootCat = metadata[@"root"];
-				if (rootCat[@"id"]) {
-					rootID = rootCat[@"id"];
-				}
+				rootCat = (PSSCategory *)[self remoteObjectForEntityNamed:@"category" fromRepresentation:metadata[@"root"]];
 			}
-			if (categories.count > 0 && rootID.length > 0) {
+			if (categories.count > 0 && rootCat != nil) {
+				[categories insertObject:rootCat atIndex:0];
 				if (success) {
-					PSSCategoryTree *categoryTree = [self categoryTreeFromCategories:categories rootCategoryID:rootID];
+					PSSCategoryTree *categoryTree = [self categoryTreeFromCategories:categories rootCategoryID:rootCat.categoryID];
 					success(categoryTree);
 				}
 			} else {
@@ -659,7 +657,7 @@ static dispatch_once_t once_token = 0;
 
 #pragma mark - PSSRemoteObject Conversion
 
-- (NSArray *)remoteObjectsForEntityNamed:(NSString *)entityName fromRepresentations:(NSArray *)representations
+- (NSMutableArray *)remoteObjectsForEntityNamed:(NSString *)entityName fromRepresentations:(NSArray *)representations
 {
 	NSMutableArray *objects = [NSMutableArray arrayWithCapacity:[representations count]];
 	for (id valueMember in representations) {

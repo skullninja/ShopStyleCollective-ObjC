@@ -29,13 +29,13 @@
 
 @interface PSSCategoryTree : NSObject <NSCoding, NSCopying>
 
-/** The top-level categories for the receiver. */
-@property (nonatomic, strong, readonly) NSArray *rootCategories;
+/** The top-level category for the receiver. */
+@property (nonatomic, strong, readonly) PSSCategory *rootCategory;
 
 /** Initializes a category tree.
  
  @param rootCategoryID The category identifier to consider the parent of the receiver.
- @param categories An array of `PSSCategory` objects to build into the receiver.
+ @param categories An array of `PSSCategory` objects to build into the receiver. This must be in top down order.
  */
 - (id)initWithRootID:(NSString *)rootCategoryID categories:(NSArray *)categories;
 
