@@ -608,7 +608,7 @@ static dispatch_once_t once_token = 0;
 {
 	NSDictionary *userDict = @{ NSLocalizedDescriptionKey: @"Malformed Response From Server",
 							 NSLocalizedFailureReasonErrorKey: @"Malformed Response From Server",
-							 @"responseString": responseString };
+							 @"responseString": (responseString ?: @"")};
 	return [NSError errorWithDomain:PSSMalformedResponseErrorDomain code:500 userInfo:userDict];
 }
 
