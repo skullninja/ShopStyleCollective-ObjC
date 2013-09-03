@@ -76,6 +76,28 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 	}
 }
 
+#pragma mark - Conversion from URL Query Parameters
+
++ (NSString *)filterTypeFromPrefix:(NSString *)prefix
+{
+	NSString *type = nil;
+	
+	if ([prefix isEqualToString:@"b"]) {
+		type = PSSProductFilterTypeBrand;
+	} else if ([prefix isEqualToString:@"r"]) {
+		type = PSSProductFilterTypeRetailer;
+	} else if ([prefix isEqualToString:@"p"]) {
+		type = PSSProductFilterTypePrice;
+	} else if ([prefix isEqualToString:@"d"]) {
+		type = PSSProductFilterTypeDiscount;
+	} else if ([prefix isEqualToString:@"s"]) {
+		type = PSSProductFilterTypeSize;
+	} else if ([prefix isEqualToString:@"c"]) {
+		type = PSSProductFilterTypeColor;
+	}
+	return type;
+}
+
 #pragma mark - Conversion to URL Query Parameters
 
 - (NSString *)typePrefixForQueryParameterRepresentation

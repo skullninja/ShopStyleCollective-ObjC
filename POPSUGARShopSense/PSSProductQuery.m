@@ -31,7 +31,7 @@ NSString * const PSSProductQuerySortDefault = @"Relevance";
 
 @interface PSSProductQuery ()
 
-@property (nonatomic, strong) NSMutableSet *productFilterSet;
+@property (nonatomic, strong) NSMutableOrderedSet *productFilterSet;
 
 @end
 
@@ -57,7 +57,7 @@ NSString * const PSSProductQuerySortDefault = @"Relevance";
 {
 	self = [super init];
 	if (self) {
-		_productFilterSet = [[NSMutableSet alloc] init];
+		_productFilterSet = [[NSMutableOrderedSet alloc] init];
 		_showInternationalProducts = NO;
 	}
 	return self;
@@ -101,12 +101,12 @@ NSString * const PSSProductQuerySortDefault = @"Relevance";
 
 - (NSArray *)productFilters
 {
-	return self.productFilterSet.allObjects;
+	return [self.productFilterSet array];
 }
 
 - (NSSet *)productFilterSetOfType:(NSString *)filterType
 {
-	NSSet *filteredSet = [self.productFilterSet objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+	NSSet *filteredSet = [[self.productFilterSet set] objectsPassingTest:^BOOL(id obj, BOOL *stop) {
 		if ([[(PSSProductFilter *)obj type] isEqualToString:filterType]) {
 			return YES;
 		}
@@ -198,7 +198,7 @@ NSString * const PSSProductQuerySortDefault = @"Relevance";
 		return YES;
 	}
 	
-	if (![productQuery.productFilterSet isEqualToSet:self.productFilterSet]) {
+	if (![productQuery.productFilterSet isEqualToOrderedSet:self.productFilterSet]) {
 		return NO;
 	}
 	if ((productQuery.searchTerm != nil || self.searchTerm != nil) && ![productQuery.searchTerm isEqualToString:self.searchTerm]) {
@@ -254,7 +254,7 @@ NSString * const PSSProductQuerySortDefault = @"Relevance";
 	copy.productCategoryID = self.productCategoryID;
 	copy.priceDropDate = self.priceDropDate;
 	copy.sort = self.sort;
-	copy.productFilterSet = [[NSMutableSet alloc] initWithSet:self.productFilterSet copyItems:YES];
+	copy.productFilterSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:self.productFilterSet copyItems:YES];
 	copy.showInternationalProducts = self.showInternationalProducts;
 	return copy;
 }
