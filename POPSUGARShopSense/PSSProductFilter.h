@@ -112,4 +112,12 @@ extern NSString * const PSSProductFilterTypeColor;
 /** A representation of the receiver used to create an URL query parameter when making a product request on the ShopSense API */
 - (NSString *)queryParameterRepresentation;
 
+/**---------------------------------------------------------------------------------------
+ * @name Converting from URL Parameters
+ *  ---------------------------------------------------------------------------------------
+ */
+
+/** Used for converting prefix to filter type */
++ (NSString *)filterTypeFromPrefix:(NSString *)prefix;
+
 @end
