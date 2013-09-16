@@ -547,6 +547,24 @@ static dispatch_once_t once_token = 0;
 
 #pragma mark - Categories
 
+- (PSSCategoryTree *)categoryTreeFromJSON:(NSDictionary *)JSON
+{
+	NSArray *categoriesRepresentation = JSON[@"categories"];
+	NSMutableArray *categories = [self remoteObjectsForEntityNamed:@"category" fromRepresentations:categoriesRepresentation];
+	PSSCategory *rootCat = nil;
+	NSDictionary *metadata = JSON[@"metadata"];
+	if ([metadata[@"root"] isKindOfClass:[NSDictionary class]]) {
+		rootCat = (PSSCategory *)[self remoteObjectForEntityNamed:@"category" fromRepresentation:metadata[@"root"]];
+	}
+	if (categories.count > 0 && rootCat != nil) {
+		[categories insertObject:rootCat atIndex:0];
+		PSSCategoryTree *categoryTree = [self categoryTreeFromCategories:categories rootCategoryID:rootCat.categoryID];
+		return categoryTree;
+	}
+	
+	return nil;
+}
+
 - (void)categoryTreeFromCategoryID:(NSString *)categoryIDOrNil depth:(NSNumber *)depthOrNil success:(void (^)(PSSCategoryTree *categoryTree))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	if (depthOrNil != nil && depthOrNil.integerValue <= 0) {
@@ -567,17 +585,9 @@ static dispatch_once_t once_token = 0;
 	}
 	[self getPath:@"categories" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		if ([responseObject[@"categories"] isKindOfClass:[NSArray class]] && [responseObject[@"metadata"] isKindOfClass:[NSDictionary class]]) {
-			NSArray *categoriesRepresentation = responseObject[@"categories"];
-			NSMutableArray *categories = [self remoteObjectsForEntityNamed:@"category" fromRepresentations:categoriesRepresentation];
-			PSSCategory *rootCat = nil;
-			NSDictionary *metadata = responseObject[@"metadata"];
-			if ([metadata[@"root"] isKindOfClass:[NSDictionary class]]) {
-				rootCat = (PSSCategory *)[self remoteObjectForEntityNamed:@"category" fromRepresentation:metadata[@"root"]];
-			}
-			if (categories.count > 0 && rootCat != nil) {
-				[categories insertObject:rootCat atIndex:0];
+			PSSCategoryTree *categoryTree = [self categoryTreeFromJSON:responseObject];
+			if (categoryTree) {
 				if (success) {
-					PSSCategoryTree *categoryTree = [self categoryTreeFromCategories:categories rootCategoryID:rootCat.categoryID];
 					success(categoryTree);
 				}
 			} else {
