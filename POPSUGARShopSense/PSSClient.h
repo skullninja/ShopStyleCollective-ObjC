@@ -191,6 +191,8 @@ extern NSString * const PSSProductHistogramTypeColor;
  */
 - (void)categoryTreeFromCategoryID:(NSString *)categoryIDOrNil depth:(NSNumber *)depthOrNil success:(void (^)(PSSCategoryTree *categoryTree))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
+- (PSSCategoryTree *)categoryTreeFromJSON:(NSDictionary *)JSON;
+
 @end
 
 /** Objects that provide a local representation of a remote object. */
