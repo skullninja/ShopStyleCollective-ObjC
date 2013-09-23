@@ -459,7 +459,7 @@ static dispatch_once_t once_token = 0;
 				NSDictionary *histogramTypeMap = [self histogramResponseKeyToHistogramTypeMap];
 				NSString *histogramType = histogramTypeMap[histogramResponseKey];
 				if (filterType == nil || histogramType == nil) {
-					PSSDLog(@"Unknown Histogram Response Key: %@", filterResponseKey);
+					PSSDLog(@"Unknown Histogram Response Key: %@", histogramResponseKey);
 				} else {
 					NSMutableArray *filters = [NSMutableArray arrayWithCapacity:[filtersRepresentations count]];
 					for (id possibleFilterRep in filtersRepresentations) {
