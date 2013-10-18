@@ -141,12 +141,12 @@ static dispatch_once_t once_token = 0;
 + (NSArray *)supportedLocales
 {
 	return @[ [[NSLocale alloc] initWithLocaleIdentifier:kUSLocaleIdentifier],
-		   [[NSLocale alloc] initWithLocaleIdentifier:kUKLocaleIdentifier],
-		   [[NSLocale alloc] initWithLocaleIdentifier:kFRLocaleIdentifier],
-		   [[NSLocale alloc] initWithLocaleIdentifier:kDELocaleIdentifier],
-		   [[NSLocale alloc] initWithLocaleIdentifier:kJPLocaleIdentifier],
-		   [[NSLocale alloc] initWithLocaleIdentifier:kAULocaleIdentifier],
-		   [[NSLocale alloc] initWithLocaleIdentifier:kCALocaleIdentifier] ];
+			  [[NSLocale alloc] initWithLocaleIdentifier:kUKLocaleIdentifier],
+			  [[NSLocale alloc] initWithLocaleIdentifier:kFRLocaleIdentifier],
+			  [[NSLocale alloc] initWithLocaleIdentifier:kDELocaleIdentifier],
+			  [[NSLocale alloc] initWithLocaleIdentifier:kJPLocaleIdentifier],
+			  [[NSLocale alloc] initWithLocaleIdentifier:kAULocaleIdentifier],
+			  [[NSLocale alloc] initWithLocaleIdentifier:kCALocaleIdentifier] ];
 }
 
 + (BOOL)isSupportedLocale:(NSLocale *)locale
@@ -230,7 +230,7 @@ static dispatch_once_t once_token = 0;
 {
 	if (_partnerID == nil) {
 		NSBundle* bundle = [NSBundle mainBundle];
-        _partnerID = [bundle objectForInfoDictionaryKey:kPListPartnerIDKey];
+		_partnerID = [bundle objectForInfoDictionaryKey:kPListPartnerIDKey];
 	}
 	return _partnerID;
 }
@@ -617,8 +617,8 @@ static dispatch_once_t once_token = 0;
 - (NSError *)errorWithBadResponseString:(NSString *)responseString
 {
 	NSDictionary *userDict = @{ NSLocalizedDescriptionKey: @"Malformed Response From Server",
-							 NSLocalizedFailureReasonErrorKey: @"Malformed Response From Server",
-							 @"responseString": (responseString ?: @"")};
+								NSLocalizedFailureReasonErrorKey: @"Malformed Response From Server",
+								@"responseString": (responseString ?: @"")};
 	return [NSError errorWithDomain:PSSMalformedResponseErrorDomain code:500 userInfo:userDict];
 }
 
@@ -630,23 +630,33 @@ static dispatch_once_t once_token = 0;
 
 - (NSError *)errorFromResponseErrorRepresentation:(NSDictionary *)representation
 {
-	if (representation.count >= 3 && [representation objectForKey:@"errorCode"] != nil && [representation objectForKey:@"errorMessage"] != nil && [representation objectForKey:@"errorName"] != nil) {
-		NSString *errorName = [representation objectForKey:@"errorName"];
+	if (representation.count >= 3 && representation[@"errorCode"] != nil && representation[@"errorMessage"] != nil && representation[@"errorName"] != nil) {
+		NSString *errorName = representation[@"errorName"];
 		NSError *namedError = [self errorNamed:errorName];
 		if (namedError != nil) {
 			return namedError;
 		}
-		NSString *errorMessage = [representation objectForKey:@"errorMessage"];
+		NSString *errorMessage = representation[@"errorMessage"];
 		if (errorMessage == nil || errorMessage.length < errorName.length) {
 			errorMessage = errorName;
 		}
-		NSInteger errorCode = [[[representation objectForKey:@"errorCode"] description] integerValue];
+		NSInteger errorCode = [[representation[@"errorCode"] description] integerValue];
 		if (errorCode == 0) {
 			errorCode = 500;
 		}
+		if ([representation[@"detailedErrors"] isKindOfClass:[NSArray class]]) {
+			// Currently there is only one
+			NSDictionary *detailedError = [(NSArray *)representation[@"detailedErrors"] lastObject];
+			if (detailedError[@"errorName"] != nil) {
+				errorName = detailedError[@"errorName"];
+			}
+			if (detailedError[@"errorMessage"] != nil) {
+				errorMessage = detailedError[@"errorMessage"];
+			}
+		}
 		NSDictionary *userDict = @{ NSLocalizedDescriptionKey: errorMessage,
-							  NSLocalizedFailureReasonErrorKey: errorName,
-							  @"responseObject": [representation description] };
+									NSLocalizedFailureReasonErrorKey: errorName,
+									@"responseObject": [representation description] };
 		return [NSError errorWithDomain:PSSServerResponseErrorDomain code:errorCode userInfo:userDict];
 	}
 	return nil;
@@ -660,8 +670,8 @@ static dispatch_once_t once_token = 0;
 		return error;
 	}
 	NSDictionary *userDict = @{ NSLocalizedDescriptionKey: @"Invalid Representation",
-							 NSLocalizedFailureReasonErrorKey: @"Invalid Representation",
-							 @"responseObject": [representation description] };
+								NSLocalizedFailureReasonErrorKey: @"Invalid Representation",
+								@"responseObject": [representation description] };
 	return [NSError errorWithDomain:PSSInvalidRepresentationErrorDomain code:500 userInfo:userDict];
 }
 
@@ -710,23 +720,23 @@ static dispatch_once_t once_token = 0;
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
 	self = [super initWithCoder:aDecoder];
-    if (!self) {
-        return nil;
-    }
+	if (!self) {
+		return nil;
+	}
 	
 	[self sharedInit];
 	
-    self.partnerID = [aDecoder decodeObjectForKey:@"partnerID"];
-    self.currentLocale = [aDecoder decodeObjectForKey:@"currentLocale"];
+	self.partnerID = [aDecoder decodeObjectForKey:@"partnerID"];
+	self.currentLocale = [aDecoder decodeObjectForKey:@"currentLocale"];
 	
-    return self;
+	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
 	[super encodeWithCoder:aCoder];
-    [aCoder encodeObject:self.partnerID forKey:@"partnerID"];
-    [aCoder encodeObject:self.currentLocale forKey:@"currentLocale"];
+	[aCoder encodeObject:self.partnerID forKey:@"partnerID"];
+	[aCoder encodeObject:self.currentLocale forKey:@"currentLocale"];
 }
 
 #pragma mark - NSCopying
@@ -736,7 +746,7 @@ static dispatch_once_t once_token = 0;
 	typeof(self) copy = [super copyWithZone:zone];
 	copy.currentLocale = self.currentLocale;
 	copy.partnerID = self.partnerID;
-    return copy;
+	return copy;
 }
 
 @end
