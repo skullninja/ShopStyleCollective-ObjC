@@ -28,7 +28,6 @@
 
 @property (nonatomic, copy, readwrite) NSNumber *retailerID;
 @property (nonatomic, copy, readwrite) NSString *name;
-@property (nonatomic, copy, readwrite) NSURL *browseURL;
 @property (nonatomic, assign, readwrite) BOOL deeplinkSupport;
 
 @end
@@ -93,9 +92,7 @@
 				self.retailerID = [NSNumber numberWithInteger:[[value description] integerValue]];
 			}
 		} else if ([key isEqualToString:@"url"]) {
-			if ([value isKindOfClass:[NSString class]]) {
-				self.browseURL = [NSURL URLWithString:value];
-			}
+			// ignore browse URLs
 		} else {
 			[self setValue:value forKey:key];
 		}
@@ -108,7 +105,6 @@
 {
 	[encoder encodeObject:self.name forKey:@"name"];
 	[encoder encodeObject:self.retailerID forKey:@"retailerID"];
-	[encoder encodeObject:self.browseURL forKey:@"browseURL"];
 	[encoder encodeObject:[NSNumber numberWithBool:self.deeplinkSupport] forKey:@"deeplinkSupport"];
 }
 
@@ -117,7 +113,6 @@
 	if ((self = [self init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
 		self.retailerID = [decoder decodeObjectForKey:@"retailerID"];
-		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
 		self.deeplinkSupport = [(NSNumber *)[decoder decodeObjectForKey:@"deeplinkSupport"] boolValue];
 	}
 	return self;
@@ -130,7 +125,6 @@
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
 	copy.retailerID = self.retailerID;
 	copy.name = self.name;
-	copy.browseURL = self.browseURL;
 	copy.deeplinkSupport = self.deeplinkSupport;
 	return copy;
 }

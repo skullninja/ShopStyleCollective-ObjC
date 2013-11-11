@@ -28,7 +28,6 @@
 
 @property (nonatomic, copy, readwrite) NSNumber *colorID;
 @property (nonatomic, copy, readwrite) NSString *name;
-@property (nonatomic, copy, readwrite) NSURL *browseURL;
 
 @end
 
@@ -92,9 +91,7 @@
 				self.colorID = [NSNumber numberWithInteger:[[value description] integerValue]];
 			}
 		} else if ([key isEqualToString:@"url"]) {
-			if ([value isKindOfClass:[NSString class]]) {
-				self.browseURL = [NSURL URLWithString:value];
-			}
+			// ignore browse URLs
 		} else {
 			[self setValue:value forKey:key];
 		}
@@ -107,7 +104,6 @@
 {
 	[encoder encodeObject:self.name forKey:@"name"];
 	[encoder encodeObject:self.colorID forKey:@"colorID"];
-	[encoder encodeObject:self.browseURL forKey:@"browseURL"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -115,7 +111,6 @@
 	if ((self = [self init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
 		self.colorID = [decoder decodeObjectForKey:@"colorID"];
-		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
 	}
 	return self;
 }
@@ -127,7 +122,6 @@
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
 	copy.colorID = self.colorID;
 	copy.name = self.name;
-	copy.browseURL = self.browseURL;
 	return copy;
 }
 

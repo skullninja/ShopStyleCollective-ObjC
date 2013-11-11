@@ -200,9 +200,7 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 		}
 		id value = [aDictionary valueForKey:key];
 		if ([key isEqualToString:@"url"]) {
-			if ([value isKindOfClass:[NSString class]]) {
-				self.browseURL = [NSURL URLWithString:value];
-			}
+			// ignore browse URLs
 		} else if ([key isEqualToString:@"count"]) {
 			if ([value isKindOfClass:[NSNumber class]]) {
 				self.productCount = value;
@@ -221,7 +219,6 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 {
 	[encoder encodeObject:self.name forKey:@"name"];
 	[encoder encodeObject:self.filterID forKey:@"filterID"];
-	[encoder encodeObject:self.browseURL forKey:@"browseURL"];
 	[encoder encodeObject:self.type forKey:@"type"];
 	[encoder encodeObject:self.productCount forKey:@"productCount"];
 }
@@ -231,7 +228,6 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 	if ((self = [self init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
 		self.filterID = [decoder decodeObjectForKey:@"filterID"];
-		self.browseURL = [decoder decodeObjectForKey:@"browseURL"];
 		self.type = [decoder decodeObjectForKey:@"type"];
 		self.productCount = [decoder decodeObjectForKey:@"productCount"];
 	}
@@ -246,7 +242,6 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 	copy.filterID = self.filterID;
 	copy.type = self.type;
 	copy.name = self.name;
-	copy.browseURL = self.browseURL;
 	copy.productCount = self.productCount;
 	return copy;
 }

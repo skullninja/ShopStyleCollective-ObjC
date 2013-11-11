@@ -36,9 +36,6 @@
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;
 
-/** A shopstyle.com URL that shows more products like the receiver. */
-@property (nonatomic, copy, readonly) NSURL *browseURL;
-
 /** A product filter representing the receiver. */
 - (PSSProductFilter *)productFilter;
 

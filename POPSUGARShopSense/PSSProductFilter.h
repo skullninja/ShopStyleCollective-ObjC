@@ -82,9 +82,6 @@ extern NSString * const PSSProductFilterTypeColor;
  *  ---------------------------------------------------------------------------------------
  */
 
-/** A shopstyle.com URL that shows more products like the receiver. */
-@property (nonatomic, copy) NSURL *browseURL;
-
 /** A count of the products that would be found if the receiver was used to further filter the result set.
  
  If the reciever was not returned by a product histogram query this value will be nil. */
