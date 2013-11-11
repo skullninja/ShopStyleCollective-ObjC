@@ -177,7 +177,9 @@
 		} else if ([key isEqualToString:@"locale"]) {
 			self.localeIdentifier = [value description];
 		} else if ([key isEqualToString:@"id"]) {
-			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+			if ([value isKindOfClass:[NSNumber class]]) {
+				self.productID = value;
+			} else if ([value isKindOfClass:[NSString class]]) {
 				self.productID = [NSNumber numberWithInteger:[[value description] integerValue]];
 			}
 		} else if ([key isEqualToString:@"brand"]) {
@@ -205,13 +207,17 @@
 				self.sizes = [self remoteObjectsForToManyRelationshipNamed:@"sizes" fromRepresentations:value];
 			}
 		} else if ([key isEqualToString:@"price"]) {
-			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+			if ([value isKindOfClass:[NSNumber class]]) {
+				self.regularPrice = value;
+			} else if ([value isKindOfClass:[NSString class]]) {
 				self.regularPrice = [NSNumber numberWithInteger:[[value description] integerValue]];
 			}
 		} else if ([key isEqualToString:@"priceLabel"]) {
 			self.regularPriceLabel = [value description];
 		} else if ([key isEqualToString:@"maxPrice"]) {
-			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+			if ([value isKindOfClass:[NSNumber class]]) {
+				self.maxRegularPrice = value;
+			} else if ([value isKindOfClass:[NSString class]]) {
 				self.maxRegularPrice = [NSNumber numberWithInteger:[[value description] integerValue]];
 			}
 		} else if ([key isEqualToString:@"maxPriceLabel"]) {

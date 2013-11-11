@@ -86,7 +86,9 @@
 	for (NSString *key in aDictionary) {
 		id value = [aDictionary valueForKey:key];
 		if ([key isEqualToString:@"id"]) {
-			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+			if ([value isKindOfClass:[NSNumber class]]) {
+				self.colorID = value;
+			} else if ([value isKindOfClass:[NSString class]]) {
 				self.colorID = [NSNumber numberWithInteger:[[value description] integerValue]];
 			}
 		} else if ([key isEqualToString:@"url"]) {

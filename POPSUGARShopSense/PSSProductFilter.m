@@ -170,38 +170,43 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 	if (representation.count == 0) {
 		return nil;
 	}
+	id value = representation[@"id"];
+	NSString *type = [representation[@"type"] description];
 	if (representation[@"id"] == nil || representation[@"type"] == nil) {
 		return nil;
 	}
-	id value = representation[@"id"];
 	NSNumber *filterID = nil;
-	if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+	if ([value isKindOfClass:[NSNumber class]]) {
+		filterID = value;
+	} else if ([value isKindOfClass:[NSString class]]) {
 		filterID = [NSNumber numberWithInteger:[[value description] integerValue]];
 	}
 	if (filterID == nil) {
 		return nil;
 	}
-	NSString *type = representation[@"type"];
 	if (![[self class] isValidType:type]) {
 		return nil;
 	}
 	PSSProductFilter *instance = [[[self class] alloc] initWithType:type filterID:filterID];
-	NSMutableDictionary *cleanRep = [representation mutableCopy];
-	[cleanRep removeObjectsForKeys:@[ @"id", @"type" ]];
-	[instance setPropertiesWithDictionary:cleanRep];
+	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }
 
 - (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary
 {
 	for (NSString *key in aDictionary) {
+		if ([key isEqualToString:@"id"] || [key isEqualToString:@"type"]) {
+			break;
+		}
 		id value = [aDictionary valueForKey:key];
 		if ([key isEqualToString:@"url"]) {
 			if ([value isKindOfClass:[NSString class]]) {
 				self.browseURL = [NSURL URLWithString:value];
 			}
 		} else if ([key isEqualToString:@"count"]) {
-			if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+			if ([value isKindOfClass:[NSNumber class]]) {
+				self.productCount = value;
+			} else if ([value isKindOfClass:[NSString class]]) {
 				self.productCount = [NSNumber numberWithInteger:[[value description] integerValue]];
 			}
 		} else {
