@@ -193,6 +193,30 @@ extern NSString * const PSSProductHistogramTypeColor;
 
 - (PSSCategoryTree *)categoryTreeFromJSON:(NSDictionary *)JSON;
 
+/**---------------------------------------------------------------------------------------
+ * @name Browser URL's
+ *  ---------------------------------------------------------------------------------------
+ */
+
+/** Returns a URL to browse ShopStyle 
+ 
+ @param locale A supported ShopSense locale. If invalid will default to US 
+ */
++ (NSURL *)siteURLForLocale:(NSLocale *)locale;
+
+/** Returns a URL to browse ShopStyle in the specified category and/or product filter.
+ 
+ @param categoryIDOrNil A categoryID on ShopStyle or nil
+ @param productFilterOrNil A valid product filter or nil
+ */
+- (NSURL *)browseURLForCategoryID:(NSString *)categoryIDOrNil productFilter:(PSSProductFilter *)productFilterOrNil;
+
+/** Returns a URL to browse ShopStyle with parameters set matching the productQuery
+ 
+ @param productQuery A product query to define the filters for a browse URL
+ */
+- (NSURL *)browseURLForProductQuery:(PSSProductQuery *)productQuery;
+
 @end
 
 /** Objects that provide a local representation of a remote object. */

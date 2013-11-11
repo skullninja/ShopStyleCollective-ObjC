@@ -224,6 +224,49 @@ static dispatch_once_t once_token = 0;
 	}
 }
 
+#pragma mark - BrowseURLs
+
++ (NSURL *)siteURLForLocale:(NSLocale *)locale
+{
+	return [NSURL URLWithString:[NSString stringWithFormat:@"http://%@", ([self siteIdentifierForLocale:locale] ?: kUSLocaleIdentifier)]];
+}
+
+- (NSURL *)browseURLForCategoryID:(NSString *)categoryIDOrNil productFilter:(PSSProductFilter *)productFilterOrNil
+{
+	NSMutableDictionary *params = [NSMutableDictionary new];
+	if (categoryIDOrNil.length > 0) {
+		params[@"cat"] = categoryIDOrNil;
+	}
+	if (productFilterOrNil != nil) {
+		params[@"fl"] = productFilterOrNil.queryParameterRepresentation;
+	}
+	return [self browseURLWithParams:params];
+}
+
+- (NSURL *)browseURLForProductQuery:(PSSProductQuery *)productQuery
+{
+	NSParameterAssert(productQuery);
+	return [self browseURLWithParams:productQuery.queryParameterRepresentation];
+}
+
+- (NSURL *)browseURLWithParams:(NSDictionary *)params
+{
+	NSString *siteURLString = [[[self class] siteURLForLocale:self.currentLocale] absoluteString];
+	NSString *pidParam = [NSString stringWithFormat:@"pid=%@", [self.partnerID stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	NSMutableString *browseURLString = [NSMutableString stringWithFormat:@"%@/browse?%@", siteURLString, pidParam];
+	if (params.count > 0) {
+		NSString *paramString = AFQueryStringFromParametersWithEncoding(params, self.stringEncoding);
+		for (NSString *key in params.allKeys) {
+			if ([params[key] isKindOfClass:[NSArray class]]) {
+				paramString = [paramString stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@[]=", key] withString:[key stringByAppendingString:@"="]];
+				paramString = [paramString stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@%%5B%%5D=", key] withString:[key stringByAppendingString:@"="]];
+			}
+		}
+		[browseURLString appendFormat:@"&%@", paramString];
+	}
+	return [NSURL URLWithString:browseURLString];
+}
+
 #pragma mark - partnerID
 
 - (NSString *)partnerID
