@@ -156,6 +156,14 @@ extern NSString * const PSSProductHistogramTypeColor;
  */
 - (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil histogramTypes:(NSArray *)histogramTypes floor:(NSNumber *)floorOrNil success:(void (^)(NSUInteger totalCount, NSDictionary *histograms))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
+/** This method returns a collection of category IDs with product counts that describe the results of a given product query.
+ 
+ @param queryOrNil A `PSSProductQuery` to define which products are used in the calculation.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes three arguments: the total count of products that match the provided criteria and a dictionary of product counts keyed by categoryID.
+ @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
+ */
+- (void)productCategoryHistogramWithQuery:(PSSProductQuery *)queryOrNil success:(void (^)(NSUInteger totalCount, NSDictionary *categoryIDCounts))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
 /**---------------------------------------------------------------------------------------
  * @name Getting Lookup Values
  *  ---------------------------------------------------------------------------------------

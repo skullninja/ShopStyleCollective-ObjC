@@ -531,6 +531,48 @@ static dispatch_once_t once_token = 0;
 	} failure:failure];
 }
 
+- (void)productCategoryHistogramWithQuery:(PSSProductQuery *)queryOrNil success:(void (^)(NSUInteger totalCount, NSDictionary *categoryIDCounts))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+	params[@"filters"] = @"Category";
+	if (queryOrNil != nil) {
+		NSDictionary *queryParams = [queryOrNil queryParameterRepresentation];
+		[params addEntriesFromDictionary:queryParams];
+	}
+	[self getPath:@"products/histogram" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+		NSUInteger totalCount = 0;
+		if ([responseObject[@"metadata"] isKindOfClass:[NSDictionary class]]) {
+			NSDictionary *metadata = responseObject[@"metadata"];
+			if ([metadata[@"total"] isKindOfClass:[NSNumber class]]) {
+				totalCount = [metadata[@"total"] integerValue];
+			}
+		}
+		NSMutableDictionary *catCounts = [NSMutableDictionary dictionary];
+		if ([responseObject[@"categoryHistogram"] isKindOfClass:[NSArray class]]) {
+			for (NSDictionary *catCount in (NSArray *)responseObject[@"categoryHistogram"]) {
+				NSString *catID = [catCount[@"id"] description];
+				id count = catCount[@"count"];
+				if (catID.length > 0 && count != nil) {
+					if ([count isKindOfClass:[NSNumber class]]) {
+						catCounts[catID] = count;
+					} else if ([count isKindOfClass:[NSString class]]) {
+						catCounts[catID] = [NSNumber numberWithInteger:[[count description] integerValue]];
+					}
+				}
+			}
+		}
+		if (catCounts.count > 0) {
+			if (success) {
+				success(totalCount, catCounts);
+			}
+		} else {
+			if (failure) {
+				failure(operation, [self errorWithInvalidRepresentation:responseObject]);
+			}
+		}
+	} failure:failure];
+}
+
 #pragma mark - Brands
 
 - (void)getBrandsSuccess:(void (^)(NSArray *brands))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
