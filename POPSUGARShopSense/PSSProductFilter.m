@@ -195,11 +195,10 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 - (void)setPropertiesWithDictionary:(NSDictionary *)aDictionary
 {
 	for (NSString *key in aDictionary) {
-		if ([key isEqualToString:@"id"] || [key isEqualToString:@"type"]) {
-			break;
-		}
 		id value = [aDictionary valueForKey:key];
-		if ([key isEqualToString:@"url"]) {
+		if ([key isEqualToString:@"id"] || [key isEqualToString:@"type"]) {
+			// ignore name and type, already have those
+		} else if ([key isEqualToString:@"url"]) {
 			// ignore browse URLs
 		} else if ([key isEqualToString:@"count"]) {
 			if ([value isKindOfClass:[NSNumber class]]) {
