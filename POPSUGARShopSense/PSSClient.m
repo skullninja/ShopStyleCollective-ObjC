@@ -547,8 +547,8 @@ static dispatch_once_t once_token = 0;
 				totalCount = [metadata[@"total"] integerValue];
 			}
 		}
-		NSMutableDictionary *catCounts = [NSMutableDictionary dictionary];
 		if ([responseObject[@"categoryHistogram"] isKindOfClass:[NSArray class]]) {
+			NSMutableDictionary *catCounts = [NSMutableDictionary dictionary];
 			for (NSDictionary *catCount in (NSArray *)responseObject[@"categoryHistogram"]) {
 				NSString *catID = [catCount[@"id"] description];
 				id count = catCount[@"count"];
@@ -560,8 +560,6 @@ static dispatch_once_t once_token = 0;
 					}
 				}
 			}
-		}
-		if (catCounts.count > 0) {
 			if (success) {
 				success(totalCount, catCounts);
 			}
