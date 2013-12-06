@@ -387,12 +387,6 @@ static dispatch_once_t once_token = 0;
 	} failure:failure];
 }
 
-- (void)searchProductsWithTerm:(NSString *)searchTerm offset:(NSNumber *)offset limit:(NSNumber *)limit success:(void (^)(NSUInteger totalCount, NSArray *availableHistogramTypes, NSArray *products))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
-{
-	NSParameterAssert(searchTerm != nil && searchTerm.length > 0);
-	[self searchProductsWithQuery:[PSSProductQuery productQueryWithSearchTerm:searchTerm] offset:offset limit:limit success:success failure:failure];
-}
-
 + (NSMutableArray *)standardFilterTypes
 {
 	return [@[ PSSProductHistogramTypeBrand, PSSProductFilterTypeRetailer, PSSProductFilterTypeDiscount, PSSProductFilterTypePrice ] mutableCopy];
@@ -418,6 +412,9 @@ static dispatch_once_t once_token = 0;
 	}
 	if (queryParams != nil) {
 		[params addEntriesFromDictionary:queryParams];
+		if ([self.currentLocale.localeIdentifier isEqualToString:kUSLocaleIdentifier]) {
+			[params removeObjectForKey:@"locales"];
+		}
 	}
 	if (params.count == 0) {
 		params = nil;

@@ -210,7 +210,7 @@ NSString * const PSSProductQuerySortDefault = @"Relevance";
 	if ((productQuery.priceDropDate != nil || self.priceDropDate != nil) && ![productQuery.priceDropDate isEqualToDate:self.priceDropDate]) {
 		return NO;
 	}
-	if (productQuery.sort != self.sort) {
+	if ((productQuery.sort != nil || self.sort != nil) && ![productQuery.sort isEqualToString:self.sort]) {
 		return NO;
 	}
 	if (productQuery.showInternationalProducts != self.showInternationalProducts) {
