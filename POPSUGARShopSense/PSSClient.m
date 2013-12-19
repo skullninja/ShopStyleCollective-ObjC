@@ -272,7 +272,7 @@ static dispatch_once_t once_token = 0;
 - (NSString *)partnerID
 {
 	if (_partnerID == nil) {
-		NSBundle* bundle = [NSBundle mainBundle];
+		NSBundle *bundle = [NSBundle mainBundle];
 		_partnerID = [bundle objectForInfoDictionaryKey:kPListPartnerIDKey];
 	}
 	return _partnerID;
@@ -429,7 +429,7 @@ static dispatch_once_t once_token = 0;
 				NSUInteger totalCount = products.count;
 				NSDictionary *metadata = responseObject[@"metadata"];
 				if ([metadata[@"total"] isKindOfClass:[NSNumber class]]) {
-					totalCount = [metadata[@"total"] integerValue];
+					totalCount = (NSUInteger)[metadata[@"total"] integerValue];
 				}
 				NSMutableArray *availableHistogramTypes = [[self class] standardFilterTypes];
 				if ([metadata[@"showColorFilter"] isKindOfClass:[NSNumber class]] && [metadata[@"showColorFilter"] boolValue]) {
@@ -487,7 +487,7 @@ static dispatch_once_t once_token = 0;
 		if ([responseObject[@"metadata"] isKindOfClass:[NSDictionary class]]) {
 			NSDictionary *metadata = responseObject[@"metadata"];
 			if ([metadata[@"total"] isKindOfClass:[NSNumber class]]) {
-				totalCount = [metadata[@"total"] integerValue];
+				totalCount = (NSUInteger)[metadata[@"total"] integerValue];
 			}
 		}
 		NSMutableDictionary *histograms = [NSMutableDictionary dictionary];
@@ -541,7 +541,7 @@ static dispatch_once_t once_token = 0;
 		if ([responseObject[@"metadata"] isKindOfClass:[NSDictionary class]]) {
 			NSDictionary *metadata = responseObject[@"metadata"];
 			if ([metadata[@"total"] isKindOfClass:[NSNumber class]]) {
-				totalCount = [metadata[@"total"] integerValue];
+				totalCount = (NSUInteger)[metadata[@"total"] integerValue];
 			}
 		}
 		if ([responseObject[@"categoryHistogram"] isKindOfClass:[NSArray class]]) {
@@ -553,7 +553,7 @@ static dispatch_once_t once_token = 0;
 					if ([count isKindOfClass:[NSNumber class]]) {
 						catCounts[catID] = count;
 					} else if ([count isKindOfClass:[NSString class]]) {
-						catCounts[catID] = [NSNumber numberWithInteger:[[count description] integerValue]];
+						catCounts[catID] = @([count integerValue]);
 					}
 				}
 			}

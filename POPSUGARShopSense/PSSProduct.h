@@ -50,6 +50,9 @@
  may be purchased. */
 @property (nonatomic, copy, readonly) NSURL *buyURL;
 
+/** The click-through URL to view the receiver, which will take a user to the ShopStyle product detail page */
+@property (nonatomic, copy, readonly) NSURL *productPageURL;
+
 /** A string representation of the `regularPrice`. */
 @property (nonatomic, copy, readonly) NSString *regularPriceLabel;
 

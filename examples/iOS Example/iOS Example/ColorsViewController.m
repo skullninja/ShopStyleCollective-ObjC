@@ -56,7 +56,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return [self.colors count];
+	return (NSInteger)self.colors.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -66,7 +66,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 	}
-	PSSColor *thisColor = self.colors[indexPath.row];
+	PSSColor *thisColor = self.colors[(NSUInteger)indexPath.row];
 	cell.textLabel.text = thisColor.name;
 	return cell;
 }

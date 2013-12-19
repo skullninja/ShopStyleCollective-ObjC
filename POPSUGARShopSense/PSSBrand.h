@@ -36,6 +36,9 @@
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;
 
+/** Alternate names to display for the receiver. */
+@property (nonatomic, copy, readonly) NSArray *nameSynonyms;
+
 /** A product filter representing the receiver. */
 - (PSSProductFilter *)productFilter;
 

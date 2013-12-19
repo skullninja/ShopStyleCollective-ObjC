@@ -28,16 +28,28 @@
 
 @property (nonatomic, copy, readwrite) NSNumber *brandID;
 @property (nonatomic, copy, readwrite) NSString *name;
+@property (nonatomic, copy, readwrite) NSArray *nameSynonyms;
 
 @end
 
 @implementation PSSBrand
 
+- (id)init
+{
+	self = [super init];
+	if (self) {
+		_nameSynonyms = [NSArray new];
+	}
+	return self;
+}
+
 #pragma mark - Product Filter
 
 - (PSSProductFilter *)productFilter
 {
-	return [PSSProductFilter filterWithType:PSSProductFilterTypeBrand filterID:self.brandID];
+	PSSProductFilter *filter = [PSSProductFilter filterWithType:PSSProductFilterTypeBrand filterID:self.brandID];
+	filter.name = self.name;
+	return filter;
 }
 
 #pragma mark - NSObject
@@ -49,7 +61,7 @@
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
-	PSSDLog(@"Warning: Undefined Key Named '%@'", key);
+	PSSDLog(@"Warning: Undefined Key Named '%@' with value: %@", key, [value description]);
 }
 
 - (NSUInteger)hash
@@ -88,10 +100,16 @@
 			if ([value isKindOfClass:[NSNumber class]]) {
 				self.brandID = value;
 			} else if ([value isKindOfClass:[NSString class]]) {
-				self.brandID = [NSNumber numberWithInteger:[[value description] integerValue]];
+				self.brandID = @([value integerValue]);
 			}
 		} else if ([key isEqualToString:@"url"]) {
 			// ignore browse URLs
+		} else if ([key isEqualToString:@"synonyms"]) {
+			if ([value isKindOfClass:[NSArray class]]) {
+				self.nameSynonyms = value;
+			} else if ([value isKindOfClass:[NSString class]]) {
+				self.nameSynonyms = @[ value ];
+			}
 		} else {
 			[self setValue:value forKey:key];
 		}
@@ -104,6 +122,7 @@
 {
 	[encoder encodeObject:self.name forKey:@"name"];
 	[encoder encodeObject:self.brandID forKey:@"brandID"];
+	[encoder encodeObject:self.nameSynonyms forKey:@"nameSynonyms"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -111,6 +130,7 @@
 	if ((self = [self init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
 		self.brandID = [decoder decodeObjectForKey:@"brandID"];
+		self.nameSynonyms = [decoder decodeObjectForKey:@"nameSynonyms"];
 	}
 	return self;
 }
@@ -122,6 +142,7 @@
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
 	copy.brandID = self.brandID;
 	copy.name = self.name;
+	copy.nameSynonyms = self.nameSynonyms;
 	return copy;
 }
 

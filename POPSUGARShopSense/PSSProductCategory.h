@@ -34,4 +34,7 @@
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;
 
+/** The unique identifier of the receiver localized in the currentLocale of the client. */
+@property (nonatomic, copy, readonly) NSString *localizedCategoryID;
+
 @end

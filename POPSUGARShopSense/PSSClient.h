@@ -189,9 +189,6 @@ extern NSString * const PSSProductHistogramTypeColor;
  */
 - (void)categoryTreeFromCategoryID:(NSString *)categoryIDOrNil depth:(NSNumber *)depthOrNil success:(void (^)(PSSCategoryTree *categoryTree))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
-/** Helper for decoding the category API. Exposed for testing. */
-- (PSSCategoryTree *)categoryTreeFromJSON:(NSDictionary *)JSON;
-
 /**---------------------------------------------------------------------------------------
  * @name Browser URL's
  *  ---------------------------------------------------------------------------------------

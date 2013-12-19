@@ -34,6 +34,7 @@
 @property (nonatomic, copy, readwrite) NSString *name;
 @property (nonatomic, copy, readwrite) NSString *descriptionHTML;
 @property (nonatomic, copy, readwrite) NSURL *buyURL;
+@property (nonatomic, copy, readwrite) NSURL *productPageURL;
 @property (nonatomic, copy, readwrite) NSString *regularPriceLabel;
 @property (nonatomic, copy, readwrite) NSNumber *regularPrice;
 @property (nonatomic, copy, readwrite) NSString *maxRegularPriceLabel;
@@ -126,7 +127,7 @@
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
-	PSSDLog(@"Warning: Undefined Key Named '%@'", key);
+	PSSDLog(@"Warning: Undefined Key Named '%@' with value: %@", key, [value description]);
 }
 
 - (NSUInteger)hash
@@ -168,7 +169,11 @@
 			if ([value isKindOfClass:[NSString class]]) {
 				self.buyURL = [NSURL URLWithString:value];
 			}
-		} else if ([key isEqualToString:@"seeMoreUrl"] && [value isKindOfClass:[NSString class]]) {
+		} else if ([key isEqualToString:@"pageUrl"]) {
+			if ([value isKindOfClass:[NSString class]]) {
+				self.productPageURL = [NSURL URLWithString:value];
+			}
+		} else if ([key isEqualToString:@"seeMoreUrl"]) {
 			if ([value isKindOfClass:[NSString class]]) {
 				self.seeMoreURL = [NSURL URLWithString:value];
 			}
@@ -180,7 +185,7 @@
 			if ([value isKindOfClass:[NSNumber class]]) {
 				self.productID = value;
 			} else if ([value isKindOfClass:[NSString class]]) {
-				self.productID = [NSNumber numberWithInteger:[[value description] integerValue]];
+				self.productID = @([value integerValue]);
 			}
 		} else if ([key isEqualToString:@"brand"]) {
 			if ([value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
@@ -210,7 +215,7 @@
 			if ([value isKindOfClass:[NSNumber class]]) {
 				self.regularPrice = value;
 			} else if ([value isKindOfClass:[NSString class]]) {
-				self.regularPrice = [NSNumber numberWithInteger:[[value description] integerValue]];
+				self.regularPrice = @([value integerValue]);
 			}
 		} else if ([key isEqualToString:@"priceLabel"]) {
 			self.regularPriceLabel = [value description];
@@ -218,7 +223,7 @@
 			if ([value isKindOfClass:[NSNumber class]]) {
 				self.maxRegularPrice = value;
 			} else if ([value isKindOfClass:[NSString class]]) {
-				self.maxRegularPrice = [NSNumber numberWithInteger:[[value description] integerValue]];
+				self.maxRegularPrice = @([value integerValue]);
 			}
 		} else if ([key isEqualToString:@"maxPriceLabel"]) {
 			self.maxRegularPriceLabel = [value description];
@@ -272,6 +277,7 @@
 	[encoder encodeObject:self.brand forKey:@"brand"];
 	[encoder encodeObject:self.categories forKey:@"categories"];
 	[encoder encodeObject:self.buyURL forKey:@"buyURL"];
+	[encoder encodeObject:self.productPageURL forKey:@"productPageURL"];
 	[encoder encodeObject:self.colors forKey:@"colors"];
 	[encoder encodeObject:self.currency forKey:@"currency"];
 	[encoder encodeObject:self.descriptionHTML forKey:@"descriptionHTML"];
@@ -310,6 +316,7 @@
 		self.brand = [decoder decodeObjectForKey:@"brand"];
 		self.categories = [decoder decodeObjectForKey:@"categories"];
 		self.buyURL = [decoder decodeObjectForKey:@"buyURL"];
+		self.productPageURL = [decoder decodeObjectForKey:@"productPageURL"];
 		self.colors = [decoder decodeObjectForKey:@"colors"];
 		self.currency = [decoder decodeObjectForKey:@"currency"];
 		self.descriptionHTML = [decoder decodeObjectForKey:@"descriptionHTML"];
@@ -353,6 +360,7 @@
 	copy.name = self.name;
 	copy.descriptionHTML = self.descriptionHTML;
 	copy.buyURL = self.buyURL;
+	copy.productPageURL = self.productPageURL;
 	copy.regularPriceLabel = self.regularPriceLabel;
 	copy.regularPrice = self.regularPrice;
 	copy.maxRegularPriceLabel = self.maxRegularPriceLabel;

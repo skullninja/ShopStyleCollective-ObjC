@@ -56,7 +56,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return [self.brands count];
+	return (NSInteger)self.brands.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -66,7 +66,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 	}
-	PSSBrand *thisBrand = self.brands[indexPath.row];
+	PSSBrand *thisBrand = self.brands[(NSUInteger)indexPath.row];
 	cell.textLabel.text = thisBrand.name;
 	return cell;
 }

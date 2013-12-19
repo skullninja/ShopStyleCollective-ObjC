@@ -56,7 +56,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return [self.retailers count];
+	return (NSInteger)self.retailers.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -66,7 +66,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 	}
-	PSSRetailer *thisRetailer = self.retailers[indexPath.row];
+	PSSRetailer *thisRetailer = self.retailers[(NSUInteger)indexPath.row];
 	cell.textLabel.text = thisRetailer.name;
 	return cell;
 }

@@ -58,7 +58,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return [self.products count];
+	return (NSInteger)self.products.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -73,7 +73,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
 	}
-	PSSProduct *thisProduct = self.products[indexPath.row];
+	PSSProduct *thisProduct = self.products[(NSUInteger)indexPath.row];
 	cell.textLabel.text = thisProduct.name;
 	cell.textLabel.numberOfLines = 0;
 	if (thisProduct.salePriceLabel) {

@@ -41,7 +41,7 @@
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
-	PSSDLog(@"Warning: Undefined Key Named '%@'", key);
+	PSSDLog(@"Warning: Undefined Key Named '%@' with value: %@", key, [value description]);
 }
 
 - (NSUInteger)hash

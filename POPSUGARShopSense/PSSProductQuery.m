@@ -148,7 +148,7 @@ NSString * const PSSProductQuerySortDefault = @"Relevance";
 	}
 	
 	if (self.priceDropDate != nil) {
-		NSNumber *numberRep = [NSNumber numberWithDouble:([self.priceDropDate timeIntervalSince1970] * 1000)];
+		NSNumber *numberRep = @([self.priceDropDate timeIntervalSince1970] * 1000);
 		dictionary[@"pdd"] = numberRep;
 	}
 	

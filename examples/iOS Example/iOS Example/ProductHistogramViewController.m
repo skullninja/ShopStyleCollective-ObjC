@@ -59,7 +59,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return [self.filters count];
+	return (NSInteger)self.filters.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -69,7 +69,7 @@
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
 	}
-	PSSProductFilter *thisFilter = self.filters[indexPath.row];
+	PSSProductFilter *thisFilter = self.filters[(NSUInteger)indexPath.row];
 	cell.textLabel.text = thisFilter.name;
 	cell.detailTextLabel.text = thisFilter.productCount.stringValue;
 	return cell;

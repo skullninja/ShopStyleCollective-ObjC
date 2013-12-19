@@ -37,7 +37,9 @@
 
 - (PSSProductFilter *)productFilter
 {
-	return [PSSProductFilter filterWithType:PSSProductFilterTypeColor filterID:self.colorID];
+	PSSProductFilter *filter = [PSSProductFilter filterWithType:PSSProductFilterTypeColor filterID:self.colorID];
+	filter.name = self.name;
+	return filter;
 }
 
 #pragma mark - NSObject
@@ -49,7 +51,7 @@
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
-	PSSDLog(@"Warning: Undefined Key Named '%@'", key);
+	PSSDLog(@"Warning: Undefined Key Named '%@' with value: %@", key, [value description]);
 }
 
 - (NSUInteger)hash
@@ -88,7 +90,7 @@
 			if ([value isKindOfClass:[NSNumber class]]) {
 				self.colorID = value;
 			} else if ([value isKindOfClass:[NSString class]]) {
-				self.colorID = [NSNumber numberWithInteger:[[value description] integerValue]];
+				self.colorID = @([value integerValue]);
 			}
 		} else if ([key isEqualToString:@"url"]) {
 			// ignore browse URLs

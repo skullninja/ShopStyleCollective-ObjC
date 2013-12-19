@@ -28,6 +28,7 @@
 
 @property (nonatomic, copy, readwrite) NSString *categoryID;
 @property (nonatomic, copy, readwrite) NSString *name;
+@property (nonatomic, copy, readwrite) NSString *localizedCategoryID;
 
 @end
 
@@ -42,7 +43,7 @@
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
-	PSSDLog(@"Warning: Undefined Key Named '%@'", key);
+	PSSDLog(@"Warning: Undefined Key Named '%@' with value: %@", key, [value description]);
 }
 
 - (NSUInteger)hash
@@ -82,6 +83,8 @@
 		id value = [aDictionary valueForKey:key];
 		if ([key isEqualToString:@"id"]) {
 			self.categoryID = [value description];
+		} else if ([key isEqualToString:@"localizedId"]) {
+			self.localizedCategoryID = [value description];
 		} else {
 			[self setValue:value forKey:key];
 		}
@@ -94,6 +97,7 @@
 {
 	[encoder encodeObject:self.categoryID forKey:@"categoryID"];
 	[encoder encodeObject:self.name forKey:@"name"];
+	[encoder encodeObject:self.localizedCategoryID forKey:@"localizedCategoryID"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -101,6 +105,7 @@
 	if ((self = [self init])) {
 		self.categoryID = [decoder decodeObjectForKey:@"categoryID"];
 		self.name = [decoder decodeObjectForKey:@"name"];
+		self.localizedCategoryID = [decoder decodeObjectForKey:@"localizedCategoryID"];
 	}
 	return self;
 }
@@ -112,6 +117,7 @@
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
 	copy.categoryID = self.categoryID;
 	copy.name = self.name;
+	copy.localizedCategoryID = self.localizedCategoryID;
 	return copy;
 }
 

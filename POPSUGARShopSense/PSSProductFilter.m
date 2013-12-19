@@ -140,7 +140,7 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
-	PSSDLog(@"Warning: Undefined Key Named '%@'", key);
+	PSSDLog(@"Warning: Undefined Key Named '%@' with value: %@", key, [value description]);
 }
 
 - (NSUInteger)hash
@@ -179,7 +179,7 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 	if ([value isKindOfClass:[NSNumber class]]) {
 		filterID = value;
 	} else if ([value isKindOfClass:[NSString class]]) {
-		filterID = [NSNumber numberWithInteger:[[value description] integerValue]];
+		filterID = @([value integerValue]);
 	}
 	if (filterID == nil) {
 		return nil;
@@ -204,7 +204,7 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 			if ([value isKindOfClass:[NSNumber class]]) {
 				self.productCount = value;
 			} else if ([value isKindOfClass:[NSString class]]) {
-				self.productCount = [NSNumber numberWithInteger:[[value description] integerValue]];
+				self.productCount = @([value integerValue]);
 			}
 		} else {
 			[self setValue:value forKey:key];
