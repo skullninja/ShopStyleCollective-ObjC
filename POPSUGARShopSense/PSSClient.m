@@ -429,7 +429,7 @@ static dispatch_once_t once_token = 0;
 				NSUInteger totalCount = products.count;
 				NSDictionary *metadata = responseObject[@"metadata"];
 				if ([metadata[@"total"] isKindOfClass:[NSNumber class]]) {
-					totalCount = (NSUInteger)[metadata[@"total"] integerValue];
+					totalCount = [metadata[@"total"] unsignedIntegerValue];
 				}
 				NSMutableArray *availableHistogramTypes = [[self class] standardFilterTypes];
 				if ([metadata[@"showColorFilter"] isKindOfClass:[NSNumber class]] && [metadata[@"showColorFilter"] boolValue]) {
@@ -487,7 +487,7 @@ static dispatch_once_t once_token = 0;
 		if ([responseObject[@"metadata"] isKindOfClass:[NSDictionary class]]) {
 			NSDictionary *metadata = responseObject[@"metadata"];
 			if ([metadata[@"total"] isKindOfClass:[NSNumber class]]) {
-				totalCount = (NSUInteger)[metadata[@"total"] integerValue];
+				totalCount = [metadata[@"total"] unsignedIntegerValue];
 			}
 		}
 		NSMutableDictionary *histograms = [NSMutableDictionary dictionary];
@@ -541,7 +541,7 @@ static dispatch_once_t once_token = 0;
 		if ([responseObject[@"metadata"] isKindOfClass:[NSDictionary class]]) {
 			NSDictionary *metadata = responseObject[@"metadata"];
 			if ([metadata[@"total"] isKindOfClass:[NSNumber class]]) {
-				totalCount = (NSUInteger)[metadata[@"total"] integerValue];
+				totalCount = [metadata[@"total"] unsignedIntegerValue];
 			}
 		}
 		if ([responseObject[@"categoryHistogram"] isKindOfClass:[NSArray class]]) {
