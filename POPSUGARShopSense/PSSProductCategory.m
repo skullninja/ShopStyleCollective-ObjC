@@ -29,6 +29,8 @@
 @property (nonatomic, copy, readwrite) NSString *categoryID;
 @property (nonatomic, copy, readwrite) NSString *name;
 @property (nonatomic, copy, readwrite) NSString *localizedCategoryID;
+@property (nonatomic, assign, readwrite) BOOL hasSizeFilter;
+@property (nonatomic, assign, readwrite) BOOL hasColorFilter;
 
 @end
 
@@ -98,6 +100,8 @@
 	[encoder encodeObject:self.categoryID forKey:@"categoryID"];
 	[encoder encodeObject:self.name forKey:@"name"];
 	[encoder encodeObject:self.localizedCategoryID forKey:@"localizedCategoryID"];
+	[encoder encodeBool:self.hasColorFilter forKey:@"hasColorFilter"];
+	[encoder encodeBool:self.hasSizeFilter forKey:@"hasSizeFilter"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -105,7 +109,8 @@
 	if ((self = [self init])) {
 		self.categoryID = [decoder decodeObjectForKey:@"categoryID"];
 		self.name = [decoder decodeObjectForKey:@"name"];
-		self.localizedCategoryID = [decoder decodeObjectForKey:@"localizedCategoryID"];
+		self.hasColorFilter = [decoder decodeBoolForKey:@"hasColorFilter"];
+		self.hasSizeFilter = [decoder decodeBoolForKey:@"hasSizeFilter"];
 	}
 	return self;
 }
@@ -118,6 +123,8 @@
 	copy.categoryID = self.categoryID;
 	copy.name = self.name;
 	copy.localizedCategoryID = self.localizedCategoryID;
+	copy.hasColorFilter = self.hasColorFilter;
+	copy.hasSizeFilter = self.hasSizeFilter;
 	return copy;
 }
 
