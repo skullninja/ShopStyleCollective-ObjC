@@ -109,6 +109,7 @@
 	if ((self = [self init])) {
 		self.categoryID = [decoder decodeObjectForKey:@"categoryID"];
 		self.name = [decoder decodeObjectForKey:@"name"];
+		self.localizedCategoryID = [decoder decodeObjectForKey:@"localizedCategoryID"];
 		self.hasColorFilter = [decoder decodeBoolForKey:@"hasColorFilter"];
 		self.hasSizeFilter = [decoder decodeBoolForKey:@"hasSizeFilter"];
 	}
