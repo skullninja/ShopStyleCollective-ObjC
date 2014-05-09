@@ -378,7 +378,7 @@ static dispatch_once_t once_token = 0;
 - (void)getProductByID:(NSNumber *)productID success:(void (^)(PSSProduct *product))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	NSParameterAssert(productID != nil);
-	NSString *path = [NSString stringWithFormat:@"products/%d",productID.integerValue];
+	NSString *path = [NSString stringWithFormat:@"products/%@", productID];
 	[self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		if (success) {
 			PSSProduct *product = (PSSProduct *)[self remoteObjectForEntityNamed:@"product" fromRepresentation:responseObject];
