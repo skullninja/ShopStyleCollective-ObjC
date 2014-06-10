@@ -29,6 +29,7 @@ extern NSString * const PSSProductFilterTypeRetailer;
 extern NSString * const PSSProductFilterTypePrice;
 extern NSString * const PSSProductFilterTypeDiscount;
 extern NSString * const PSSProductFilterTypeSize;
+extern NSString * const PSSProductFilterTypeHeelHeight;
 extern NSString * const PSSProductFilterTypeColor;
 
 /** A filter used to refine a product query or understand a product histogram.
@@ -67,7 +68,10 @@ extern NSString * const PSSProductFilterTypeColor;
  
  `PSSProductFilterTypeSize`
  Filter by size.
- 
+
+ `PSSProductFilterTypeHeelHeight`
+ Filter by heel height.
+
  `PSSProductFilterTypeColor`
  Filter by color.
  

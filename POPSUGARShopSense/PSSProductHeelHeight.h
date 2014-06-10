@@ -1,7 +1,7 @@
 //
-//  PSSProductCategory.h
+//  PSSProductHeelHeight.h
 //
-//  Copyright (c) 2013 POPSUGAR Inc.
+//  Copyright (c) 2014 POPSUGAR Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,21 +24,11 @@
 #import <Foundation/Foundation.h>
 #import "PSSClient.h"
 
-/** A product's category.  */
+/** A product's heel height */
 
-@interface PSSProductCategory : NSObject <NSCoding, NSCopying, PSSRemoteObject>
-
-/** The unique identifier of the receiver. See `PSSCategoryTree` to understand it's position in the hierarchy. */
-@property (nonatomic, copy, readonly) NSString *categoryID;
+@interface PSSProductHeelHeight : NSObject <NSCoding, NSCopying, PSSRemoteObject>
 
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;
-
-/** The unique identifier of the receiver localized in the currentLocale of the client. */
-@property (nonatomic, copy, readonly) NSString *localizedCategoryID;
-
-@property (nonatomic, assign, readonly) BOOL hasSizeFilter;
-@property (nonatomic, assign, readonly) BOOL hasColorFilter;
-@property (nonatomic, assign, readonly) BOOL hasHeelHeightFilter;
 
 @end

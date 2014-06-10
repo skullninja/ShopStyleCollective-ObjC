@@ -40,6 +40,7 @@ NSString * const PSSProductHistogramTypeRetailer = @"Retailer";
 NSString * const PSSProductHistogramTypePrice = @"Price";
 NSString * const PSSProductHistogramTypeDiscount = @"Discount";
 NSString * const PSSProductHistogramTypeSize = @"Size";
+NSString * const PSSProductHistogramTypeHeelHeight = @"HeelHeight";
 NSString * const PSSProductHistogramTypeColor = @"Color";
 
 static NSString * const kShopSenseBaseURLString = @"http://api.shopstyle.com/api/v2/";
@@ -438,6 +439,9 @@ static dispatch_once_t once_token = 0;
 				if ([metadata[@"showSizeFilter"] isKindOfClass:[NSNumber class]] && [metadata[@"showSizeFilter"] boolValue]) {
 					[availableHistogramTypes addObject:PSSProductHistogramTypeSize];
 				}
+				if ([metadata[@"showHeelHeightFilter"] isKindOfClass:[NSNumber class]] && [metadata[@"showHeelHeightFilter"] boolValue]) {
+					[availableHistogramTypes addObject:PSSProductHistogramTypeHeelHeight];
+				}
 				success(totalCount, availableHistogramTypes, products);
 			}
 			
@@ -451,12 +455,12 @@ static dispatch_once_t once_token = 0;
 
 - (NSDictionary *)histogramResponseKeyToFilterTypeMap
 {
-	return @{ @"brandHistogram": PSSProductFilterTypeBrand, @"retailerHistogram": PSSProductFilterTypeRetailer, @"priceHistogram": PSSProductFilterTypePrice, @"discountHistogram": PSSProductFilterTypeDiscount, @"sizeHistogram": PSSProductFilterTypeSize, @"colorHistogram": PSSProductFilterTypeColor };
+	return @{ @"brandHistogram": PSSProductFilterTypeBrand, @"retailerHistogram": PSSProductFilterTypeRetailer, @"priceHistogram": PSSProductFilterTypePrice, @"discountHistogram": PSSProductFilterTypeDiscount, @"sizeHistogram": PSSProductFilterTypeSize, @"heelHeightHistogram": PSSProductFilterTypeHeelHeight, @"colorHistogram": PSSProductFilterTypeColor };
 }
 
 - (NSDictionary *)histogramResponseKeyToHistogramTypeMap
 {
-	return @{ @"brandHistogram": PSSProductHistogramTypeBrand, @"retailerHistogram": PSSProductHistogramTypeRetailer, @"priceHistogram": PSSProductHistogramTypePrice, @"discountHistogram": PSSProductHistogramTypeDiscount, @"sizeHistogram": PSSProductHistogramTypeSize, @"colorHistogram":PSSProductHistogramTypeColor };
+	return @{ @"brandHistogram": PSSProductHistogramTypeBrand, @"retailerHistogram": PSSProductHistogramTypeRetailer, @"priceHistogram": PSSProductHistogramTypePrice, @"discountHistogram": PSSProductHistogramTypeDiscount, @"sizeHistogram": PSSProductHistogramTypeSize, @"heelHeightHistogram": PSSProductHistogramTypeHeelHeight, @"colorHistogram":PSSProductHistogramTypeColor };
 }
 
 - (void)productHistogramWithQuery:(PSSProductQuery *)queryOrNil histogramTypes:(NSArray *)histogramTypes floor:(NSNumber *)floorOrNil success:(void (^)(NSUInteger totalCount, NSDictionary *histograms))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure

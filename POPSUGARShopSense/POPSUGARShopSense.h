@@ -34,6 +34,7 @@
 	#import "PSSCategory.h"
 	#import "PSSProductImage.h"
 	#import "PSSProductSize.h"
+	#import "PSSProductHeelHeight.h"
 	#import "PSSProductColor.h"
 	#import "PSSProductCategory.h"
 	#import "PSSRetailer.h"
