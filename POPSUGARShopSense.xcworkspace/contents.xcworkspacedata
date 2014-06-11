@@ -56,6 +56,12 @@
          location = "group:PSSProductSize.m">
       </FileRef>
       <FileRef
+         location = "group:PSSProductHeelHeight.h">
+      </FileRef>
+      <FileRef
+         location = "group:PSSProductHeelHeight.m">
+      </FileRef>
+      <FileRef
          location = "group:PSSProductCategory.h">
       </FileRef>
       <FileRef

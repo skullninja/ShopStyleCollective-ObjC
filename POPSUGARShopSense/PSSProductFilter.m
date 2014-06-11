@@ -29,6 +29,7 @@ NSString * const PSSProductFilterTypeRetailer = @"Retailer";
 NSString * const PSSProductFilterTypePrice = @"Price";
 NSString * const PSSProductFilterTypeDiscount = @"Discount";
 NSString * const PSSProductFilterTypeSize = @"Size";
+NSString * const PSSProductFilterTypeHeelHeight = @"HeelHeight";
 NSString * const PSSProductFilterTypeColor = @"Color";
 
 @interface PSSProductFilter ()
@@ -64,7 +65,7 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 
 + (BOOL)isValidType:(NSString *)type
 {
-	return ([type isEqualToString:PSSProductFilterTypeBrand] || [type isEqualToString:PSSProductFilterTypeRetailer] || [type isEqualToString:PSSProductFilterTypePrice] || [type isEqualToString:PSSProductFilterTypeDiscount] || [type isEqualToString:PSSProductFilterTypeSize] || [type isEqualToString:PSSProductFilterTypeColor]);
+	return ([type isEqualToString:PSSProductFilterTypeBrand] || [type isEqualToString:PSSProductFilterTypeRetailer] || [type isEqualToString:PSSProductFilterTypePrice] || [type isEqualToString:PSSProductFilterTypeDiscount] || [type isEqualToString:PSSProductFilterTypeSize] || [type isEqualToString:PSSProductFilterTypeHeelHeight] || [type isEqualToString:PSSProductFilterTypeColor]);
 }
 
 - (void)setType:(NSString *)type
@@ -92,6 +93,8 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 		type = PSSProductFilterTypeDiscount;
 	} else if ([prefix isEqualToString:@"s"]) {
 		type = PSSProductFilterTypeSize;
+	} else if ([prefix isEqualToString:@"h"]) {
+		type = PSSProductFilterTypeHeelHeight;
 	} else if ([prefix isEqualToString:@"c"]) {
 		type = PSSProductFilterTypeColor;
 	}
@@ -108,6 +111,7 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 	// p - price
 	// d - discount
 	// s - size
+	// h - heel height
 	// c - color
 	NSString *prefix = @"";
 	if ([self.type isEqualToString:PSSProductFilterTypeBrand]) {
@@ -120,6 +124,8 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 		prefix = @"d";
 	} else if ([self.type isEqualToString:PSSProductFilterTypeSize]) {
 		prefix = @"s";
+	} else if ([self.type isEqualToString:PSSProductFilterTypeHeelHeight]) {
+		prefix = @"h";
 	} else if ([self.type isEqualToString:PSSProductFilterTypeColor]) {
 		prefix = @"c";
 	}

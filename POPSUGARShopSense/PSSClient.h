@@ -41,6 +41,7 @@ extern NSString * const PSSProductHistogramTypeRetailer;
 extern NSString * const PSSProductHistogramTypePrice;
 extern NSString * const PSSProductHistogramTypeDiscount;
 extern NSString * const PSSProductHistogramTypeSize;
+extern NSString * const PSSProductHistogramTypeHeelHeight;
 extern NSString * const PSSProductHistogramTypeColor;
 
 /** A singleton subclass of AFHTTPClient that wraps the ShopSense API web services and converts the response into native Objective-C objects.
@@ -134,7 +135,10 @@ extern NSString * const PSSProductHistogramTypeColor;
  
  `PSSProductHistogramTypeSize`
  Histogram of size filters.
- 
+
+ `PSSProductHistogramTypeHeelHeight`
+ Histogram of heel height filters.
+
  `PSSProductHistogramTypeColor`
  Histogram of color filters.
  
