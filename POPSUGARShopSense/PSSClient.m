@@ -486,6 +486,11 @@ static dispatch_once_t once_token = 0;
 		NSDictionary *queryParams = [queryOrNil queryParameterRepresentation];
 		[params addEntriesFromDictionary:queryParams];
 	}
+	if (params != nil) {
+		if ([self.currentLocale.localeIdentifier isEqualToString:kUSLocaleIdentifier]) {
+			[params removeObjectForKey:@"locales"];
+		}
+	}
 	[self getPath:@"products/histogram" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		NSUInteger totalCount = 0;
 		if ([responseObject[@"metadata"] isKindOfClass:[NSDictionary class]]) {
@@ -539,6 +544,11 @@ static dispatch_once_t once_token = 0;
 	if (queryOrNil != nil) {
 		NSDictionary *queryParams = [queryOrNil queryParameterRepresentation];
 		[params addEntriesFromDictionary:queryParams];
+	}
+	if (params != nil) {
+		if ([self.currentLocale.localeIdentifier isEqualToString:kUSLocaleIdentifier]) {
+			[params removeObjectForKey:@"locales"];
+		}
 	}
 	[self getPath:@"products/histogram" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		NSUInteger totalCount = 0;
