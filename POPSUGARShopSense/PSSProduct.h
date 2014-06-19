@@ -140,6 +140,9 @@
 /** Default image of the receiver. */
 @property (nonatomic, strong, readonly) PSSProductImage *image;
 
+/** Alternate images of the receiver. */
+@property (nonatomic, copy, readonly) NSArray *alternateImages;
+
 /** The currency of the pricing information of the product from the locale it was extracted. Examples are USD, GBP, and EUR. 
  
  For example, if a product from a Japanese retailer is displayed in a US local it's currency will 

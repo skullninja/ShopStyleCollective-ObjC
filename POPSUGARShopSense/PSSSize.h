@@ -1,7 +1,7 @@
 //
-//  PSSProductColor.h
+//  PSSSize.h
 //
-//  Copyright (c) 2013 POPSUGAR Inc.
+//  Copyright (c) 2014 POPSUGAR Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,22 +24,19 @@
 #import <Foundation/Foundation.h>
 #import "PSSClient.h"
 
-@class PSSProductImage;
+@class PSSProductFilter;
 
-/** The retailer/brand color description */
+/** A standard ShopStyle size. Primarily used for displaying filters. For the retailer/brand color of a product see `PSSProductSize` */
 
-@interface PSSProductColor : NSObject <NSCoding, NSCopying, PSSRemoteObject>
+@interface PSSSize : NSObject <NSCoding, NSCopying, PSSRemoteObject>
+
+/** The unique identifier of the receiver. */
+@property (nonatomic, copy, readonly) NSNumber *sizeID;
 
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;
 
-/** Image of the receiver. */
-@property (nonatomic, strong, readonly) PSSProductImage *image;
-
-/** An optional list of PSSColor objects that match the receiver */
-@property (nonatomic, copy, readonly) NSArray *canonicalColors;
-
-/** An optional URL for a swatch image of the receiver */
-@property (nonatomic, copy, readonly) NSURL *swatchURL;
+/** A product filter representing the receiver. */
+- (PSSProductFilter *)productFilter;
 
 @end

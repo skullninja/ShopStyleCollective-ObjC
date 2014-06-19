@@ -29,6 +29,8 @@
 
 @property (nonatomic, copy, readwrite) NSString *name;
 @property (nonatomic, strong, readwrite) PSSProductImage *image;
+@property (nonatomic, copy, readwrite) NSArray *canonicalColors;
+@property (nonatomic, copy, readwrite) NSURL *swatchURL;
 
 @end
 
@@ -82,6 +84,24 @@
 			if ([value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
 				self.image = (PSSProductImage *)[self remoteObjectForRelationshipNamed:@"image" fromRepresentation:value];
 			}
+		} else if ([key isEqualToString:@"swatchUrl"]) {
+			self.swatchURL = [NSURL URLWithString:[value description]];
+		} else if ([key isEqualToString:@"canonicalColors"]) {
+			if ([value isKindOfClass:[NSArray class]]) {
+				NSArray *canonicalColors = value;
+				if (canonicalColors.count > 0) {
+					NSMutableArray *colors = [NSMutableArray new];
+					for (id canonicalColor in canonicalColors) {
+						id color = [self remoteObjectForRelationshipNamed:@"color" fromRepresentation:canonicalColor];
+						if (color != nil) {
+							[colors addObject:color];
+						}
+					}
+					if (colors.count > 0) {
+						self.canonicalColors = [colors copy];
+					}
+				}
+			}
 		} else {
 			[self setValue:value forKey:key];
 		}
@@ -92,6 +112,8 @@
 {
 	if ([relationshipName isEqualToString:@"image"]) {
 		return [PSSProductImage instanceFromRemoteRepresentation:representation];
+	} else if ([relationshipName isEqualToString:@"color"]) {
+		return [PSSColor instanceFromRemoteRepresentation:representation];
 	}
 	return nil;
 }
@@ -102,6 +124,8 @@
 {
 	[encoder encodeObject:self.name forKey:@"name"];
 	[encoder encodeObject:self.image forKey:@"image"];
+	[encoder encodeObject:self.canonicalColors forKey:@"canonicalColors"];
+	[encoder encodeObject:self.swatchURL forKey:@"swatchURL"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -109,6 +133,8 @@
 	if ((self = [self init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
 		self.image = [decoder decodeObjectForKey:@"image"];
+		self.canonicalColors = [decoder decodeObjectForKey:@"canonicalColors"];
+		self.swatchURL = [decoder decodeObjectForKey:@"swatchURL"];
 	}
 	return self;
 }
@@ -120,6 +146,8 @@
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
 	copy.name = self.name;
 	copy.image = [self.image copyWithZone:zone];
+	copy.canonicalColors = self.canonicalColors;
+	copy.swatchURL = self.swatchURL;
 	return copy;
 }
 

@@ -55,6 +55,7 @@
 @property (nonatomic, assign, readwrite) BOOL inStock;
 @property (nonatomic, copy, readwrite) NSString *extractDate;
 @property (nonatomic, strong, readwrite) PSSProductImage *image;
+@property (nonatomic, copy, readwrite) NSArray *alternateImages;
 @property (nonatomic, copy, readwrite) NSString *nativeCurrency;
 @property (nonatomic, copy, readwrite) NSString *nativePriceLabel;
 @property (nonatomic, copy, readwrite) NSNumber *nativePrice;
@@ -203,6 +204,10 @@
 			if ([value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
 				self.image = (PSSProductImage *)[self remoteObjectForRelationshipNamed:@"image" fromRepresentation:value];
 			}
+		} else if ([key isEqualToString:@"alternateImages"]) {
+			if ([value isKindOfClass:[NSArray class]]) {
+				self.alternateImages = [self remoteObjectsForToManyRelationshipNamed:@"image" fromRepresentations:value];
+			}
 		} else if ([key isEqualToString:@"retailer"]) {
 			if ([value isKindOfClass:[NSDictionary class]] && [(NSDictionary *)value count] > 0) {
 				self.retailer = (PSSRetailer *)[self remoteObjectForRelationshipNamed:@"retailer" fromRepresentation:value];
@@ -229,6 +234,8 @@
 			self.maxRegularPriceLabel = [value description];
 		} else if ([key isEqualToString:@"type"] || [key isEqualToString:@"images"]) {
 			// not needed
+		} else if ([key isEqualToString:@"brandedName"] || [key isEqualToString:@"unbrandedName"] || [key isEqualToString:@"badges"]) {
+			// not complete on all data so leaving out for now
 		} else {
 			[self setValue:value forKey:key];
 		}
@@ -283,6 +290,7 @@
 	[encoder encodeObject:self.descriptionHTML forKey:@"descriptionHTML"];
 	[encoder encodeObject:self.extractDate forKey:@"extractDate"];
 	[encoder encodeObject:self.image forKey:@"image"];
+	[encoder encodeObject:self.alternateImages forKey:@"alternateImages"];
 	[encoder encodeBool:self.inStock forKey:@"inStock"];
 	[encoder encodeObject:self.localeIdentifier forKey:@"localeIdentifier"];
 	[encoder encodeObject:self.maxRegularPrice forKey:@"maxRegularPrice"];
@@ -322,6 +330,7 @@
 		self.descriptionHTML = [decoder decodeObjectForKey:@"descriptionHTML"];
 		self.extractDate = [decoder decodeObjectForKey:@"extractDate"];
 		self.image = [decoder decodeObjectForKey:@"image"];
+		self.alternateImages = [decoder decodeObjectForKey:@"alternateImages"];
 		self.inStock = [decoder decodeBoolForKey:@"inStock"];
 		self.localeIdentifier = [decoder decodeObjectForKey:@"localeIdentifier"];
 		self.maxRegularPrice = [decoder decodeObjectForKey:@"maxRegularPrice"];
@@ -381,6 +390,7 @@
 	copy.inStock = self.inStock;
 	copy.extractDate = self.extractDate;
 	copy.image = [self.image copyWithZone:zone];
+	copy.alternateImages = self.alternateImages;
 	copy.nativeCurrency = self.nativeCurrency;
 	copy.nativePriceLabel = self.nativePriceLabel;
 	copy.nativePrice = self.nativePrice;

@@ -39,6 +39,7 @@
 	#import "PSSProductCategory.h"
 	#import "PSSRetailer.h"
 	#import "PSSColor.h"
+	#import "PSSSize.h"
 #endif
 
 #ifdef _POPSUGARShopSense_DEBUG_
