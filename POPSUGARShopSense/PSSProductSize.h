@@ -24,11 +24,16 @@
 #import <Foundation/Foundation.h>
 #import "PSSClient.h"
 
+@class PSSSize;
+
 /** The retailer/brand size description */
 
 @interface PSSProductSize : NSObject <NSCoding, NSCopying, PSSRemoteObject>
 
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;
+
+/** An optional PSSSize object that matches the receiver */
+@property (nonatomic, strong, readonly) PSSSize *canonicalSize;
 
 @end

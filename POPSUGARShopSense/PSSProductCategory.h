@@ -34,11 +34,7 @@
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;
 
-/** The unique identifier of the receiver localized in the currentLocale of the client. */
-@property (nonatomic, copy, readonly) NSString *localizedCategoryID;
-
-@property (nonatomic, assign, readonly) BOOL hasSizeFilter;
-@property (nonatomic, assign, readonly) BOOL hasColorFilter;
-@property (nonatomic, assign, readonly) BOOL hasHeelHeightFilter;
+/** A short version of the receiver's name. If none exists name will be returned. */
+@property (nonatomic, copy, readonly) NSString *shortName;
 
 @end

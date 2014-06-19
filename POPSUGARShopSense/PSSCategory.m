@@ -31,12 +31,16 @@
 @end
 
 static NSString * const kParentCategoryIDKey = @"parentId";
+static NSString * const kLocalizedIDKey = @"localizedId";
 
 @interface PSSCategory ()
 
 @property (nonatomic, strong) NSMutableOrderedSet *mutableChildCategorySet;
 @property (nonatomic, copy, readwrite) NSString *parentCategoryID;
-@property (nonatomic, copy, readwrite) NSString *shortName;
+@property (nonatomic, copy, readwrite) NSString *localizedCategoryID;
+@property (nonatomic, assign, readwrite) BOOL hasSizeFilter;
+@property (nonatomic, assign, readwrite) BOOL hasColorFilter;
+@property (nonatomic, assign, readwrite) BOOL hasHeelHeightFilter;
 
 @end
 
@@ -54,16 +58,6 @@ static NSString * const kParentCategoryIDKey = @"parentId";
 	}
 	_mutableChildCategorySet = [[NSMutableOrderedSet alloc] init];
 	return _mutableChildCategorySet;
-}
-
-#pragma mark - Short Name
-
-- (NSString *)shortName
-{
-	if (_shortName) {
-		return _shortName;
-	}
-	return self.name;
 }
 
 #pragma mark - PSSRemoteObject
@@ -85,6 +79,10 @@ static NSString * const kParentCategoryIDKey = @"parentId";
 		self.parentCategoryID = copyDictionary[kParentCategoryIDKey];
 		[copyDictionary removeObjectForKey:kParentCategoryIDKey];
 	}
+	if (copyDictionary[kLocalizedIDKey] != nil) {
+		self.localizedCategoryID = [copyDictionary[kLocalizedIDKey] description];
+		[copyDictionary removeObjectForKey:kLocalizedIDKey];
+	}
 	[super setPropertiesWithDictionary:copyDictionary];
 }
 
@@ -95,7 +93,10 @@ static NSString * const kParentCategoryIDKey = @"parentId";
 	[super encodeWithCoder:encoder];
 	[encoder encodeObject:self.parentCategoryID forKey:@"parentCategoryID"];
 	[encoder encodeObject:self.mutableChildCategorySet forKey:@"mutableChildCategorySet"];
-	[encoder encodeObject:self.shortName forKey:@"shortName"];
+	[encoder encodeObject:self.localizedCategoryID forKey:@"localizedCategoryID"];
+	[encoder encodeBool:self.hasColorFilter forKey:@"hasColorFilter"];
+	[encoder encodeBool:self.hasSizeFilter forKey:@"hasSizeFilter"];
+	[encoder encodeBool:self.hasHeelHeightFilter forKey:@"hasHeelHeightFilter"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -103,7 +104,10 @@ static NSString * const kParentCategoryIDKey = @"parentId";
 	if ((self = [super initWithCoder:decoder])) {
 		self.parentCategoryID = [decoder decodeObjectForKey:@"parentCategoryID"];
 		self.mutableChildCategorySet = [decoder decodeObjectForKey:@"mutableChildCategorySet"];
-		self.shortName = [decoder decodeObjectForKey:@"shortName"];
+		self.localizedCategoryID = [decoder decodeObjectForKey:@"localizedCategoryID"];
+		self.hasColorFilter = [decoder decodeBoolForKey:@"hasColorFilter"];
+		self.hasSizeFilter = [decoder decodeBoolForKey:@"hasSizeFilter"];
+		self.hasHeelHeightFilter = [decoder decodeBoolForKey:@"hasHeelHeightFilter"];
 	}
 	return self;
 }
@@ -115,7 +119,10 @@ static NSString * const kParentCategoryIDKey = @"parentId";
 	typeof(self) copy = [super copyWithZone:zone];
 	copy.parentCategoryID = self.parentCategoryID;
 	copy.mutableChildCategorySet = [self.mutableChildCategorySet mutableCopyWithZone:zone];
-	copy.shortName = self.shortName;
+	copy.localizedCategoryID = self.localizedCategoryID;
+	copy.hasColorFilter = self.hasColorFilter;
+	copy.hasSizeFilter = self.hasSizeFilter;
+	copy.hasHeelHeightFilter = self.hasHeelHeightFilter;
 	return copy;
 }
 

@@ -36,6 +36,9 @@
 /** A name to display for the receiver. */
 @property (nonatomic, copy, readonly) NSString *name;
 
+/** The domain name (if available) for the receiver */
+@property (nonatomic, copy, readonly) NSString *domainName;
+
 @property (nonatomic, assign, readonly) BOOL deeplinkSupport;
 
 /** A product filter representing the receiver. */

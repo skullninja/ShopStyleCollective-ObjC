@@ -31,7 +31,16 @@
 /** The child categories of the receiver if any exists. */
 @property (nonatomic, strong, readonly) NSArray *childCategories;
 
-/** A short version of the receiver's name. If none exists name will be returned. */
-@property (nonatomic, copy, readonly) NSString *shortName;
+/** The unique identifier of the receiver localized in the currentLocale of the client. */
+@property (nonatomic, copy, readonly) NSString *localizedCategoryID;
+
+/** Returns YES if the receiver will have the size histogram available */
+@property (nonatomic, assign, readonly) BOOL hasSizeFilter;
+
+/** Returns YES if the receiver will have the color histogram available */
+@property (nonatomic, assign, readonly) BOOL hasColorFilter;
+
+/** Returns YES if the receiver will have the heel height histogram available */
+@property (nonatomic, assign, readonly) BOOL hasHeelHeightFilter;
 
 @end

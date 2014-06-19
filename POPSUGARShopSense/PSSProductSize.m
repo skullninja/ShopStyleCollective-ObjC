@@ -27,6 +27,7 @@
 @interface PSSProductSize ()
 
 @property (nonatomic, copy, readwrite) NSString *name;
+@property (nonatomic, strong, readwrite) PSSSize *canonicalSize;
 
 @end
 
@@ -76,8 +77,22 @@
 {
 	for (NSString *key in aDictionary) {
 		id value = [aDictionary valueForKey:key];
-		[self setValue:value forKey:key];
+		if ([key isEqualToString:@"canonicalSize"]) {
+			if ([value isKindOfClass:[NSDictionary class]]) {
+				self.canonicalSize = (PSSSize *)[self remoteObjectForRelationshipNamed:@"size" fromRepresentation:value];
+			}
+		} else {
+			[self setValue:value forKey:key];
+		}
 	}
+}
+
+- (id<PSSRemoteObject>)remoteObjectForRelationshipNamed:(NSString *)relationshipName fromRepresentation:(NSDictionary *)representation
+{
+	if ([relationshipName isEqualToString:@"size"]) {
+		return [PSSSize instanceFromRemoteRepresentation:representation];
+	}
+	return nil;
 }
 
 #pragma mark - NSCoding
@@ -85,12 +100,14 @@
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
 	[encoder encodeObject:self.name forKey:@"name"];
+	[encoder encodeObject:self.canonicalSize forKey:@"canonicalSize"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [self init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
+		self.canonicalSize = [decoder decodeObjectForKey:@"canonicalSize"];
 	}
 	return self;
 }
@@ -101,6 +118,7 @@
 {
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
 	copy.name = self.name;
+	copy.canonicalSize = [self.canonicalSize copyWithZone:zone];
 	return copy;
 }
 

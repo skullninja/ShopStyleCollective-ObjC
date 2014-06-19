@@ -1,7 +1,7 @@
 //
-//  PSSRetailer.m
+//  PSSSize.m
 //
-//  Copyright (c) 2013 POPSUGAR Inc.
+//  Copyright (c) 2014 POPSUGAR Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "PSSRetailer.h"
+#import "PSSSize.h"
+
 #import "POPSUGARShopSense.h"
 
-@interface PSSRetailer ()
+@interface PSSSize ()
 
-@property (nonatomic, copy, readwrite) NSNumber *retailerID;
+@property (nonatomic, copy, readwrite) NSNumber *sizeID;
 @property (nonatomic, copy, readwrite) NSString *name;
-@property (nonatomic, copy, readwrite) NSString *domainName;
-@property (nonatomic, assign, readwrite) BOOL deeplinkSupport;
 
 @end
 
-@implementation PSSRetailer
+@implementation PSSSize
 
 #pragma mark - Product Filter
 
 - (PSSProductFilter *)productFilter
 {
-	PSSProductFilter *filter = [PSSProductFilter filterWithType:PSSProductFilterTypeRetailer filterID:self.retailerID];
+	PSSProductFilter *filter = [PSSProductFilter filterWithType:PSSProductFilterTypeSize filterID:self.sizeID];
 	filter.name = self.name;
 	return filter;
 }
@@ -48,7 +47,7 @@
 
 - (NSString *)description
 {
-	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.retailerID];
+	return [[super description] stringByAppendingFormat:@" %@: %@", self.name, self.sizeID];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
@@ -58,7 +57,7 @@
 
 - (NSUInteger)hash
 {
-	return self.retailerID.hash;
+	return self.sizeID.hash;
 }
 
 - (BOOL)isEqual:(id)object
@@ -69,7 +68,7 @@
 	if (object == nil || ![object isKindOfClass:[self class]]) {
 		return NO;
 	}
-	return ([self.retailerID isEqualToNumber:[(PSSRetailer *)object retailerID]]);
+	return ([self.sizeID isEqualToNumber:[(PSSSize *)object sizeID]]);
 }
 
 #pragma mark - PSSRemoteObject
@@ -79,7 +78,7 @@
 	if (representation.count == 0) {
 		return nil;
 	}
-	PSSRetailer *instance = [[[self class] alloc] init];
+	PSSSize *instance = [[[self class] alloc] init];
 	[instance setPropertiesWithDictionary:representation];
 	return instance;
 }
@@ -90,14 +89,12 @@
 		id value = [aDictionary valueForKey:key];
 		if ([key isEqualToString:@"id"]) {
 			if ([value isKindOfClass:[NSNumber class]]) {
-				self.retailerID = value;
+				self.sizeID = value;
 			} else if ([value isKindOfClass:[NSString class]]) {
-				self.retailerID = @([value integerValue]);
+				self.sizeID = @([value integerValue]);
 			}
-		} else if ([key isEqualToString:@"hostDomain"]) {
-			if ([value isKindOfClass:[NSString class]]) {
-				self.domainName = value;
-			}
+		} else if ([key.lowercaseString isEqualToString:@"variant"]) {
+			// ignore variant (for now)
 		} else if ([key isEqualToString:@"url"]) {
 			// ignore browse URLs
 		} else {
@@ -111,18 +108,14 @@
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
 	[encoder encodeObject:self.name forKey:@"name"];
-	[encoder encodeObject:self.retailerID forKey:@"retailerID"];
-	[encoder encodeObject:self.domainName forKey:@"domainName"];
-	[encoder encodeObject:[NSNumber numberWithBool:self.deeplinkSupport] forKey:@"deeplinkSupport"];
+	[encoder encodeObject:self.sizeID forKey:@"sizeID"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [self init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
-		self.retailerID = [decoder decodeObjectForKey:@"retailerID"];
-		self.domainName = [decoder decodeObjectForKey:@"domainName"];
-		self.deeplinkSupport = [(NSNumber *)[decoder decodeObjectForKey:@"deeplinkSupport"] boolValue];
+		self.sizeID = [decoder decodeObjectForKey:@"sizeID"];
 	}
 	return self;
 }
@@ -132,10 +125,8 @@
 - (id)copyWithZone:(NSZone *)zone
 {
 	typeof(self) copy = [[[self class] allocWithZone:zone] init];
-	copy.retailerID = self.retailerID;
+	copy.sizeID = self.sizeID;
 	copy.name = self.name;
-	copy.domainName = self.domainName;
-	copy.deeplinkSupport = self.deeplinkSupport;
 	return copy;
 }
 

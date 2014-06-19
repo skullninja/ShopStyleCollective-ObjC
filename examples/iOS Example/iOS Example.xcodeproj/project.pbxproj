@@ -44,6 +44,7 @@
 		889272A416CC11A900C2FCED /* PSSClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 889272A216CC11A900C2FCED /* PSSClient.m */; };
 		889ABAB5170F96AC006364A5 /* PSSProductCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 889ABAB4170F96AC006364A5 /* PSSProductCategory.m */; };
 		889ABAB8170F9DFF006364A5 /* PSSCategoryTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 889ABAB7170F9DFF006364A5 /* PSSCategoryTree.m */; };
+		88AA872519525CB5004AD181 /* PSSSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 88AA872419525CB5004AD181 /* PSSSize.m */; };
 		AD54415816CEFE4F00CA6A1C /* BrandsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD54415616CEFE4F00CA6A1C /* BrandsViewController.m */; };
 		AD54415D16CF0A2D00CA6A1C /* RetailersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD54415B16CF0A2D00CA6A1C /* RetailersViewController.m */; };
 		AD54416216CF0A3A00CA6A1C /* ColorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD54416016CF0A3A00CA6A1C /* ColorsViewController.m */; };
@@ -119,6 +120,8 @@
 		889ABAB4170F96AC006364A5 /* PSSProductCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSSProductCategory.m; sourceTree = "<group>"; };
 		889ABAB6170F9DFF006364A5 /* PSSCategoryTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSSCategoryTree.h; sourceTree = "<group>"; };
 		889ABAB7170F9DFF006364A5 /* PSSCategoryTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSSCategoryTree.m; sourceTree = "<group>"; };
+		88AA872319525CB5004AD181 /* PSSSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSSSize.h; sourceTree = "<group>"; };
+		88AA872419525CB5004AD181 /* PSSSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSSSize.m; sourceTree = "<group>"; };
 		AD54415516CEFE4F00CA6A1C /* BrandsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrandsViewController.h; sourceTree = "<group>"; };
 		AD54415616CEFE4F00CA6A1C /* BrandsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrandsViewController.m; sourceTree = "<group>"; };
 		AD54415A16CF0A2D00CA6A1C /* RetailersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RetailersViewController.h; sourceTree = "<group>"; };
@@ -287,6 +290,8 @@
 				88730A7C16CEBE210070885F /* PSSRetailer.m */,
 				88730A9016CEE5B10070885F /* PSSColor.h */,
 				88730A9116CEE5B20070885F /* PSSColor.m */,
+				88AA872319525CB5004AD181 /* PSSSize.h */,
+				88AA872419525CB5004AD181 /* PSSSize.m */,
 			);
 			name = POPSUGARShopSense;
 			path = ../../POPSUGARShopSense;
@@ -380,6 +385,7 @@
 				88730A8A16CEBE210070885F /* PSSRetailer.m in Sources */,
 				88730A9216CEE5B20070885F /* PSSColor.m in Sources */,
 				88730A9516CEF29E0070885F /* PSSProductFilter.m in Sources */,
+				88AA872519525CB5004AD181 /* PSSSize.m in Sources */,
 				AD54415816CEFE4F00CA6A1C /* BrandsViewController.m in Sources */,
 				AD54415D16CF0A2D00CA6A1C /* RetailersViewController.m in Sources */,
 				AD54416216CF0A3A00CA6A1C /* ColorsViewController.m in Sources */,
