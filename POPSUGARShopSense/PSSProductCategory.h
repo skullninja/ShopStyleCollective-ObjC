@@ -37,4 +37,7 @@
 /** A short version of the receiver's name. If none exists name will be returned. */
 @property (nonatomic, copy, readonly) NSString *shortName;
 
+/** The unique identifier of the receiver localized in the currentLocale of the client. */
+@property (nonatomic, copy, readonly) NSString *localizedCategoryID;
+
 @end

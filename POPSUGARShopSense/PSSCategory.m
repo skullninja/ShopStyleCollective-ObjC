@@ -31,13 +31,11 @@
 @end
 
 static NSString * const kParentCategoryIDKey = @"parentId";
-static NSString * const kLocalizedIDKey = @"localizedId";
 
 @interface PSSCategory ()
 
 @property (nonatomic, strong) NSMutableOrderedSet *mutableChildCategorySet;
 @property (nonatomic, copy, readwrite) NSString *parentCategoryID;
-@property (nonatomic, copy, readwrite) NSString *localizedCategoryID;
 @property (nonatomic, assign, readwrite) BOOL hasSizeFilter;
 @property (nonatomic, assign, readwrite) BOOL hasColorFilter;
 @property (nonatomic, assign, readwrite) BOOL hasHeelHeightFilter;
@@ -79,10 +77,6 @@ static NSString * const kLocalizedIDKey = @"localizedId";
 		self.parentCategoryID = copyDictionary[kParentCategoryIDKey];
 		[copyDictionary removeObjectForKey:kParentCategoryIDKey];
 	}
-	if (copyDictionary[kLocalizedIDKey] != nil) {
-		self.localizedCategoryID = [copyDictionary[kLocalizedIDKey] description];
-		[copyDictionary removeObjectForKey:kLocalizedIDKey];
-	}
 	[super setPropertiesWithDictionary:copyDictionary];
 }
 
@@ -93,7 +87,6 @@ static NSString * const kLocalizedIDKey = @"localizedId";
 	[super encodeWithCoder:encoder];
 	[encoder encodeObject:self.parentCategoryID forKey:@"parentCategoryID"];
 	[encoder encodeObject:self.mutableChildCategorySet forKey:@"mutableChildCategorySet"];
-	[encoder encodeObject:self.localizedCategoryID forKey:@"localizedCategoryID"];
 	[encoder encodeBool:self.hasColorFilter forKey:@"hasColorFilter"];
 	[encoder encodeBool:self.hasSizeFilter forKey:@"hasSizeFilter"];
 	[encoder encodeBool:self.hasHeelHeightFilter forKey:@"hasHeelHeightFilter"];
@@ -104,7 +97,6 @@ static NSString * const kLocalizedIDKey = @"localizedId";
 	if ((self = [super initWithCoder:decoder])) {
 		self.parentCategoryID = [decoder decodeObjectForKey:@"parentCategoryID"];
 		self.mutableChildCategorySet = [decoder decodeObjectForKey:@"mutableChildCategorySet"];
-		self.localizedCategoryID = [decoder decodeObjectForKey:@"localizedCategoryID"];
 		self.hasColorFilter = [decoder decodeBoolForKey:@"hasColorFilter"];
 		self.hasSizeFilter = [decoder decodeBoolForKey:@"hasSizeFilter"];
 		self.hasHeelHeightFilter = [decoder decodeBoolForKey:@"hasHeelHeightFilter"];
@@ -119,7 +111,6 @@ static NSString * const kLocalizedIDKey = @"localizedId";
 	typeof(self) copy = [super copyWithZone:zone];
 	copy.parentCategoryID = self.parentCategoryID;
 	copy.mutableChildCategorySet = [self.mutableChildCategorySet mutableCopyWithZone:zone];
-	copy.localizedCategoryID = self.localizedCategoryID;
 	copy.hasColorFilter = self.hasColorFilter;
 	copy.hasSizeFilter = self.hasSizeFilter;
 	copy.hasHeelHeightFilter = self.hasHeelHeightFilter;

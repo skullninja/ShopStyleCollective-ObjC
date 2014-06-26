@@ -29,6 +29,7 @@
 @property (nonatomic, copy, readwrite) NSString *categoryID;
 @property (nonatomic, copy, readwrite) NSString *name;
 @property (nonatomic, copy, readwrite) NSString *shortName;
+@property (nonatomic, copy, readwrite) NSString *localizedCategoryID;
 
 @end
 
@@ -93,6 +94,8 @@
 		id value = [aDictionary valueForKey:key];
 		if ([key isEqualToString:@"id"]) {
 			self.categoryID = [value description];
+		} else if ([key isEqualToString:@"localizedId"]) {
+			self.localizedCategoryID = [value description];
 		} else {
 			[self setValue:value forKey:key];
 		}
@@ -106,6 +109,7 @@
 	[encoder encodeObject:self.categoryID forKey:@"categoryID"];
 	[encoder encodeObject:self.name forKey:@"name"];
 	[encoder encodeObject:self.shortName forKey:@"shortName"];
+	[encoder encodeObject:self.localizedCategoryID forKey:@"localizedCategoryID"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -114,6 +118,7 @@
 		self.categoryID = [decoder decodeObjectForKey:@"categoryID"];
 		self.name = [decoder decodeObjectForKey:@"name"];
 		self.shortName = [decoder decodeObjectForKey:@"shortName"];
+		self.localizedCategoryID = [decoder decodeObjectForKey:@"localizedCategoryID"];
 	}
 	return self;
 }
@@ -126,6 +131,7 @@
 	copy.categoryID = self.categoryID;
 	copy.name = self.name;
 	copy.shortName = self.shortName;
+	copy.localizedCategoryID = self.localizedCategoryID;
 	return copy;
 }
 
