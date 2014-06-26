@@ -31,9 +31,6 @@
 /** The child categories of the receiver if any exists. */
 @property (nonatomic, strong, readonly) NSArray *childCategories;
 
-/** The unique identifier of the receiver localized in the currentLocale of the client. */
-@property (nonatomic, copy, readonly) NSString *localizedCategoryID;
-
 /** Returns YES if the receiver will have the size histogram available */
 @property (nonatomic, assign, readonly) BOOL hasSizeFilter;
 

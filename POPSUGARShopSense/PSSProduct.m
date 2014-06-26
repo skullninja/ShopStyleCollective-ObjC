@@ -233,7 +233,9 @@
 		} else if ([key isEqualToString:@"maxPriceLabel"]) {
 			self.maxRegularPriceLabel = [value description];
 		} else if ([key isEqualToString:@"type"] || [key isEqualToString:@"images"]) {
-			// not needed
+			// not needed, type is always product and "images" will be removed from the API, see image, alternateImages and colors for images
+		} else if ([key isEqualToString:@"priceRangeLabel"] || [key isEqualToString:@"salePriceRangeLabel"]) {
+			// not needed, use other price labels to create ranges for your UI
 		} else if ([key isEqualToString:@"brandedName"] || [key isEqualToString:@"unbrandedName"] || [key isEqualToString:@"badges"]) {
 			// not complete on all data so leaving out for now
 		} else {
