@@ -212,6 +212,8 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 			} else if ([value isKindOfClass:[NSString class]]) {
 				self.productCount = @([value integerValue]);
 			}
+		} else if ([key isEqualToString:@"longLabel"]) {
+			// ignore long label
 		} else {
 			[self setValue:value forKey:key];
 		}
