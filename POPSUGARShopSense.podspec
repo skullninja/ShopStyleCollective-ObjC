@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "POPSUGARShopSense"
-  s.version      = "0.9.8"
+  s.version      = "0.9.9"
   s.summary      = "Objective-C client for the POPSUGAR ShopSense API."
   s.homepage     = "https://github.com/PopSugar/objc-POPSUGAR-ShopSense-client"
   s.author       = { "POPSUGAR Inc" => "shopsense@shopstyle.com" }

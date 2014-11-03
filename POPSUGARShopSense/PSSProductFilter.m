@@ -213,7 +213,9 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 				self.productCount = @([value integerValue]);
 			}
 		} else if ([key isEqualToString:@"longLabel"]) {
-			// ignore long label
+			if ([value isKindOfClass:[NSString class]]) {
+				self.longName = value;
+			}
 		} else {
 			[self setValue:value forKey:key];
 		}
@@ -225,6 +227,7 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
 	[encoder encodeObject:self.name forKey:@"name"];
+	[encoder encodeObject:self.longName forKey:@"longName"];
 	[encoder encodeObject:self.filterID forKey:@"filterID"];
 	[encoder encodeObject:self.type forKey:@"type"];
 	[encoder encodeObject:self.productCount forKey:@"productCount"];
@@ -234,6 +237,7 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 {
 	if ((self = [self init])) {
 		self.name = [decoder decodeObjectForKey:@"name"];
+		self.longName = [decoder decodeObjectForKey:@"longName"];
 		self.filterID = [decoder decodeObjectForKey:@"filterID"];
 		self.type = [decoder decodeObjectForKey:@"type"];
 		self.productCount = [decoder decodeObjectForKey:@"productCount"];
@@ -249,6 +253,7 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 	copy.filterID = self.filterID;
 	copy.type = self.type;
 	copy.name = self.name;
+	copy.longName = self.longName;
 	copy.productCount = self.productCount;
 	return copy;
 }
