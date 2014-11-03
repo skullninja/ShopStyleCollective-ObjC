@@ -81,8 +81,8 @@ extern NSString * const PSSProductFilterTypeColor;
 /** A name to display for the receiver. */
 @property (nonatomic, copy) NSString *name;
 
-/** A localized name to display for the receiver or nil if a localized name does not exist */
-@property (nonatomic, copy) NSString *longLabel;
+/** A long name to display for the receiver or nil if a long name does not exist */
+@property (nonatomic, copy) NSString *longName;
 
 /**---------------------------------------------------------------------------------------
  * @name Histogram Result Parameters
