@@ -1,5 +1,3 @@
-> IMPORTANT: The current version of the API and Client is currently in pre-release status. You should expect changes to both naming and types.
-
 # POPSUGAR ShopSense Client for Objective-C
 **Readers click, you get money.**  
 
