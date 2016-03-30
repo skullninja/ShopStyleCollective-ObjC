@@ -1,4 +1,6 @@
-# POPSUGAR ShopSense Client for Objective-C
+# IMPORTANT: This iOS API client is unsupported as the API has changed since the last release.  Use at your own risk.
+
+## POPSUGAR ShopSense Client for Objective-C
 **Readers click, you get money.**  
 
 The POPSUGAR ShopSense is a free service that pays you for sending quality traffic to online retailers.
