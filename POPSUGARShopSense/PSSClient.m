@@ -43,7 +43,7 @@ NSString * const PSSProductHistogramTypeSize = @"Size";
 NSString * const PSSProductHistogramTypeHeelHeight = @"HeelHeight";
 NSString * const PSSProductHistogramTypeColor = @"Color";
 
-static NSString * const kShopSenseBaseURLString = @"http://api.shopstyle.com/api/v2/";
+static NSString * const kShopSenseBaseURLString = @"https://api.shopstyle.com/api/v2/";
 static NSString * const kPListPartnerIDKey = @"ShopSensePartnerID";
 static NSString * const kDefaultLocaleIdentifier = @"en_US";
 static NSString * const kUSLocaleIdentifier = @"en_US";
