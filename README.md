@@ -1,3 +1,5 @@
+# THIS FORK IS UNOFFICIAL
+
 # IMPORTANT: This iOS API client is unsupported as the API has changed since the last release.  Use at your own risk.
 
 ## POPSUGAR ShopSense Client for Objective-C

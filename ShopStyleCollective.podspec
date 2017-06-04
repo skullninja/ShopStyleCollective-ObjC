@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name         = "POPSUGARShopSense"
+  s.name         = "ShopStyleCollective"
   s.version      = "0.9.9"
   s.summary      = "Objective-C client for the POPSUGAR ShopSense API."
   s.homepage     = "https://github.com/PopSugar/objc-POPSUGAR-ShopSense-client"
@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.7'
 
   s.source       = { :git => "https://github.com/PopSugar/objc-POPSUGAR-ShopSense-client.git", :tag => s.version.to_s }
-  s.source_files = 'POPSUGARShopSense/*.{h,m}'
+  s.source_files = 'Pod/Classes/*.{h,m}'
 
   s.requires_arc = true
   

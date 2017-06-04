@@ -1,0 +1,450 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		55C1327B1EE3977C007A1FEC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C1326C1EE3977C007A1FEC /* AppDelegate.m */; };
+		55C1327C1EE3977C007A1FEC /* BrandsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C1326E1EE3977C007A1FEC /* BrandsViewController.m */; };
+		55C1327D1EE3977C007A1FEC /* CategoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C132701EE3977C007A1FEC /* CategoriesViewController.m */; };
+		55C1327E1EE3977C007A1FEC /* ColorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C132721EE3977C007A1FEC /* ColorsViewController.m */; };
+		55C1327F1EE3977C007A1FEC /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C132741EE3977C007A1FEC /* MasterViewController.m */; };
+		55C132801EE3977C007A1FEC /* ProductHistogramViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C132761EE3977C007A1FEC /* ProductHistogramViewController.m */; };
+		55C132811EE3977C007A1FEC /* RetailersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C132781EE3977C007A1FEC /* RetailersViewController.m */; };
+		55C132821EE3977C007A1FEC /* SearchProductsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C1327A1EE3977C007A1FEC /* SearchProductsViewController.m */; };
+		55C1328B1EE39796007A1FEC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55C132831EE39796007A1FEC /* Default-568h@2x.png */; };
+		55C1328C1EE39796007A1FEC /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 55C132841EE39796007A1FEC /* Default.png */; };
+		55C1328D1EE39796007A1FEC /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55C132851EE39796007A1FEC /* Default@2x.png */; };
+		55C1328E1EE39796007A1FEC /* Example-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55C132861EE39796007A1FEC /* Example-Info.plist */; };
+		55C1328F1EE39796007A1FEC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C132881EE39796007A1FEC /* main.m */; };
+		55C132901EE39796007A1FEC /* Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 55C132891EE39796007A1FEC /* Placeholder.png */; };
+		55C132911EE39796007A1FEC /* Placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55C1328A1EE39796007A1FEC /* Placeholder@2x.png */; };
+		886C264D186388A100E7E0D2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 886C264C186388A100E7E0D2 /* Security.framework */; };
+		8892724616CC0E7800C2FCED /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8892724516CC0E7800C2FCED /* UIKit.framework */; };
+		8892724816CC0E7800C2FCED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8892724716CC0E7800C2FCED /* Foundation.framework */; };
+		8892724A16CC0E7800C2FCED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8892724916CC0E7800C2FCED /* CoreGraphics.framework */; };
+		8892727616CC0EE100C2FCED /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8892727516CC0EE100C2FCED /* SystemConfiguration.framework */; };
+		8892727816CC0EE700C2FCED /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8892727716CC0EE700C2FCED /* MobileCoreServices.framework */; };
+		939EC99799123A63F521962D /* libPods-ShopStyleCollective.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1653BE61DEA902F19EF7B774 /* libPods-ShopStyleCollective.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1653BE61DEA902F19EF7B774 /* libPods-ShopStyleCollective.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ShopStyleCollective.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		41B747E6A2D0A42F349FA5F3 /* Pods-ShopStyleCollective.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShopStyleCollective.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShopStyleCollective/Pods-ShopStyleCollective.debug.xcconfig"; sourceTree = "<group>"; };
+		55C1326B1EE3977C007A1FEC /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ShopStyleCollective/AppDelegate.h; sourceTree = SOURCE_ROOT; };
+		55C1326C1EE3977C007A1FEC /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = ShopStyleCollective/AppDelegate.m; sourceTree = SOURCE_ROOT; };
+		55C1326D1EE3977C007A1FEC /* BrandsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BrandsViewController.h; path = ShopStyleCollective/BrandsViewController.h; sourceTree = SOURCE_ROOT; };
+		55C1326E1EE3977C007A1FEC /* BrandsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BrandsViewController.m; path = ShopStyleCollective/BrandsViewController.m; sourceTree = SOURCE_ROOT; };
+		55C1326F1EE3977C007A1FEC /* CategoriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CategoriesViewController.h; path = ShopStyleCollective/CategoriesViewController.h; sourceTree = SOURCE_ROOT; };
+		55C132701EE3977C007A1FEC /* CategoriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CategoriesViewController.m; path = ShopStyleCollective/CategoriesViewController.m; sourceTree = SOURCE_ROOT; };
+		55C132711EE3977C007A1FEC /* ColorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorsViewController.h; path = ShopStyleCollective/ColorsViewController.h; sourceTree = SOURCE_ROOT; };
+		55C132721EE3977C007A1FEC /* ColorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ColorsViewController.m; path = ShopStyleCollective/ColorsViewController.m; sourceTree = SOURCE_ROOT; };
+		55C132731EE3977C007A1FEC /* MasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MasterViewController.h; path = ShopStyleCollective/MasterViewController.h; sourceTree = SOURCE_ROOT; };
+		55C132741EE3977C007A1FEC /* MasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MasterViewController.m; path = ShopStyleCollective/MasterViewController.m; sourceTree = SOURCE_ROOT; };
+		55C132751EE3977C007A1FEC /* ProductHistogramViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductHistogramViewController.h; path = ShopStyleCollective/ProductHistogramViewController.h; sourceTree = SOURCE_ROOT; };
+		55C132761EE3977C007A1FEC /* ProductHistogramViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductHistogramViewController.m; path = ShopStyleCollective/ProductHistogramViewController.m; sourceTree = SOURCE_ROOT; };
+		55C132771EE3977C007A1FEC /* RetailersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RetailersViewController.h; path = ShopStyleCollective/RetailersViewController.h; sourceTree = SOURCE_ROOT; };
+		55C132781EE3977C007A1FEC /* RetailersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RetailersViewController.m; path = ShopStyleCollective/RetailersViewController.m; sourceTree = SOURCE_ROOT; };
+		55C132791EE3977C007A1FEC /* SearchProductsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchProductsViewController.h; path = ShopStyleCollective/SearchProductsViewController.h; sourceTree = SOURCE_ROOT; };
+		55C1327A1EE3977C007A1FEC /* SearchProductsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SearchProductsViewController.m; path = ShopStyleCollective/SearchProductsViewController.m; sourceTree = SOURCE_ROOT; };
+		55C132831EE39796007A1FEC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "ShopStyleCollective/Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
+		55C132841EE39796007A1FEC /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ShopStyleCollective/Default.png; sourceTree = SOURCE_ROOT; };
+		55C132851EE39796007A1FEC /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "ShopStyleCollective/Default@2x.png"; sourceTree = SOURCE_ROOT; };
+		55C132861EE39796007A1FEC /* Example-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Example-Info.plist"; path = "ShopStyleCollective/Example-Info.plist"; sourceTree = SOURCE_ROOT; };
+		55C132871EE39796007A1FEC /* Example-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Example-Prefix.pch"; path = "ShopStyleCollective/Example-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		55C132881EE39796007A1FEC /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ShopStyleCollective/main.m; sourceTree = SOURCE_ROOT; };
+		55C132891EE39796007A1FEC /* Placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Placeholder.png; path = ShopStyleCollective/Placeholder.png; sourceTree = SOURCE_ROOT; };
+		55C1328A1EE39796007A1FEC /* Placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Placeholder@2x.png"; path = "ShopStyleCollective/Placeholder@2x.png"; sourceTree = SOURCE_ROOT; };
+		71719FB090669588C093D67C /* Pods-ShopStyleCollective.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShopStyleCollective.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShopStyleCollective/Pods-ShopStyleCollective.release.xcconfig"; sourceTree = "<group>"; };
+		886C264C186388A100E7E0D2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		8892724216CC0E7800C2FCED /* ShopStyleCollective.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShopStyleCollective.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8892724516CC0E7800C2FCED /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		8892724716CC0E7800C2FCED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		8892724916CC0E7800C2FCED /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		8892727516CC0EE100C2FCED /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		8892727716CC0EE700C2FCED /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8892723F16CC0E7800C2FCED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				886C264D186388A100E7E0D2 /* Security.framework in Frameworks */,
+				8892727816CC0EE700C2FCED /* MobileCoreServices.framework in Frameworks */,
+				8892727616CC0EE100C2FCED /* SystemConfiguration.framework in Frameworks */,
+				8892724616CC0E7800C2FCED /* UIKit.framework in Frameworks */,
+				8892724816CC0E7800C2FCED /* Foundation.framework in Frameworks */,
+				8892724A16CC0E7800C2FCED /* CoreGraphics.framework in Frameworks */,
+				939EC99799123A63F521962D /* libPods-ShopStyleCollective.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8418234C4675C7701E562863 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				41B747E6A2D0A42F349FA5F3 /* Pods-ShopStyleCollective.debug.xcconfig */,
+				71719FB090669588C093D67C /* Pods-ShopStyleCollective.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		8892723916CC0E7800C2FCED = {
+			isa = PBXGroup;
+			children = (
+				8892724B16CC0E7800C2FCED /* Example */,
+				8892724416CC0E7800C2FCED /* Frameworks */,
+				8892724316CC0E7800C2FCED /* Products */,
+				8418234C4675C7701E562863 /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		8892724316CC0E7800C2FCED /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8892724216CC0E7800C2FCED /* ShopStyleCollective.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8892724416CC0E7800C2FCED /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				886C264C186388A100E7E0D2 /* Security.framework */,
+				8892727716CC0EE700C2FCED /* MobileCoreServices.framework */,
+				8892727516CC0EE100C2FCED /* SystemConfiguration.framework */,
+				8892724516CC0E7800C2FCED /* UIKit.framework */,
+				8892724716CC0E7800C2FCED /* Foundation.framework */,
+				8892724916CC0E7800C2FCED /* CoreGraphics.framework */,
+				1653BE61DEA902F19EF7B774 /* libPods-ShopStyleCollective.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8892724B16CC0E7800C2FCED /* Example */ = {
+			isa = PBXGroup;
+			children = (
+				55C1326B1EE3977C007A1FEC /* AppDelegate.h */,
+				55C1326C1EE3977C007A1FEC /* AppDelegate.m */,
+				55C1326D1EE3977C007A1FEC /* BrandsViewController.h */,
+				55C1326E1EE3977C007A1FEC /* BrandsViewController.m */,
+				55C1326F1EE3977C007A1FEC /* CategoriesViewController.h */,
+				55C132701EE3977C007A1FEC /* CategoriesViewController.m */,
+				55C132711EE3977C007A1FEC /* ColorsViewController.h */,
+				55C132721EE3977C007A1FEC /* ColorsViewController.m */,
+				55C132731EE3977C007A1FEC /* MasterViewController.h */,
+				55C132741EE3977C007A1FEC /* MasterViewController.m */,
+				55C132751EE3977C007A1FEC /* ProductHistogramViewController.h */,
+				55C132761EE3977C007A1FEC /* ProductHistogramViewController.m */,
+				55C132771EE3977C007A1FEC /* RetailersViewController.h */,
+				55C132781EE3977C007A1FEC /* RetailersViewController.m */,
+				55C132791EE3977C007A1FEC /* SearchProductsViewController.h */,
+				55C1327A1EE3977C007A1FEC /* SearchProductsViewController.m */,
+				8892724C16CC0E7800C2FCED /* Supporting Files */,
+			);
+			name = Example;
+			path = "iOS Example";
+			sourceTree = "<group>";
+		};
+		8892724C16CC0E7800C2FCED /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				55C132831EE39796007A1FEC /* Default-568h@2x.png */,
+				55C132841EE39796007A1FEC /* Default.png */,
+				55C132851EE39796007A1FEC /* Default@2x.png */,
+				55C132861EE39796007A1FEC /* Example-Info.plist */,
+				55C132871EE39796007A1FEC /* Example-Prefix.pch */,
+				55C132881EE39796007A1FEC /* main.m */,
+				55C132891EE39796007A1FEC /* Placeholder.png */,
+				55C1328A1EE39796007A1FEC /* Placeholder@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8892724116CC0E7800C2FCED /* ShopStyleCollective */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8892727116CC0E7800C2FCED /* Build configuration list for PBXNativeTarget "ShopStyleCollective" */;
+			buildPhases = (
+				36F087F3C8BD8EEEC75CD907 /* [CP] Check Pods Manifest.lock */,
+				8892723E16CC0E7800C2FCED /* Sources */,
+				8892723F16CC0E7800C2FCED /* Frameworks */,
+				8892724016CC0E7800C2FCED /* Resources */,
+				1805C75F6009A76AA6F890E1 /* [CP] Embed Pods Frameworks */,
+				1C58DB448ACFDD66DC4345D7 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ShopStyleCollective;
+			productName = "iOS Example";
+			productReference = 8892724216CC0E7800C2FCED /* ShopStyleCollective.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8892723A16CC0E7800C2FCED /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "";
+			};
+			buildConfigurationList = 8892723D16CC0E7800C2FCED /* Build configuration list for PBXProject "ShopStyleCollective" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 8892723916CC0E7800C2FCED;
+			productRefGroup = 8892724316CC0E7800C2FCED /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8892724116CC0E7800C2FCED /* ShopStyleCollective */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8892724016CC0E7800C2FCED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55C1328D1EE39796007A1FEC /* Default@2x.png in Resources */,
+				55C132901EE39796007A1FEC /* Placeholder.png in Resources */,
+				55C1328C1EE39796007A1FEC /* Default.png in Resources */,
+				55C1328B1EE39796007A1FEC /* Default-568h@2x.png in Resources */,
+				55C1328E1EE39796007A1FEC /* Example-Info.plist in Resources */,
+				55C132911EE39796007A1FEC /* Placeholder@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1805C75F6009A76AA6F890E1 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ShopStyleCollective/Pods-ShopStyleCollective-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1C58DB448ACFDD66DC4345D7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ShopStyleCollective/Pods-ShopStyleCollective-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		36F087F3C8BD8EEEC75CD907 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8892723E16CC0E7800C2FCED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55C132821EE3977C007A1FEC /* SearchProductsViewController.m in Sources */,
+				55C1328F1EE39796007A1FEC /* main.m in Sources */,
+				55C1327D1EE3977C007A1FEC /* CategoriesViewController.m in Sources */,
+				55C1327F1EE3977C007A1FEC /* MasterViewController.m in Sources */,
+				55C1327B1EE3977C007A1FEC /* AppDelegate.m in Sources */,
+				55C132811EE3977C007A1FEC /* RetailersViewController.m in Sources */,
+				55C1327C1EE3977C007A1FEC /* BrandsViewController.m in Sources */,
+				55C132801EE3977C007A1FEC /* ProductHistogramViewController.m in Sources */,
+				55C1327E1EE3977C007A1FEC /* ColorsViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		8892726F16CC0E7800C2FCED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8892727016CC0E7800C2FCED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"-Wextra",
+					"-Wno-unused-parameter",
+					"-Wformat=2",
+				);
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8892727216CC0E7800C2FCED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 41B747E6A2D0A42F349FA5F3 /* Pods-ShopStyleCollective.debug.xcconfig */;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/ShopStyleCollective/Example-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/ShopStyleCollective/Example-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		8892727316CC0E7800C2FCED /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 71719FB090669588C093D67C /* Pods-ShopStyleCollective.release.xcconfig */;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/ShopStyleCollective/Example-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/ShopStyleCollective/Example-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8892723D16CC0E7800C2FCED /* Build configuration list for PBXProject "ShopStyleCollective" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8892726F16CC0E7800C2FCED /* Debug */,
+				8892727016CC0E7800C2FCED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8892727116CC0E7800C2FCED /* Build configuration list for PBXNativeTarget "ShopStyleCollective" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8892727216CC0E7800C2FCED /* Debug */,
+				8892727316CC0E7800C2FCED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8892723A16CC0E7800C2FCED /* Project object */;
+}
